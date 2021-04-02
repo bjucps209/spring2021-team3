@@ -4,6 +4,7 @@ public class Player extends Entity {
 
     private EntityDirection direction = EntityDirection.RIGHT;
     private PlayerState state = PlayerState.STANDING;
+    private int score;
 
     @Override
     public void tick() {
