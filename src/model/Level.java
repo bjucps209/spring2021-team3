@@ -4,8 +4,18 @@ import java.util.*;
 
 public class Level {
     
-    private Player player;
-    private ArrayList<Enemy> enemies;
+    private Game game;
+    private ArrayList<Entity> entities;
     private ArrayList<Ground> ground;
+
+    public Level(Game game) {
+        this.game = game;
+        game.getPlayer().setLevel(this);
+        entities.add(game.getPlayer());
+    }
+
+    public Game getGame() {
+        return game;
+    }
 
 }
