@@ -2,6 +2,17 @@ package model;
 
 public class Solid extends Vector2 {
 
+    public Solid() { }
+
+    public Solid(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    // Physical properties
+
     private int width;
     private int height;
 

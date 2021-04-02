@@ -2,24 +2,8 @@ package model;
 
 public class Player extends Entity {
 
-    private Game game;
-    private Level level;
-
-    public Player(Game game) {
-        this.game = game;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public Level getLevel() {
-        return level;
-    }
-
-    public void setLevel(Level level) {
-        this.level = level;
-    }
+    private EntityDirection direction = EntityDirection.RIGHT;
+    private PlayerState state = PlayerState.STANDING;
 
     @Override
     public void tick() {
@@ -29,6 +13,14 @@ public class Player extends Entity {
         // Apply generic entity physics updates
         super.tick();
 
+    }
+
+    public PlayerState getState() {
+        return state;
+    }
+
+    public void setState(PlayerState state) {
+        this.state = state;
     }
 
 }

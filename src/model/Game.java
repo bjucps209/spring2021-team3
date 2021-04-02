@@ -5,9 +5,15 @@ public class Game {
     private Player player;
     private Level currentLevel;
     private GameState state;
+    private static Game instance;
 
-    public Game() {
-        player = new Player(this);
+    private Game() {
+        player = new Player();
+        state = GameState.MENU;
+    }
+
+    public static Game getInstance() {
+        return instance instanceof Game ? instance : (instance = new Game());
     }
 
     public GameState getState() {

@@ -11,7 +11,9 @@ public class Entity extends Solid {
     private double yVelocity;
     
     public void tick() {
+
         // TODO: Apply generic entity physics here
+        
     }
 
 }

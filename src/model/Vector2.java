@@ -2,9 +2,6 @@ package model;
 
 public class Vector2 {
 
-    protected int x;
-    protected int y;
-
     public Vector2() { }
 
     public Vector2(int x, int y) {
@@ -16,6 +13,11 @@ public class Vector2 {
         x = v.getX();
         y = v.getY();
     }
+
+    // Physical properties
+
+    protected int x;
+    protected int y;
 
     public int getX() {
         return x;

@@ -6,16 +6,13 @@ public class Level {
     
     private Game game;
     private ArrayList<Entity> entities;
-    private ArrayList<Ground> ground;
+    private ArrayList<Surface> surfaces;
 
-    public Level(Game game) {
-        this.game = game;
-        game.getPlayer().setLevel(this);
-        entities.add(game.getPlayer());
-    }
+    public Level() {
 
-    public Game getGame() {
-        return game;
+        entities.add(Game.getInstance().getPlayer());
+        // TODO: Generate enemies
+        
     }
 
 }
