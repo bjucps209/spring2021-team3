@@ -4,5 +4,7 @@ enum EnemyState {
     IDLE,
     WANDERING,
     CHASING,
-    AVOIDING
+    AVOIDING,
+    DYING,
+    DEAD
 }

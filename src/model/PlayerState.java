@@ -3,5 +3,7 @@ package model;
 enum PlayerState {
     STANDING,
     RUNNING,
-    JUMPING
+    JUMPING,
+    DYING,
+    DEAD
 }
