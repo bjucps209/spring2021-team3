@@ -14,4 +14,10 @@ public class Level {
 
     }
 
+    public void tick() {
+
+        for(Entity e : entities) e.tick();
+
+    }
+
 }

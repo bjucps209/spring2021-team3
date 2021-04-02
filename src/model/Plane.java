@@ -1,10 +1,10 @@
 package model;
 
-public class Solid extends Vector2 {
+public class Plane extends Point {
 
-    public Solid() { }
+    public Plane() { }
 
-    public Solid(int x, int y, int width, int height) {
+    public Plane(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -48,11 +48,11 @@ public class Solid extends Vector2 {
         return y + (height / 2);
     }
 
-    public boolean contains(Vector2 v) {
+    public boolean contains(Point v) {
         return v.getX() >= getMinX() && v.getX() <= getMaxX() && v.getY() >= getMinY() && v.getY() <= getMaxY();
     }
 
-    public boolean overlaps(Solid s) {
+    public boolean overlaps(Plane s) {
         return getMaxX() >= s.getMinX() && getMinX() <= s.getMaxX() && getMaxY() >= s.getMinY() && getMinY() <= s.getMaxY();
     }
 

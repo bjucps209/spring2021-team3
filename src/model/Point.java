@@ -1,15 +1,15 @@
 package model;
 
-public class Vector2 {
+public class Point {
 
-    public Vector2() { }
+    public Point() { }
 
-    public Vector2(int x, int y) {
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public Vector2(Vector2 v) {
+    public Point(Point v) {
         x = v.getX();
         y = v.getY();
     }
@@ -35,7 +35,7 @@ public class Vector2 {
         this.y = y;
     }
 
-    public void copyFrom(Vector2 v) {
+    public void copyFrom(Point v) {
         x = v.getX();
         y = v.getY();
     }
@@ -45,7 +45,7 @@ public class Vector2 {
         this.y = y;
     }
 
-    public void add(Vector2 v) {
+    public void add(Point v) {
         x += v.getX();
         y += v.getY();
     }
@@ -60,7 +60,7 @@ public class Vector2 {
         this.y += y;
     }
 
-    public void subtract(Vector2 v) {
+    public void subtract(Point v) {
         x -= v.getX();
         y -= v.getY();
     }
@@ -75,7 +75,7 @@ public class Vector2 {
         this.y -= y;
     }
 
-    public void multiply(Vector2 v) {
+    public void multiply(Point v) {
         x = (int) (x * v.getX());
         y = (int) (y * v.getY());
     }
@@ -100,7 +100,7 @@ public class Vector2 {
         this.y = (int) (this.y * y);
     }
 
-    public void divide(Vector2 v) {
+    public void divide(Point v) {
         x = (int) (x / v.getX());
         y = (int) (y / v.getY());
     }
@@ -125,11 +125,11 @@ public class Vector2 {
         this.y = (int) (this.y / y);
     }
 
-    public double distanceFrom(Vector2 v) {
+    public double distanceFrom(Point v) {
         return Math.sqrt(Math.pow(this.x - v.getX(), 2) + Math.pow(this.y - v.getY(), 2));
     }
 
-    public boolean is(Vector2 v) {
+    public boolean is(Point v) {
         return x == v.getX() && y == v.getY();
     }
 
