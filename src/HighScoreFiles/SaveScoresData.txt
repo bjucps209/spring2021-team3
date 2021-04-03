@@ -1,0 +1,10 @@
+Frank,400,HARD
+Joe,350,EASY
+Sue,300,HARD
+Peter,250,HARD
+John,200,EASY
+Martha,190,MEDIUM
+Rita,180,MEDIUM 
+Madhu,170,CUSTOM
+Sebastian,160,EASY
+Joe,20,EASY
