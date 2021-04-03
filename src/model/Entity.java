@@ -6,9 +6,10 @@ public class Entity extends Plane {
     public final double WALKING_SPEED = 55.11811023622;
     public final double RUNNING_SPEED = 155.11811023622;
 
-    private double weight;
-    private double xVelocity;
-    private double yVelocity;
+    protected double weight;
+    protected double xVelocity;
+    protected double yVelocity;
+    protected double maxSpeed;
     
     public void tick() {
 

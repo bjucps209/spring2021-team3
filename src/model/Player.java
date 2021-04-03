@@ -2,7 +2,7 @@ package model;
 
 import java.io.*;
 
-public class Player extends Entity {
+public class Player extends LivingEntity {
 
     private EntityDirection direction = EntityDirection.RIGHT;
     private PlayerState state = PlayerState.STANDING;
