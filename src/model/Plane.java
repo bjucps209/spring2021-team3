@@ -5,8 +5,8 @@ public class Plane extends Point {
     public Plane() { }
 
     public Plane(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
+        xProperty.set(x);
+        yProperty.set(y);
         this.width = width;
         this.height = height;
     }
@@ -41,20 +41,20 @@ public class Plane extends Point {
         this.height = height;
     }
 
-    public int getMinX() {
-        return x - (width / 2);
+    public double getMinX() {
+        return xProperty.get() - (width / 2);
     }
 
-    public int getMaxX() {
-        return x + (width / 2);
+    public double getMaxX() {
+        return xProperty.get() + (width / 2);
     }
 
-    public int getMinY() {
-        return y - (height / 2);
+    public double getMinY() {
+        return yProperty.get() - (height / 2);
     }
 
-    public int getMaxY() {
-        return y + (height / 2);
+    public double getMaxY() {
+        return yProperty.get() + (height / 2);
     }
 
     public boolean contains(Point v) {
