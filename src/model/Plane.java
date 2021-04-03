@@ -15,6 +15,15 @@ public class Plane extends Point {
 
     private int width;
     private int height;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getWidth() {
         return width;
