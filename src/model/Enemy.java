@@ -2,18 +2,10 @@ package model;
 
 import java.io.*;
 
-public class Enemy extends Entity {
+public class Enemy extends LivingEntity {
 
     protected EnemyState state;
     protected EntityDirection direction = EntityDirection.LEFT;
-
-    @Override
-    public void tick() {
-
-        // Apply generic entity physics updates
-        super.tick();
-
-    }
 
     public EnemyState getState() {
         return state;

@@ -14,7 +14,7 @@ public class Level {
 
     public Level() {
 
-        entities.add(Game.getInstance().getPlayer());
+        entities.add(Game.instance().getPlayer());
         // TODO: Generate enemies
 
     }

@@ -14,7 +14,7 @@ public class SerializationTest {
 
     @Test
     public void testGame_Save_successful() throws Exception {
-        Game world = Game.getInstance();
+        Game world = Game.instance();
         Player player = world.getPlayer();
         player.setState(PlayerState.RUNNING);
         world.load(filename);
@@ -23,7 +23,7 @@ public class SerializationTest {
 
     @Test
     public void testGame_Load_setToWorld() throws Exception{
-        Game world = Game.getInstance();
+        Game world = Game.instance();
         Player player = world.getPlayer();
         world.load(filename);
         assertEquals(PlayerState.RUNNING, player.getState());
