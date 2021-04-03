@@ -1,136 +1,234 @@
 package model;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+
 public class Point {
 
     public Point() { }
 
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Point(double x, double y) {
+        xProperty.set(x);
+        yProperty.set(y);
     }
 
-    public Point(Point v) {
-        x = v.getX();
-        y = v.getY();
+    public Point(Point p) {
+        xProperty.set(p.getX());
+        yProperty.set(p.getY());
     }
 
     // Physical properties
 
-    protected int x;
-    protected int y;
+    protected SimpleDoubleProperty xProperty = new SimpleDoubleProperty();
+    protected SimpleDoubleProperty yProperty = new SimpleDoubleProperty();
 
-    public int getX() {
-        return x;
+    public int getIntX() {
+        return (int) xProperty.get();
+    }
+
+    public int getIntY() {
+        return (int) yProperty.get();
+    }
+
+    public double getX() {
+        return xProperty.get();
+    }
+
+    public void setX(double x) {
+        xProperty.set(x);
     }
 
     public void setX(int x) {
-        this.x = x;
+        xProperty.set(x);
     }
 
-    public int getY() {
-        return y;
+    public double getY() {
+        return yProperty.get();
+    }
+
+    public void setY(double y) {
+        yProperty.set(y);
     }
 
     public void setY(int y) {
-        this.y = y;
+        yProperty.set(y);
     }
 
-    public void copyFrom(Point v) {
-        x = v.getX();
-        y = v.getY();
+    public DoubleProperty xProperty() {
+        return xProperty;
+    }
+
+    public DoubleProperty yProperty() {
+        return yProperty;
+    }
+
+    public void copyFrom(Point p) {
+        xProperty.set(p.getX());
+        yProperty.set(p.getY());
+    }
+
+    public void setXY(double x, double y) {
+        xProperty.set(x);
+        yProperty.set(y);
     }
 
     public void setXY(int x, int y) {
-        this.x = x;
-        this.y = y;
+        xProperty.set(x);
+        yProperty.set(y);
     }
 
-    public void add(Point v) {
-        x += v.getX();
-        y += v.getY();
+    public void setXY(int x, double y) {
+        xProperty.set(x);
+        yProperty.set(y);
+    }
+
+    public void setXY(double x, int y) {
+        xProperty.set(x);
+        yProperty.set(y);
+    }
+
+    public void add(Point p) {
+        xProperty.set(xProperty.get() + p.getX());
+        yProperty.set(yProperty.get() + p.getY());
     }
 
     public void add(int num) {
-        x += num;
-        y += num;
+        xProperty.set(xProperty.get() + num);
+        yProperty.set(yProperty.get() + num);
+    }
+
+    public void add(double num) {
+        xProperty.set(xProperty.get() + num);
+        yProperty.set(yProperty.get() + num);
     }
 
     public void add(int x, int y) {
-        this.x += x;
-        this.y += y;
+        xProperty.set(xProperty.get() + x);
+        yProperty.set(yProperty.get() + y);
     }
 
-    public void subtract(Point v) {
-        x -= v.getX();
-        y -= v.getY();
+    public void add(double x, double y) {
+        xProperty.set(xProperty.get() + x);
+        yProperty.set(yProperty.get() + y);
+    }
+
+    public void add(int x, double y) {
+        xProperty.set(xProperty.get() + x);
+        yProperty.set(yProperty.get() + y);
+    }
+
+    public void add(double x, int y) {
+        xProperty.set(xProperty.get() + x);
+        yProperty.set(yProperty.get() + y);
+    }
+
+    public void subtract(Point p) {
+        xProperty.set(xProperty.get() - p.getX());
+        yProperty.set(yProperty.get() - p.getY());
     }
 
     public void subtract(int num) {
-        x -= num;
-        y -= num;
+        xProperty.set(xProperty.get() - num);
+        yProperty.set(yProperty.get() - num);
+    }
+
+    public void subtract(double num) {
+        xProperty.set(xProperty.get() - num);
+        yProperty.set(yProperty.get() - num);
     }
 
     public void subtract(int x, int y) {
-        this.x -= x;
-        this.y -= y;
+        xProperty.set(xProperty.get() - x);
+        yProperty.set(yProperty.get() - y);
     }
 
-    public void multiply(Point v) {
-        x = (int) (x * v.getX());
-        y = (int) (y * v.getY());
+    public void subtract(double x, double y) {
+        xProperty.set(xProperty.get() - x);
+        yProperty.set(yProperty.get() - y);
+    }
+
+    public void subtract(int x, double y) {
+        xProperty.set(xProperty.get() - x);
+        yProperty.set(yProperty.get() - y);
+    }
+
+    public void subtract(double x, int y) {
+        xProperty.set(xProperty.get() - x);
+        yProperty.set(yProperty.get() - y);
+    }
+
+    public void multiply(Point p) {
+        xProperty.set(xProperty.get() * p.getX());
+        yProperty.set(yProperty.get() * p.getY());
     }
 
     public void multiply(int num) {
-        x = x * num;
-        y = y * num;
-    }
-
-    public void multiply(int x, int y) {
-        this.x = (int) (this.x * x);
-        this.y = (int) (this.y * y);
+        xProperty.set(xProperty.get() * num);
+        yProperty.set(yProperty.get() * num);
     }
 
     public void multiply(double num) {
-        x = (int) (x * num);
-        y = (int) (y * num);
+        xProperty.set(xProperty.get() * num);
+        yProperty.set(yProperty.get() * num);
+    }
+
+    public void multiply(int x, int y) {
+        xProperty.set(xProperty.get() * x);
+        yProperty.set(yProperty.get() * y);
     }
 
     public void multiply(double x, double y) {
-        this.x = (int) (this.x * x);
-        this.y = (int) (this.y * y);
+        xProperty.set(xProperty.get() * x);
+        yProperty.set(yProperty.get() * y);
     }
 
-    public void divide(Point v) {
-        x = (int) (x / v.getX());
-        y = (int) (y / v.getY());
+    public void multiply(double x, int y) {
+        xProperty.set(xProperty.get() * x);
+        yProperty.set(yProperty.get() * y);
+    }
+
+    public void multiply(int x, double y) {
+        xProperty.set(xProperty.get() * x);
+        yProperty.set(yProperty.get() * y);
+    }
+
+    public void divide(Point p) {
+        xProperty.set(xProperty.get() / p.getX());
+        yProperty.set(yProperty.get() / p.getY());
     }
 
     public void divide(int num) {
-        x = (int) (x / num);
-        y = (int) (y / num);
+        xProperty.set(xProperty.get() / num);
+        yProperty.set(yProperty.get() / num);
     }
 
     public void divide(double num) {
-        x = (int) (x / num);
-        y = (int) (y / num);
+        xProperty.set(xProperty.get() / num);
+        yProperty.set(yProperty.get() / num);
     }
 
     public void divide(int x, int y) {
-        this.x = (int) (this.x / x);
-        this.y = (int) (this.y / y);
+        xProperty.set(xProperty.get() / x);
+        yProperty.set(yProperty.get() / y);
     }
 
     public void divide(double x, double y) {
-        this.x = (int) (this.x / x);
-        this.y = (int) (this.y / y);
+        xProperty.set(xProperty.get() / x);
+        yProperty.set(yProperty.get() / y);
     }
 
-    public double distanceFrom(Point v) {
-        return Math.sqrt(Math.pow(this.x - v.getX(), 2) + Math.pow(this.y - v.getY(), 2));
+    public void divide(double x, int y) {
+        xProperty.set(xProperty.get() / x);
+        yProperty.set(yProperty.get() / y);
     }
 
-    public boolean is(Point v) {
-        return x == v.getX() && y == v.getY();
+    public void divide(int x, double y) {
+        xProperty.set(xProperty.get() / x);
+        yProperty.set(yProperty.get() / y);
+    }
+
+    public double distanceFrom(Point p) {
+        return Math.sqrt(Math.pow(xProperty.get() - p.getX(), 2) + Math.pow(yProperty.get() - p.getY(), 2));
     }
 
 }
