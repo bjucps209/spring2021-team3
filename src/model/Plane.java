@@ -57,12 +57,12 @@ public class Plane extends Point {
         return yProperty.get() + (height / 2);
     }
 
-    public boolean contains(Point v) {
-        return v.getX() >= getMinX() && v.getX() <= getMaxX() && v.getY() >= getMinY() && v.getY() <= getMaxY();
+    public boolean contains(Point p) {
+        return p.getX() >= getMinX() && p.getX() <= getMaxX() && p.getY() >= getMinY() && p.getY() <= getMaxY();
     }
 
-    public boolean overlaps(Plane s) {
-        return getMaxX() >= s.getMinX() && getMinX() <= s.getMaxX() && getMaxY() >= s.getMinY() && getMinY() <= s.getMaxY();
+    public boolean overlaps(Plane p) {
+        return getMaxX() >= p.getMinX() && getMinX() <= p.getMaxX() && getMaxY() >= p.getMinY() && getMinY() <= p.getMaxY();
     }
 
 }
