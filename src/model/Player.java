@@ -1,12 +1,38 @@
 package model;
 
 import java.io.*;
+import javafx.beans.property.*;
 
-public class Player extends LivingEntity {
+public class Player extends Entity implements Living {
 
     private EntityDirection direction = EntityDirection.RIGHT;
     private PlayerState state = PlayerState.STANDING;
-    private int score;
+    private IntegerProperty scoreProperty = new SimpleIntegerProperty();
+    private IntegerProperty healthProperty = new SimpleIntegerProperty();
+
+    public int getHealth() {
+        return healthProperty.get();
+    }
+
+    public int getScoreProperty() {
+        return scoreProperty.get();
+    }
+
+    public void setScoreProperty(int score) {
+        scoreProperty.set(score);
+    }
+
+    public IntegerProperty scoreProperty() {
+        return scoreProperty;
+    }
+
+    public void setHealth(int health) {
+        healthProperty.set(health);
+    }
+
+    public IntegerProperty getHealthProperty() {
+        return healthProperty;
+    }
 
     @Override
     public void tick() {

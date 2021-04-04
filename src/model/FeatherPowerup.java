@@ -1,5 +1,9 @@
 package model;
 
-public class FeatherPowerup extends Powerup {
+public class FeatherPowerup extends Entity implements Collectable {
     
+    public void collect() {
+        // TODO
+    }
+
 }

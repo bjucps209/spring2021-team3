@@ -1,13 +1,7 @@
 package model;
 
-public class Collectable extends Entity {
-    
-    @Override
-    public void tick() {
+public interface Collectable {
 
-        // Apply generic entity physics updates
-        super.tick();
-
-    }
+    public void collect();
 
 }

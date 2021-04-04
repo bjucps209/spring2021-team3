@@ -2,20 +2,40 @@ package model;
 
 import java.io.*;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+import java.util.*;
+
 public class Game {
 
     private Player player;
     private Level currentLevel;
     private GameState state;
     private static Game instance = new Game();
+    private Timeline gameLoop;
+    private ArrayList<GameObserver> observers;
 
     private Game() {
         player = new Player();
         state = GameState.MENU;
+        gameLoop = new Timeline(new KeyFrame(Duration.millis(1000 / 30), e -> {
+            if(state == GameState.LEVEL_PLAYING) {
+                Game.instance().getCurrentLevel().tick();
+                observers.forEach(o -> o.update());
+                // TODO: Game.instance().getCurrentLevel().setRuntimeSeconds(runtime);
+            }
+        }));
+        gameLoop.setCycleCount(Timeline.INDEFINITE);
+        gameLoop.play();
     }
 
     public static Game instance() {
         return instance;
+    }
+
+    public ArrayList<GameObserver> observers() {
+        return observers;
     }
 
     public GameState getState() {

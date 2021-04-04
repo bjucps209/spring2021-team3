@@ -1,5 +1,9 @@
 package model;
 
-public class SpeedPowerup extends Powerup {
-    
+public class SpeedPowerup extends Entity implements Collectable {
+
+    public void collect() {
+        // TODO
+    }
+
 }

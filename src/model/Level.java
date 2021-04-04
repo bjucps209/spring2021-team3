@@ -3,6 +3,9 @@ package model;
 import java.io.IOException;
 import java.util.*;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+
 public class Level {
     
     private ArrayList<Entity> entities;
@@ -10,7 +13,9 @@ public class Level {
     private DifficultyType difficulty;
     private int width;
     private int height;
-    private String LevelName;
+    private String levelName;
+    private DoubleProperty startTimeProperty = new SimpleDoubleProperty();
+    private DoubleProperty runTimeProperty = new SimpleDoubleProperty();
 
     public Level() {
 
@@ -24,6 +29,19 @@ public class Level {
         for(Entity e : entities) e.tick();
 
     }
+
+    public DoubleProperty runTimeProperty() {
+        return runTimeProperty;
+    }
+
+    public int getRunTimeSeconds() {
+        return (int) runTimeProperty.get();
+    }
+
+    public void setRunTimeSeconds(double runTime) {
+        runTimeProperty.set(runTime);
+    }
+
     /**
      * find the Entity with the given id
      * 
@@ -40,7 +58,7 @@ public class Level {
      * @return - levelName
      */
     public String getLevelName() {
-        return LevelName;
+        return levelName;
     }
 
     /**
@@ -49,7 +67,7 @@ public class Level {
      * @param levelName
      */
     public void setLevelName(String levelName) {
-        this.LevelName = levelName;
+        this.levelName = levelName;
     }
 
     /**
@@ -170,7 +188,7 @@ public class Level {
     /**
      * Save the file 
      */
-    public void save() {
+    public void save(String filename) {
         throw new RuntimeException("Method not implemented");
     }
 

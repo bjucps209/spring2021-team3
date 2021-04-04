@@ -12,7 +12,7 @@ public class LevelTest {
     public void test_level_findEntity() {
         Level level = new Level();
 
-        Enemy enemy = new Enemy();
+        Enemy enemy = new WanderingEnemy();
 
         enemy.setId(3);
 
@@ -38,7 +38,7 @@ public class LevelTest {
     public void test_Level_Save_Load() throws Exception {
         Level level = new Level();
 
-        Enemy enemy = new Enemy();
+        Enemy enemy = new WanderingEnemy();
         enemy.setId(2);
         enemy.setXY(10, 25);
 
@@ -59,7 +59,7 @@ public class LevelTest {
         level.setWidth(2000);
 
         //save the level
-        level.save();
+        level.save("Custom1.dat");
 
         //load the level
         Level level2 = new Level();

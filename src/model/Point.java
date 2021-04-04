@@ -19,8 +19,8 @@ public class Point {
 
     // Physical properties
 
-    protected SimpleDoubleProperty xProperty = new SimpleDoubleProperty();
-    protected SimpleDoubleProperty yProperty = new SimpleDoubleProperty();
+    protected DoubleProperty xProperty = new SimpleDoubleProperty();
+    protected DoubleProperty yProperty = new SimpleDoubleProperty();
 
     public int getIntX() {
         return (int) xProperty.get();

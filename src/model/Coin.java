@@ -1,6 +1,6 @@
 package model;
 
-public class Coin extends Collectable {
+public class Coin extends Entity implements Collectable {
     
     @Override
     public void tick() {
@@ -8,6 +8,10 @@ public class Coin extends Collectable {
         // Apply generic Collectable physics updates
         super.tick();
 
+    }
+
+    public void collect() {
+        // TODO
     }
 
 }

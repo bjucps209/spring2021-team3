@@ -1,5 +1,7 @@
 package model;
 
+import javafx.beans.property.*;
+
 public class Plane extends Point {
 
     public Plane() { }
@@ -7,15 +9,15 @@ public class Plane extends Point {
     public Plane(int x, int y, int width, int height) {
         xProperty.set(x);
         yProperty.set(y);
-        this.width = width;
-        this.height = height;
+        widthProperty.set(width);
+        heightProperty.set(height);
     }
 
     // Physical properties
 
-    private int width;
-    private int height;
     private int id;
+    protected IntegerProperty widthProperty = new SimpleIntegerProperty();
+    protected IntegerProperty heightProperty = new SimpleIntegerProperty();
 
     public int getId() {
         return id;
@@ -25,36 +27,44 @@ public class Plane extends Point {
         this.id = id;
     }
 
+    public IntegerProperty widthProperty() {
+        return widthProperty;
+    }
+
+    public IntegerProperty heightProperty() {
+        return heightProperty;
+    }
+
     public int getWidth() {
-        return width;
+        return widthProperty.get();
     }
 
     public void setWidth(int width) {
-        this.width = width;
+        widthProperty.set(width);
     }
 
     public int getHeight() {
-        return height;
+        return heightProperty.get();
     }
 
     public void setHeight(int height) {
-        this.height = height;
+        heightProperty.set(height);
     }
 
     public double getMinX() {
-        return xProperty.get() - (width / 2);
+        return xProperty.get() - (widthProperty.get() / 2);
     }
 
     public double getMaxX() {
-        return xProperty.get() + (width / 2);
+        return xProperty.get() + (widthProperty.get() / 2);
     }
 
     public double getMinY() {
-        return yProperty.get() - (height / 2);
+        return yProperty.get() - (heightProperty.get() / 2);
     }
 
     public double getMaxY() {
-        return yProperty.get() + (height / 2);
+        return yProperty.get() + (heightProperty.get() / 2);
     }
 
     public boolean contains(Point p) {
