@@ -17,7 +17,7 @@ public class SerializationTest {
         Game world = Game.instance();
         Player player = world.getPlayer();
         player.setState(PlayerState.RUNNING);
-        world.load(filename);
+        world.save(filename);
         
     }
 
