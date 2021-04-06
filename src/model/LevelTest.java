@@ -22,10 +22,10 @@ public class LevelTest {
 
     @Test 
 
-    public void test_level_findSurface() {
+    public void test_level_findBox() {
         Level level = new Level();
 
-        Box block = new Surface();
+        Box block = new Box();
 
         block.setId(5);
 
@@ -66,7 +66,7 @@ public class LevelTest {
         level2.load("Custom1.dat");
 
         Entity enemy2 = level2.findEntity(2);
-        Surface block2 = level2.findBox(1);
+        Box block2 = level2.findBox(1);
 
         //test the loaded level
         assertEquals("Custom1", level2.getLevelName());
@@ -78,7 +78,7 @@ public class LevelTest {
         assertEquals(10, enemy2.centerPoint().getX());
         assertEquals(25, enemy2.centerPoint().getY());
 
-        //Ensure the surface loaded properly
+        //Ensure the Boxes loaded properly
         assertEquals(1, block2.getId());
         assertEquals(100, block2.centerPoint().getX());
         assertEquals(200, block2.centerPoint().getY());
