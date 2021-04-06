@@ -17,4 +17,8 @@ public class Entity extends Box {
         
     }
 
+    public String getType() {
+        return null;
+    }
+
 }

@@ -1,5 +1,7 @@
 package model;
 
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -185,11 +187,38 @@ public class Level {
     public void setHeight(int height) {
         this.height = height;
     }
+    
     /**
      * Save the file 
      */
-    public void save(String filename) {
-        throw new RuntimeException("Method not implemented");
+    public void save(String filename) throws IOException {
+        try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename, false))) {
+            //write the size of the level
+            writer.writeInt(width); 
+            writer.writeInt(height);
+            //write how many entities their are
+            writer.writeInt(entities.size());
+            //Iterate through the entities saving each's data
+            for (int i = 0; i < entities.size(); ++i) { 
+                writer.writeInt(entities.get(i).getId());
+                writer.writeUTF(entities.get(i).getType());
+                writer.writeInt(entities.get(i).centerPoint().getIntX());
+                writer.writeInt(entities.get(i).centerPoint().getIntY());
+                writer.writeInt(entities.get(i).getHeight());
+                writer.writeInt(entities.get(i).getWidth());
+            }
+            //Write how many boxes there are
+            writer.writeInt(boxes.size());
+            //Iterate through the boxes saving each's data
+            for (int i = 0; i < boxes.size(); ++i) {
+                writer.writeInt(boxes.get(i).getId());
+                writer.writeUTF(boxes.get(i).getType());
+                writer.writeInt(boxes.get(i).centerPoint().getIntX());
+                writer.writeInt(boxes.get(i).centerPoint().getIntY());
+                writer.writeInt(boxes.get(i).getWidth());
+                writer.writeInt(boxes.get(i).getHeight());
+            }            
+        }
     }
 
     /**

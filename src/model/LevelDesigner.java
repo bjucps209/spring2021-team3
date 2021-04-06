@@ -6,8 +6,6 @@
 
 package model;
 
-import java.util.ArrayList;
-
 public class LevelDesigner {
 
     Level level;

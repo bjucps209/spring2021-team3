@@ -113,4 +113,8 @@ public class Box {
         return getMaxX() >= b.getMinX() && getMinX() <= b.getMaxX() && getMaxY() >= b.getMinY() && getMinY() <= b.getMaxY();
     }
 
+    public String getType() {
+        return null;
+    }
+
 }
