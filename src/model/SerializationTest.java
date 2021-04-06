@@ -7,7 +7,7 @@ package model;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-//Tests will fail because methods are not implemented.
+
 public class SerializationTest {
 
     private String filename = "serialization.dat";
@@ -18,7 +18,7 @@ public class SerializationTest {
         Player player = world.getPlayer();
         player.centerPoint().setXY(100, 200);
         player.setHealth(9);
-        // add way to just enemies
+        // add way to check enemies
         player.setState(PlayerState.RUNNING);
         world.save(filename);
         
