@@ -19,15 +19,15 @@ public class Game {
     private Game() {
         player = new Player();
         state = GameState.MENU;
-        gameLoop = new Timeline(new KeyFrame(Duration.millis(1000 / 30), e -> {
-            if(state == GameState.LEVEL_PLAYING) {
-                Game.instance().getCurrentLevel().tick();
-                observers.forEach(o -> o.update());
-                // TODO: Game.instance().getCurrentLevel().setRuntimeSeconds(runtime);
-            }
-        }));
-        gameLoop.setCycleCount(Timeline.INDEFINITE);
-        gameLoop.play();
+        // gameLoop = new Timeline(new KeyFrame(Duration.millis(1000 / 30), e -> {
+        //     if(state == GameState.LEVEL_PLAYING) {
+        //         Game.instance().getCurrentLevel().tick();
+        //         observers.forEach(o -> o.update());
+        //         // TODO: Game.instance().getCurrentLevel().setRuntimeSeconds(runtime);
+        //     }
+        // }));
+        // gameLoop.setCycleCount(Timeline.INDEFINITE);
+        // gameLoop.play();
     }
 
     public static Game instance() {

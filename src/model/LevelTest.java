@@ -40,12 +40,12 @@ public class LevelTest {
 
         Enemy enemy = new WanderingEnemy();
         enemy.setId(2);
-        enemy.setXY(10, 25);
+        enemy.centerPoint().setXY(10, 25);
 
         Surface block = new Surface();
         block.setId(1);
-        block.setX(100);
-        block.setY(200);
+        block.centerPoint().setX(100);
+        block.centerPoint().setY(200);
         block.setWidth(100);
         block.setHeight(100);
 
@@ -75,13 +75,13 @@ public class LevelTest {
         assertEquals(2000, level2.getWidth());
 
         //ensure the entities loaded properly
-        assertEquals(10, enemy2.getX());
-        assertEquals(25, enemy2.getY());
+        assertEquals(10, enemy2.centerPoint().getX());
+        assertEquals(25, enemy2.centerPoint().getY());
 
         //Ensure the surface loaded properly
         assertEquals(1, block2.getId());
-        assertEquals(100, block2.getX());
-        assertEquals(200, block2.getY());
+        assertEquals(100, block2.centerPoint().getX());
+        assertEquals(200, block2.centerPoint().getY());
         assertEquals(100, block2.getWidth());
         assertEquals(100, block2.getHeight());
     }

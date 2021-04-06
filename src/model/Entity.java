@@ -1,6 +1,6 @@
 package model;
 
-public class Entity extends Plane {
+public class Entity extends Box {
 
     public final double GRAVITY = 386.0886;
     public final double WALKING_SPEED = 55.11811023622;

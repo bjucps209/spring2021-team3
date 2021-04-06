@@ -1,5 +1,5 @@
 package model;
 
-public class Surface extends Plane {
+public class Surface extends Box {
 
 }
