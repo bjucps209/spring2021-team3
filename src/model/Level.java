@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 public class Level {
     
     private ArrayList<Entity> entities;
-    private ArrayList<Surface> surfaces;
+    private ArrayList<Box> boxes;
     private DifficultyType difficulty;
     private int width;
     private int height;
@@ -84,7 +84,7 @@ public class Level {
      * @param id
      * @return Surface
      */
-    public Surface findSurface(int id) {
+    public Surface findBox(int id) {
         throw new RuntimeException("Method not implemented");
     }
 
@@ -93,7 +93,7 @@ public class Level {
      * 
      * @param id
      */
-    public void removeSurface(int id) {
+    public void removeBox(int id) {
     }
 
     /**
@@ -110,8 +110,8 @@ public class Level {
      * 
      * @param object
      */
-    public void addSurface(Surface surface) {
-        surfaces.add(surface);
+    public void addBox(Box surface) {
+        boxes.add(surface);
     }
 
     /**
@@ -137,8 +137,8 @@ public class Level {
      * 
      * @return surfaces
      */
-    public ArrayList<Surface> getSurfaces() {
-        return surfaces;
+    public ArrayList<Box> getSurfaces() {
+        return boxes;
     }
 
     /**
