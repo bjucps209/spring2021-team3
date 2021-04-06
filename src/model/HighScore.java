@@ -29,8 +29,7 @@ public class HighScore {
     }
 
      /**
-     * Takes a Score as I/P. Loads the High Scores from File into a Data Structure
-     * (scoresList). Adds the incoming Score into the List. Sorts the socresList. 
+     * Takes a Score as I/P. Adds the incoming Score into the List. Sorts the socresList. 
      * 
      * @param score - Score Object to be added
      * @throws IOException
