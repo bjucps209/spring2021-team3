@@ -22,7 +22,7 @@ public class HighScoreTest {
         HighScore highScores = UnitTestUtil.setupHighScores();
 
         // Delete the old SaveScoresData.txt file
-        File fileObj = new File("src/HighScoreFiles/SaveScoresData.txt");
+        File fileObj = new File("HighScoreFiles/SaveScoresData.txt");
         if (fileObj.exists()) {
             fileObj.delete();
         }
@@ -61,7 +61,7 @@ public class HighScoreTest {
         HighScore highScores = UnitTestUtil.setupHighScores();
 
         // Load High Scores from File
-        String fileName = "src/HighScoreFiles/HighScoresTestData.txt";
+        String fileName = "HighScoreFiles/HighScoresTestData.txt";
         highScores.loadScores(fileName);
 
         assertTrue(highScores.getScoresList().get(0).getName().equals("Frank"));
@@ -81,14 +81,14 @@ public class HighScoreTest {
         HighScore highScores = UnitTestUtil.setupHighScores();
 
         try {
-            highScores.loadScores("src/HighScoreFiles/HighScoresTestData.txt");
+            highScores.loadScores("HighScoreFiles/HighScoresTestData.txt");
         } catch (IOException e) {
             System.out.println("I/O Error");
             e.printStackTrace();
         }
-        highScores.saveScores("src/HighScoreFiles/SaveScoresData.txt");
+        highScores.saveScores("HighScoreFiles/SaveScoresData.txt");
         // Check if File SaveScoresTestData.txt exists
-        File fileObj =  new File("src/HighScoreFiles/SaveScoresData.txt");
+        File fileObj =  new File("HighScoreFiles/SaveScoresData.txt");
         assertTrue(fileObj.exists());
     }
 }
