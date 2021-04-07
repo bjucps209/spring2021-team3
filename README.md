@@ -20,7 +20,7 @@
 
 ### Assets
 
-* [Assets Documentation](https://github.com/bjucps209/spring2021-team3/tree/main/src/assets/images)
+* [Assets Documentation](https://github.com/bjucps209/spring2021-team3/tree/main/DinoAdventure-Game/src/assets/images)
 
 
 ### Journals
