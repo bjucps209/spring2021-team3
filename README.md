@@ -12,7 +12,7 @@
 
 ### Design Documents
 
-* [Design Documents](https://github.com/bjucps209/spring2021-team3/wiki/Design)
+* [Design Documents](https://github.com/bjucps209/spring2021-team3/wiki/Design-Documents)
 
 * [Game Specification](https://github.com/bjucps209/spring2021-team3/wiki/Game-Specifications)
 
