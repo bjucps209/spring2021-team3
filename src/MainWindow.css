@@ -8,6 +8,16 @@
     -fx-font-family: 'Helvetica', Arial, sans-serif;
 }
 
+/* Page styles */
+
+
+
+/* Game styles */
+
 .gamePage {
     -fx-background-color: #00BFFF;
+}
+
+.gameTimer {
+    -fx-font-size: 32px;
 }

@@ -2,10 +2,6 @@ package model;
 
 public class Entity extends Box {
 
-    public final double GRAVITY = 386.0886;
-    public final double WALKING_SPEED = 55.11811023622;
-    public final double RUNNING_SPEED = 155.11811023622;
-
     protected double weight;
     protected double xVelocity;
     protected double yVelocity;

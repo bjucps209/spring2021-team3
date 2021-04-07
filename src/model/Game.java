@@ -1,10 +1,6 @@
 package model;
 
 import java.io.*;
-
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 import java.util.*;
 
 public class Game {
@@ -13,25 +9,29 @@ public class Game {
     private Level currentLevel;
     private GameState state;
     private static Game instance = new Game();
-    private Timeline gameLoop;
-    private ArrayList<GameObserver> observers;
+    private ArrayList<GameObserver> observers = new ArrayList<GameObserver>();
+
+    public static final double FPS = 30;
+
+    public static final double GRAVITY = 386.0886;
+    public static final double WALKING_SPEED = 55.11811023622;
+    public static final double RUNNING_SPEED = 155.11811023622;
 
     private Game() {
         player = new Player();
         state = GameState.MENU;
-        // gameLoop = new Timeline(new KeyFrame(Duration.millis(1000 / 30), e -> {
-        //     if(state == GameState.LEVEL_PLAYING) {
-        //         Game.instance().getCurrentLevel().tick();
-        //         observers.forEach(o -> o.update());
-        //         // TODO: Game.instance().getCurrentLevel().setRuntimeSeconds(runtime);
-        //     }
-        // }));
-        // gameLoop.setCycleCount(Timeline.INDEFINITE);
-        // gameLoop.play();
     }
 
     public static Game instance() {
         return instance;
+    }
+
+    public void startLevel(Level level) {
+        currentLevel = level;
+        player.scoreProperty().set(0);
+
+        level.recordStartTime();
+        state = GameState.LEVEL_PLAYING;
     }
 
     public ArrayList<GameObserver> observers() {

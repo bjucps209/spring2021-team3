@@ -19,6 +19,7 @@
     <VBox fx:id="startPage" styleClass="startPage" managed="${startPage.visible}" visible="true">
 
         <Label text="[TEST] Start Page" />
+        <Button text="Start Game" onAction="#startGame" />
         <!-- TODO: Build main page here -->
 
     </VBox>
@@ -38,9 +39,9 @@
     <VBox fx:id="aboutPage" styleClass="aboutPage" managed="${aboutPage.visible}" visible="false">
 
         <!-- TODO: Build about page here -->
-        
+
     </VBox>
 
-    <Pane fx:id="gamePage" styleClass="gamePage" managed="${gamePage.visible}" visible="false" prefWidth="${window.width}" prefHeight="${window.height}" />
+    <AnchorPane fx:id="gamePage" styleClass="gamePage" managed="${gamePage.visible}" visible="false" prefWidth="${window.width}" prefHeight="${window.height}" />
 
 </VBox>

@@ -3,45 +3,89 @@ package model;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleLongProperty;
 
 public class Level {
     
-    private ArrayList<Entity> entities;
-    private ArrayList<Box> boxes;
+    private ArrayList<Entity> entities = new ArrayList<Entity>();
+    private ArrayList<Box> boxes = new ArrayList<Box>();
     private DifficultyType difficulty;
     private int width;
     private int height;
     private String levelName;
-    private DoubleProperty startTimeProperty = new SimpleDoubleProperty();
-    private DoubleProperty runTimeProperty = new SimpleDoubleProperty();
+    private LongProperty startTimeProperty = new SimpleLongProperty();
+    private LongProperty runTimeProperty = new SimpleLongProperty();
+    private LongProperty currentTimeProperty = new SimpleLongProperty();
+    private LongProperty maxTimeProperty = new SimpleLongProperty();
+    private LongProperty remainingTimeProperty = new SimpleLongProperty();
 
     public Level() {
 
         entities.add(Game.instance().getPlayer());
         // TODO: Generate enemies
 
+        runTimeProperty.bind(Bindings.createLongBinding(() -> {
+            return currentTimeProperty.get() - startTimeProperty.get();
+        }, currentTimeProperty, startTimeProperty));
+
+        remainingTimeProperty.bind(Bindings.createLongBinding(() -> {
+            return maxTimeProperty.get() - runTimeProperty.get();
+        }, maxTimeProperty, runTimeProperty));
+
+    }
+
+    public long getMaxTime() {
+        return maxTimeProperty.get() / 1000;
+    }
+
+    public void setMaxTime(long seconds) {
+        maxTimeProperty.set(seconds * 1000);
+    }
+
+    public LongProperty maxTimeProperty() {
+        return maxTimeProperty;
+    }
+
+    public LongProperty remainingTimeProperty() {
+        return remainingTimeProperty;
     }
 
     public void tick() {
 
+        currentTimeProperty.set(System.currentTimeMillis());
         for(Entity e : entities) e.tick();
 
     }
 
-    public DoubleProperty runTimeProperty() {
+    public LongProperty startTimeProperty() {
+        return startTimeProperty;
+    }
+
+    public LongProperty runTimeProperty() {
         return runTimeProperty;
     }
 
-    public int getRunTimeSeconds() {
-        return (int) runTimeProperty.get();
+    public void recordStartTime() {
+        startTimeProperty.set(System.currentTimeMillis());
     }
 
-    public void setRunTimeSeconds(double runTime) {
-        runTimeProperty.set(runTime);
+    public void setStartTime(long time) {
+        startTimeProperty.set(time);
+    }
+
+    public long getStartTime() {
+        return startTimeProperty.get();
+    }
+
+    public long getRunTime() {
+        return runTimeProperty.get();
     }
 
     /**
