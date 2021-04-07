@@ -3,9 +3,44 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:controller="MainWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css"
-    spacing="10" prefHeight="400" prefWidth="250">
+<VBox fx:controller="MainWindow" fx:id="window" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css" spacing="0">
 
-    <Button onAction="#onGreetClicked" text="Greet"  />
+    <!--
+        * Please do not modify the root VBox without discussing it with the team first.
+        * The root VBox controls the entire GUI, so any changes to it could affect everyone.
+        * All pages except the initial page should have the following properties:
+        *     - managed="false"
+        *     - visible="false"
+        * These are the properties used to show and hide pages.
+        * Both properties must be set to the same value, so I've set up data binding to ensure that.
+        * Use `<fx:id>.setVisible(boolean)` to show and hide pages within the Java, just make sure only one is shown at a time.
+    -->
+
+    <VBox fx:id="startPage" styleClass="startPage" managed="${startPage.visible}" visible="true">
+
+        <Label text="[TEST] Start Page" />
+        <!-- TODO: Build main page here -->
+
+    </VBox>
+
+    <VBox fx:id="highScorePage" styleClass="highScorePage" managed="${highScorePage.visible}" visible="false">
+
+        <!-- TODO: Build high score page here -->
+
+    </VBox>
+
+    <VBox fx:id="helpPage" styleClass="helpPage" managed="${helpPage.visible}" visible="false">
+
+        <!-- TODO: Build help page here -->
+
+    </VBox>
+
+    <VBox fx:id="aboutPage" styleClass="aboutPage" managed="${aboutPage.visible}" visible="false">
+
+        <!-- TODO: Build about page here -->
+        
+    </VBox>
+
+    <Pane fx:id="gamePage" styleClass="gamePage" managed="${gamePage.visible}" visible="false" prefWidth="${window.width}" prefHeight="${window.height}" />
 
 </VBox>
