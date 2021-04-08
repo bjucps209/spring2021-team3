@@ -10,6 +10,7 @@ public class Game {
     private GameState state;
     private static Game instance = new Game();
     private ArrayList<GameObserver> observers = new ArrayList<GameObserver>();
+    private DifficultyType difficulty = DifficultyType.EASY;
 
     public static final double FPS = 30;
 
@@ -48,6 +49,24 @@ public class Game {
 
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * set the game's difficulty
+     * 
+     * @param difficulty - difficulty to set to
+     */
+    public void setDifficulty(DifficultyType difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    /**
+     * get the difficutly of the game
+     * 
+     * @return difficulty
+     */
+    public DifficultyType getDifficulty() {
+        return difficulty;
     }
 
     public Level getCurrentLevel() {

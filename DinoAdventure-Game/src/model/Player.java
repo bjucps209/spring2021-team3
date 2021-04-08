@@ -30,7 +30,7 @@ public class Player extends Entity implements Living {
         healthProperty.set(health);
     }
 
-    public IntegerProperty getHealthProperty() {
+    public IntegerProperty healthProperty() {
         return healthProperty;
     }
 

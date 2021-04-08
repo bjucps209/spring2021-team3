@@ -8,6 +8,6 @@ public interface Living {
 
     public void setHealth(int health);
 
-    public IntegerProperty getHealthProperty();
+    public IntegerProperty healthProperty();
     
 }
