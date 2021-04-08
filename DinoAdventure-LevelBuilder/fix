@@ -1,0 +1,2 @@
+sed -i "86,106d" build/install/app/bin/app
+sed -i "85i JAVACMD=\"java\"" build/install/app/bin/app

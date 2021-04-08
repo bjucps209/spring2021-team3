@@ -1,0 +1,4 @@
+echo "Cleaning project..."
+rm .project .classpath gradlew*
+rm -r bin/ build/ .settings/ .gradle/ .idea/ gradle/
+echo "Project is cleaned."
