@@ -114,7 +114,12 @@ public class Box {
     }
 
     public String getType() {
-        return null;
+        return "null";
     }
+
+    public void setType(String readUTF) {
+    }
+
+    
 
 }
