@@ -1,6 +1,6 @@
 package model;
 
-enum SurfaceType {
+enum BlockType {
     BLOCK,
     WALL,
     FLAG
