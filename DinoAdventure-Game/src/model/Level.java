@@ -16,7 +16,6 @@ public class Level {
     
     private ArrayList<Entity> entities = new ArrayList<Entity>();
     private ArrayList<Box> boxes = new ArrayList<Box>();
-    private DifficultyType difficulty;
     private int width;
     private int height;
     private String levelName;
@@ -158,24 +157,6 @@ public class Level {
      */
     public void addBox(Box surface) {
         boxes.add(surface);
-    }
-
-    /**
-     * set the level's difficulty
-     * 
-     * @param difficulty - difficulty to set to
-     */
-    public void setDifficulty(DifficultyType difficulty) {
-        this.difficulty = difficulty;
-    }
-
-    /**
-     * get the difficutly of the level
-     * 
-     * @return difficulty
-     */
-    public DifficultyType getDifficulty() {
-        return difficulty;
     }
 
     /**

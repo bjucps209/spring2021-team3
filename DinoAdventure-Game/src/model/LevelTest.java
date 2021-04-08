@@ -54,7 +54,6 @@ public class LevelTest {
         level.addEntity(enemy);
         
         level.setLevelName("Custom1");
-        level.setDifficulty(DifficultyType.HARD);
         level.setHeight(500);
         level.setWidth(2000);
 
@@ -70,7 +69,6 @@ public class LevelTest {
 
         //test the loaded level
         assertEquals("Custom1", level2.getLevelName());
-        assertEquals(DifficultyType.HARD, level2.getDifficulty());
         assertEquals(500, level2.getHeight());
         assertEquals(2000, level2.getWidth());
 
