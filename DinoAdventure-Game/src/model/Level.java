@@ -15,7 +15,7 @@ import javafx.beans.property.SimpleLongProperty;
 public class Level {
     
     private ArrayList<Entity> entities = new ArrayList<Entity>();
-    private ArrayList<Box> boxes = new ArrayList<Box>();
+    private ArrayList<Block> surfaces = new ArrayList<Block>();
     private int width;
     private int height;
     private String levelName;
@@ -127,9 +127,9 @@ public class Level {
      * find the surface with the given id
      * 
      * @param id
-     * @return Surface
+     * @return Block
      */
-    public Surface findBox(int id) {
+    public Block findBox(int id) {
         throw new RuntimeException("Method not implemented");
     }
 
@@ -155,8 +155,8 @@ public class Level {
      * 
      * @param object
      */
-    public void addBox(Box surface) {
-        boxes.add(surface);
+    public void addBlock(Block surface) {
+        surfaces.add(surface);
     }
 
     /**
@@ -164,8 +164,8 @@ public class Level {
      * 
      * @return surfaces
      */
-    public ArrayList<Box> getSurfaces() {
-        return boxes;
+    public ArrayList<Block> getBlocks() {
+        return surfaces;
     }
 
     /**
@@ -232,16 +232,16 @@ public class Level {
                 writer.writeInt(entities.get(i).getHeight());
                 writer.writeInt(entities.get(i).getWidth());
             }
-            //Write how many boxes there are
-            writer.writeInt(boxes.size());
-            //Iterate through the boxes saving each's data
-            for (int i = 0; i < boxes.size(); ++i) {
-                writer.writeInt(boxes.get(i).getId());
-                writer.writeUTF(boxes.get(i).getType());
-                writer.writeInt(boxes.get(i).centerPoint().getIntX());
-                writer.writeInt(boxes.get(i).centerPoint().getIntY());
-                writer.writeInt(boxes.get(i).getWidth());
-                writer.writeInt(boxes.get(i).getHeight());
+            //Write how many surfaces there are
+            writer.writeInt(surfaces.size());
+            //Iterate through the surfaces saving each's data
+            for (int i = 0; i < surfaces.size(); ++i) {
+                writer.writeInt(surfaces.get(i).getId());
+                writer.writeUTF(surfaces.get(i).getType());
+                writer.writeInt(surfaces.get(i).centerPoint().getIntX());
+                writer.writeInt(surfaces.get(i).centerPoint().getIntY());
+                writer.writeInt(surfaces.get(i).getWidth());
+                writer.writeInt(surfaces.get(i).getHeight());
             }            
         }
     }

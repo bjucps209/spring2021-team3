@@ -135,13 +135,40 @@ public class MainWindow {
         healthIconLabel.getStyleClass().add("material-icons");
         healthHBox.getChildren().add(healthIconLabel);
 
-
-
         gamePage.getChildren().add(dataVBox);
 
 
 
         gamePage.setVisible(true);
+
+
+
+        ImageView playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
+        playerImage.xProperty().bind(Game.instance().getPlayer().minXProperty());
+        playerImage.yProperty().bind(Game.instance().getPlayer().minYProperty());
+        gamePage.getChildren().add(playerImage);
+
+
+
+        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-1.png"));
+        Block block = new Block();
+        block.centerPoint().setXY(100, 600);
+        block.setWidth(128);
+        block.setHeight(128);
+        Game.instance().getCurrentLevel().getBlocks().add(block);
+        blockImage.xProperty().bind(block.minXProperty());
+        blockImage.yProperty().bind(block.minYProperty());
+        gamePage.getChildren().add(blockImage);
+
+
+
+
+
+
+        Game.instance().getPlayer().centerPoint().setXY(100, 100);
+        Game.instance().getPlayer().setWidth(50);
+        Game.instance().getPlayer().setHeight(54);
+        //Game.instance().getPlayer().setXVelocity(1);
 
     }
 

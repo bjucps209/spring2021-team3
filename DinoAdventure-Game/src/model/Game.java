@@ -12,9 +12,10 @@ public class Game {
     private ArrayList<GameObserver> observers = new ArrayList<GameObserver>();
     private DifficultyType difficulty = DifficultyType.EASY;
 
-    public static final double FPS = 30;
+    public static final double FPS = 60;
 
-    public static final double GRAVITY = 386.0886;
+    // Real gravity: 386.0886
+    public static final double GRAVITY = 25;
     public static final double WALKING_SPEED = 55.11811023622;
     public static final double RUNNING_SPEED = 155.11811023622;
 
