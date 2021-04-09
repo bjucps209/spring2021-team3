@@ -149,17 +149,12 @@ public class MainWindow {
         gamePage.getChildren().add(playerImage);
 
 
-
-        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-1.png"));
-        Block block = new Block();
-        block.centerPoint().setXY(100, 600);
-        block.setWidth(128);
-        block.setHeight(128);
-        Game.instance().getCurrentLevel().getBlocks().add(block);
-        blockImage.xProperty().bind(block.minXProperty());
-        blockImage.yProperty().bind(block.minYProperty());
-        gamePage.getChildren().add(blockImage);
-
+        Game.instance().getCurrentLevel().getBlocks().stream().forEach(block -> {
+            ImageView blockImage = new ImageView(new Image("assets/images/world/ground-2.png"));
+            blockImage.xProperty().bind(block.minXProperty());
+            blockImage.yProperty().bind(block.minYProperty());
+            gamePage.getChildren().add(blockImage);
+        });
 
 
 

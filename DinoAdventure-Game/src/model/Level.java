@@ -1,6 +1,8 @@
 package model;
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Instant;
@@ -15,7 +17,7 @@ import javafx.beans.property.SimpleLongProperty;
 public class Level {
     
     private ArrayList<Entity> entities = new ArrayList<Entity>();
-    private ArrayList<Block> surfaces = new ArrayList<Block>();
+    private ArrayList<Box> boxes = new ArrayList<Box>();
     private int width;
     private int height;
     private String levelName;
@@ -29,6 +31,17 @@ public class Level {
 
         entities.add(Game.instance().getPlayer());
         // TODO: Generate enemies
+        Block block = new Block();
+        block.centerPoint().setXY(100, 600);
+        block.setWidth(128);
+        block.setHeight(128);
+        this.addBox(block);
+
+        Block block2 = new Block();
+        block2.centerPoint().setXY(200, 600);
+        block2.setWidth(128);
+        block2.setHeight(128);
+        this.addBox(block2);
 
         runTimeProperty.bind(Bindings.createLongBinding(() -> {
             return currentTimeProperty.get() - startTimeProperty.get();
@@ -94,7 +107,12 @@ public class Level {
      * @return Entity
      */
     public Entity findEntity(int id) {
-        throw new RuntimeException("Method not implemented");
+        for (Entity entity : entities) {
+            if (entity.getId() == id) {
+                return entity;
+            }
+        }
+        return null;
     }
 
     /**
@@ -129,8 +147,13 @@ public class Level {
      * @param id
      * @return Block
      */
-    public Block findBox(int id) {
-        throw new RuntimeException("Method not implemented");
+    public Box findBox(int id) {
+        for (Box box : boxes) {
+            if (box.getId() == id) {
+                return box;
+            }
+        }
+        return null;
     }
 
     /**
@@ -155,8 +178,8 @@ public class Level {
      * 
      * @param object
      */
-    public void addBlock(Block surface) {
-        surfaces.add(surface);
+    public void addBox(Box block) {
+        boxes.add(block);
     }
 
     /**
@@ -164,8 +187,8 @@ public class Level {
      * 
      * @return surfaces
      */
-    public ArrayList<Block> getBlocks() {
-        return surfaces;
+    public ArrayList<Box> getBlocks() {
+        return boxes;
     }
 
     /**
@@ -214,35 +237,35 @@ public class Level {
     }
     
     /**
-     * Save the file 
+     * Save the file
      */
     public void save(String filename) throws IOException {
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename, false))) {
-            //write the size of the level
-            writer.writeInt(width); 
+            // write the size of the level
+            writer.writeInt(width);
             writer.writeInt(height);
-            //write how many entities their are
+            // write how many entities their are
             writer.writeInt(entities.size());
-            //Iterate through the entities saving each's data
-            for (int i = 0; i < entities.size(); ++i) { 
+            // Iterate through the entities saving each's data
+            for (int i = 0; i < entities.size(); ++i) {
                 writer.writeInt(entities.get(i).getId());
-                writer.writeUTF(entities.get(i).getType());
+                // writer.writeUTF(entities.get(i).getType());
                 writer.writeInt(entities.get(i).centerPoint().getIntX());
                 writer.writeInt(entities.get(i).centerPoint().getIntY());
-                writer.writeInt(entities.get(i).getHeight());
-                writer.writeInt(entities.get(i).getWidth());
+                // writer.writeInt(entities.get(i).getHeight());
+                // writer.writeInt(entities.get(i).getWidth());
             }
-            //Write how many surfaces there are
-            writer.writeInt(surfaces.size());
-            //Iterate through the surfaces saving each's data
-            for (int i = 0; i < surfaces.size(); ++i) {
-                writer.writeInt(surfaces.get(i).getId());
-                writer.writeUTF(surfaces.get(i).getType());
-                writer.writeInt(surfaces.get(i).centerPoint().getIntX());
-                writer.writeInt(surfaces.get(i).centerPoint().getIntY());
-                writer.writeInt(surfaces.get(i).getWidth());
-                writer.writeInt(surfaces.get(i).getHeight());
-            }            
+            // Write how many boxes there are
+            writer.writeInt(boxes.size());
+            // Iterate through the boxes saving each's data
+            for (int i = 0; i < boxes.size(); ++i) {
+                writer.writeInt(boxes.get(i).getId());
+                // writer.writeUTF(boxes.get(i).getType());
+                writer.writeInt(boxes.get(i).centerPoint().getIntX());
+                writer.writeInt(boxes.get(i).centerPoint().getIntY());
+                writer.writeInt(boxes.get(i).getWidth());
+                writer.writeInt(boxes.get(i).getHeight());
+            }
         }
     }
 
@@ -250,8 +273,42 @@ public class Level {
      * 
      * @return
      */
-    public Level load(String fileName) throws IOException {
-        throw new RuntimeException("Method not implemented");
+    public void load(String fileName) throws IOException {
+        setLevelName(fileName);
+        // Load Playermanager instance from itmes.dat binary file
+        var reader = new DataInputStream(new FileInputStream(fileName)); // Create loader
+        // read the size of the level
+        int width = reader.readInt();
+        int height = reader.readInt();
+        // read the number of entities
+        int sizeOfEntities = reader.readInt();
+        // get how many players there are
+        for (int i = 0; i < sizeOfEntities; ++i) { // iterate over each playing gathering their values
+            Entity entity = new Enemy() {
+            };
+            entity.setId(reader.readInt());
+            // reader.readUTF();
+            entity.centerPoint().setX(reader.readInt());
+            entity.centerPoint().setY(reader.readInt());
+            entities.add(entity);
+        }
+        // get blocks
+        int sizeOfBlocks = reader.readInt();
+        for (int i = 0; i < sizeOfBlocks; ++i) { // iterate over each playing gathering their values
+            Box box = new Box();
+            box.setId(reader.readInt());
+            // box.setType(reader.readUTF());
+            box.centerPoint().setX(reader.readInt());
+            box.centerPoint().setY(reader.readInt());
+            box.setWidth(reader.readInt());
+            box.setHeight(reader.readInt());
+            boxes.add(box);
+        }
+
+        setWidth(width);
+        setHeight(height);
+
+        reader.close();
     }
 
 }

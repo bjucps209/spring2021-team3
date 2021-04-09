@@ -22,7 +22,7 @@ public class Entity extends Box {
         surfaceCheck.centerPoint().add(xVelocity, yVelocity - 1);
 
         // Check if the entity would be colliding with a surface based on the future velocities
-        for(Block b : Game.instance().getCurrentLevel().getBlocks()) {
+        for(Box b : Game.instance().getCurrentLevel().getBlocks()) {
             if(b.overlaps(surfaceCheck)) {
                 yVelocity = -(yVelocity / 4);
             }
