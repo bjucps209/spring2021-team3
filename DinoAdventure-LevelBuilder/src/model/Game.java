@@ -10,16 +10,27 @@ public class Game {
     private GameState state;
     private static Game instance = new Game();
     private ArrayList<GameObserver> observers = new ArrayList<GameObserver>();
+    private DifficultyType difficulty = DifficultyType.EASY;
+    private String gameOverMessage;
 
-    public static final double FPS = 30;
+    public static final double FPS = 60;
 
-    public static final double GRAVITY = 386.0886;
+    // Real gravity: 386.0886
+    public static final double GRAVITY = 30;
     public static final double WALKING_SPEED = 55.11811023622;
     public static final double RUNNING_SPEED = 155.11811023622;
 
     private Game() {
         player = new Player();
         state = GameState.MENU;
+    }
+
+    public String getGameOverMessage() {
+        return gameOverMessage;
+    }
+
+    public void setGameOverMessage(String gameOverMessage) {
+        this.gameOverMessage = gameOverMessage;
     }
 
     public static Game instance() {
@@ -48,6 +59,24 @@ public class Game {
 
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * set the game's difficulty
+     * 
+     * @param difficulty - difficulty to set to
+     */
+    public void setDifficulty(DifficultyType difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    /**
+     * get the difficutly of the game
+     * 
+     * @return difficulty
+     */
+    public DifficultyType getDifficulty() {
+        return difficulty;
     }
 
     public Level getCurrentLevel() {

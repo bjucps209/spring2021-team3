@@ -1,6 +1,6 @@
 package model;
 
-enum EntityDirection {
+public enum EntityDirection {
     LEFT,
     RIGHT
 }

@@ -25,12 +25,12 @@ public class LevelTest {
     public void test_level_findBox() {
         Level level = new Level();
 
-        Box block = new Box();
+        Block block = new Block();
 
         block.setId(5);
 
-        level.addBox(block);
-        assertEquals(block, level.findBox(5));
+        level.getBlocks().add(block);
+        assertEquals(block, level.findBlock(5));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class LevelTest {
         enemy.setId(2);
         enemy.centerPoint().setXY(10, 25);
 
-        Box block = new Box();
+        Block block = new Block();
         block.setId(1);
         block.centerPoint().setX(100);
         block.centerPoint().setY(200);
@@ -49,7 +49,7 @@ public class LevelTest {
         block.setHeight(100);
 
         //add new elements to the level
-        level.addBox(block);
+        level.getBlocks().add(block);
         level.addEntity(enemy);
         
         level.setLevelName("Custom1");
@@ -77,7 +77,7 @@ public class LevelTest {
         block.setHeight(100);
 
         //add new elements to the level
-        level.addBox(block);
+        level.addBlock(block);
         level.addEntity(enemy);
         
         level.setLevelName("Custom1");
@@ -93,7 +93,7 @@ public class LevelTest {
         level2.load("Custom1.dat");
 
         Entity enemy2 = level2.findEntity(2);
-        Box block2 = level2.findBox(1);
+        Box block2 = level2.findBlock(1);
 
         //test the loaded level
         // assertEquals("Custom1", level2.getLevelName());

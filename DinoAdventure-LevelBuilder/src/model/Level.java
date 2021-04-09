@@ -15,10 +15,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 
 public class Level {
-
+    
     private ArrayList<Entity> entities = new ArrayList<Entity>();
-    private ArrayList<Box> boxes = new ArrayList<Box>();
-    private DifficultyType difficulty;
+    private ArrayList<Block> blocks = new ArrayList<Block>();
     private int width;
     private int height;
     private String levelName;
@@ -27,11 +26,23 @@ public class Level {
     private LongProperty currentTimeProperty = new SimpleLongProperty();
     private LongProperty maxTimeProperty = new SimpleLongProperty();
     private LongProperty remainingTimeProperty = new SimpleLongProperty();
+    private Point spawnPoint = new Point();
 
     public Level() {
 
         entities.add(Game.instance().getPlayer());
         // TODO: Generate enemies
+        Block block = new Block();
+        block.centerPoint().setXY(100, 600);
+        block.setWidth(128);
+        block.setHeight(128);
+        this.addBlock(block);
+
+        Block block2 = new Block();
+        block2.centerPoint().setXY(200, 600);
+        block2.setWidth(128);
+        block2.setHeight(128);
+        this.addBlock(block2);
 
         runTimeProperty.bind(Bindings.createLongBinding(() -> {
             return currentTimeProperty.get() - startTimeProperty.get();
@@ -41,6 +52,14 @@ public class Level {
             return maxTimeProperty.get() - runTimeProperty.get();
         }, maxTimeProperty, runTimeProperty));
 
+    }
+
+    public Point getSpawnPoint() {
+        return spawnPoint;
+    }
+
+    public void setSpawnPoint(Point spawnPoint) {
+        this.spawnPoint.copyFrom(spawnPoint);
     }
 
     public long getMaxTime() {
@@ -62,8 +81,7 @@ public class Level {
     public void tick() {
 
         currentTimeProperty.set(System.currentTimeMillis());
-        for (Entity e : entities)
-            e.tick();
+        for(Entity e : entities) e.tick();
 
     }
 
@@ -136,12 +154,12 @@ public class Level {
      * find the surface with the given id
      * 
      * @param id
-     * @return Surface
+     * @return Block
      */
-    public Box findBox(int id) {
-        for (Box box : boxes) {
-            if (box.getId() == id) {
-                return box;
+    public Block findBlock(int id) {
+        for (Block block : blocks) {
+            if (block.getId() == id) {
+                return block;
             }
         }
         return null;
@@ -152,7 +170,7 @@ public class Level {
      * 
      * @param id
      */
-    public void removeBox(int id) {
+    public void removeBlock(int id) {
     }
 
     /**
@@ -169,26 +187,8 @@ public class Level {
      * 
      * @param object
      */
-    public void addBox(Box surface) {
-        boxes.add(surface);
-    }
-
-    /**
-     * set the level's difficulty
-     * 
-     * @param difficulty - difficulty to set to
-     */
-    public void setDifficulty(DifficultyType difficulty) {
-        this.difficulty = difficulty;
-    }
-
-    /**
-     * get the difficutly of the level
-     * 
-     * @return difficulty
-     */
-    public DifficultyType getDifficulty() {
-        return difficulty;
+    public void addBlock(Block block) {
+        blocks.add(block);
     }
 
     /**
@@ -196,8 +196,8 @@ public class Level {
      * 
      * @return surfaces
      */
-    public ArrayList<Box> getSurfaces() {
-        return boxes;
+    public ArrayList<Block> getBlocks() {
+        return blocks;
     }
 
     /**
@@ -244,7 +244,7 @@ public class Level {
     public void setHeight(int height) {
         this.height = height;
     }
-
+    
     /**
      * Save the file
      */
@@ -258,22 +258,22 @@ public class Level {
             // Iterate through the entities saving each's data
             for (int i = 0; i < entities.size(); ++i) {
                 writer.writeInt(entities.get(i).getId());
-                writer.writeUTF(entities.get(i).getType());
+                // writer.writeUTF(entities.get(i).getType());
                 writer.writeInt(entities.get(i).centerPoint().getIntX());
                 writer.writeInt(entities.get(i).centerPoint().getIntY());
                 // writer.writeInt(entities.get(i).getHeight());
                 // writer.writeInt(entities.get(i).getWidth());
             }
-            // Write how many boxes there are
-            writer.writeInt(boxes.size());
-            // Iterate through the boxes saving each's data
-            for (int i = 0; i < boxes.size(); ++i) {
-                writer.writeInt(boxes.get(i).getId());
-                writer.writeUTF(boxes.get(i).getType());
-                writer.writeInt(boxes.get(i).centerPoint().getIntX());
-                writer.writeInt(boxes.get(i).centerPoint().getIntY());
-                writer.writeInt(boxes.get(i).getWidth());
-                writer.writeInt(boxes.get(i).getHeight());
+            // Write how many blocks there are
+            writer.writeInt(blocks.size());
+            // Iterate through the blocks saving each's data
+            for (int i = 0; i < blocks.size(); ++i) {
+                writer.writeInt(blocks.get(i).getId());
+                // writer.writeUTF(blocks.get(i).getType());
+                writer.writeInt(blocks.get(i).centerPoint().getIntX());
+                writer.writeInt(blocks.get(i).centerPoint().getIntY());
+                writer.writeInt(blocks.get(i).getWidth());
+                writer.writeInt(blocks.get(i).getHeight());
             }
         }
     }
@@ -296,7 +296,7 @@ public class Level {
             Entity entity = new Enemy() {
             };
             entity.setId(reader.readInt());
-            reader.readUTF();
+            // reader.readUTF();
             entity.centerPoint().setX(reader.readInt());
             entity.centerPoint().setY(reader.readInt());
             entities.add(entity);
@@ -304,21 +304,20 @@ public class Level {
         // get blocks
         int sizeOfBlocks = reader.readInt();
         for (int i = 0; i < sizeOfBlocks; ++i) { // iterate over each playing gathering their values
-            Box box = new Box();
+            Block box = new Block();
             box.setId(reader.readInt());
-            box.setType(reader.readUTF());
+            // box.setType(reader.readUTF());
             box.centerPoint().setX(reader.readInt());
             box.centerPoint().setY(reader.readInt());
             box.setWidth(reader.readInt());
             box.setHeight(reader.readInt());
-            boxes.add(box);
+            blocks.add(box);
         }
 
         setWidth(width);
         setHeight(height);
 
         reader.close();
-
     }
 
 }
