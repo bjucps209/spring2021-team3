@@ -284,8 +284,7 @@ public class Level {
         int sizeOfEntities = reader.readInt();
         // get how many players there are
         for (int i = 0; i < sizeOfEntities; ++i) { // iterate over each playing gathering their values
-            Entity entity = new Enemy() {
-            };
+            Entity entity = new Enemy() {};
             entity.setId(reader.readInt());
             // reader.readUTF();
             entity.centerPoint().setX(reader.readInt());
@@ -295,7 +294,7 @@ public class Level {
         // get blocks
         int sizeOfBlocks = reader.readInt();
         for (int i = 0; i < sizeOfBlocks; ++i) { // iterate over each playing gathering their values
-            Box box = new Box();
+            Block box = new Block();
             box.setId(reader.readInt());
             // box.setType(reader.readUTF());
             box.centerPoint().setX(reader.readInt());
