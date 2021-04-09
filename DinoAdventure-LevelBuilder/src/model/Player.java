@@ -9,9 +9,18 @@ public class Player extends Entity implements Living {
     private PlayerState state = PlayerState.STANDING;
     private IntegerProperty scoreProperty = new SimpleIntegerProperty();
     private IntegerProperty healthProperty = new SimpleIntegerProperty();
+    private boolean moving;
 
     public int getHealth() {
         return healthProperty.get();
+    }
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 
     public int getScoreProperty() {
@@ -30,17 +39,29 @@ public class Player extends Entity implements Living {
         healthProperty.set(health);
     }
 
-    public IntegerProperty getHealthProperty() {
+    public IntegerProperty healthProperty() {
         return healthProperty;
     }
 
     @Override
     public void tick() {
 
-        // TODO: Implement specific player physics
+        for(GameObserver observer : Game.instance().observers()) {
+            observer.handleInput();
+        }
 
         // Apply generic entity physics updates
         super.tick();
+
+        if(healthProperty.get() <= 0) {
+            Game.instance().setGameOverMessage("You ran out of health!");
+            Game.instance().setState(GameState.GAME_OVER);
+        }
+
+        if(Game.instance().getCurrentLevel().remainingTimeProperty().get() <= 0) {
+            Game.instance().setGameOverMessage("You ran out of time!");
+            Game.instance().setState(GameState.GAME_OVER);
+        }
 
     }
 

@@ -11,17 +11,26 @@ public class Game {
     private static Game instance = new Game();
     private ArrayList<GameObserver> observers = new ArrayList<GameObserver>();
     private DifficultyType difficulty = DifficultyType.EASY;
+    private String gameOverMessage;
 
     public static final double FPS = 60;
 
     // Real gravity: 386.0886
-    public static final double GRAVITY = 25;
+    public static final double GRAVITY = 30;
     public static final double WALKING_SPEED = 55.11811023622;
     public static final double RUNNING_SPEED = 155.11811023622;
 
     private Game() {
         player = new Player();
         state = GameState.MENU;
+    }
+
+    public String getGameOverMessage() {
+        return gameOverMessage;
+    }
+
+    public void setGameOverMessage(String gameOverMessage) {
+        this.gameOverMessage = gameOverMessage;
     }
 
     public static Game instance() {
