@@ -24,6 +24,7 @@ public class Level {
     private LongProperty currentTimeProperty = new SimpleLongProperty();
     private LongProperty maxTimeProperty = new SimpleLongProperty();
     private LongProperty remainingTimeProperty = new SimpleLongProperty();
+    private Point spawnPoint = new Point();
 
     public Level() {
 
@@ -38,6 +39,14 @@ public class Level {
             return maxTimeProperty.get() - runTimeProperty.get();
         }, maxTimeProperty, runTimeProperty));
 
+    }
+
+    public Point getSpawnPoint() {
+        return spawnPoint;
+    }
+
+    public void setSpawnPoint(Point spawnPoint) {
+        this.spawnPoint.copyFrom(spawnPoint);
     }
 
     public long getMaxTime() {

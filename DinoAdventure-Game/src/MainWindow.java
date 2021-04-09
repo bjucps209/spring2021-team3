@@ -5,7 +5,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import model.*;
 
@@ -14,7 +16,7 @@ import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.util.Duration;
 
-public class MainWindow {
+public class MainWindow implements GameObserver {
 
     @FXML VBox window;
     @FXML VBox startPage;
@@ -22,24 +24,191 @@ public class MainWindow {
     @FXML VBox helpPage;
     @FXML VBox aboutPage;
     @FXML AnchorPane gamePage;
+    @FXML ImageView playerImage;
     
     private Timeline gameLoop;
 
+    private boolean keysBound;
+    private boolean upKeyPressed;
+    private boolean leftKeyPressed;
+    private boolean rightKeyPressed;
+    private boolean downKeyPressed;
+    private boolean escapeKeyPressed;
+
     public void initialize() {
 
+        Game.instance().observers().add(this);
+
         gameLoop = new Timeline(new KeyFrame(Duration.millis(1000 / Game.FPS), e -> {
-            if(Game.instance().getState() == GameState.LEVEL_PLAYING) {
-                Game.instance().getCurrentLevel().tick();
-                Game.instance().observers().forEach(o -> o.update());
+
+            switch(Game.instance().getState()) {
+
+                case LEVEL_PLAYING:
+                    handleInput();
+                    Game.instance().getCurrentLevel().tick();
+                    Game.instance().observers().forEach(o -> o.update());
+                    break;
+
+                case GAME_OVER:
+                    gameLoop.stop();
+                    VBox gameOverPane = new VBox();
+                    gameOverPane.setAlignment(Pos.CENTER);
+                    gameOverPane.getStyleClass().add("gameOverPane");
+                    AnchorPane.setTopAnchor(gameOverPane, 0.0);
+                    AnchorPane.setLeftAnchor(gameOverPane, 0.0);
+                    AnchorPane.setRightAnchor(gameOverPane, 0.0);
+                    gameOverPane.setPrefHeight(window.getHeight());
+                    gameOverPane.setSpacing(10);
+                    gamePage.getChildren().add(gameOverPane);
+                    Label gameOverHeader = new Label();
+                    gameOverHeader.setText("GAME OVER");
+                    gameOverHeader.getStyleClass().add("gameOverHeader");
+                    gameOverPane.getChildren().add(gameOverHeader);
+                    Label gameOverMessage = new Label();
+                    gameOverMessage.setText(Game.instance().getGameOverMessage());
+                    gameOverMessage.getStyleClass().add("gameOverMessage");
+                    gameOverPane.getChildren().add(gameOverMessage);
+                    HBox buttons = new HBox();
+                    buttons.setAlignment(Pos.CENTER);
+                    buttons.setSpacing(10);
+                    gameOverPane.getChildren().add(buttons);
+                    Button menuButton = new Button();
+                    menuButton.setText("Menu");
+                    buttons.getChildren().add(menuButton);
+                    Button restartButton = new Button();
+                    restartButton.setText("Try Again");
+                    buttons.getChildren().add(restartButton);
+                    menuButton.setOnAction(ev -> {
+                        Game.instance().setState(GameState.MENU);
+                        gamePage.setVisible(false);
+                        startPage.setVisible(true);
+                    });
+                    restartButton.setOnAction(ev -> {
+                        startGame(new ActionEvent());
+                    });
+                    break;
+
+                case LEVEL_PAUSED:
+                    gameLoop.stop();
+                    long gamePausedAt = System.currentTimeMillis();
+                    VBox gamePausedPane = new VBox();
+                    gamePausedPane.setAlignment(Pos.CENTER);
+                    gamePausedPane.getStyleClass().add("gamePausedPane");
+                    AnchorPane.setTopAnchor(gamePausedPane, 0.0);
+                    AnchorPane.setLeftAnchor(gamePausedPane, 0.0);
+                    AnchorPane.setRightAnchor(gamePausedPane, 0.0);
+                    gamePausedPane.setPrefHeight(window.getHeight());
+                    gamePausedPane.setSpacing(10);
+                    gamePage.getChildren().add(gamePausedPane);
+                    Label gamePausedHeader = new Label();
+                    gamePausedHeader.setText("GAME PAUSED");
+                    gamePausedHeader.getStyleClass().add("gamePausedHeader");
+                    gamePausedPane.getChildren().add(gamePausedHeader);
+                    HBox buttonsPaused = new HBox();
+                    buttonsPaused.setAlignment(Pos.CENTER);
+                    buttonsPaused.setSpacing(10);
+                    gamePausedPane.getChildren().add(buttonsPaused);
+                    Button menuButtonPaused = new Button();
+                    menuButtonPaused.setText("Menu");
+                    buttonsPaused.getChildren().add(menuButtonPaused);
+                    Button resumeButton = new Button();
+                    resumeButton.setText("Resume");
+                    buttonsPaused.getChildren().add(resumeButton);
+                    menuButtonPaused.setOnAction(ev -> {
+                        Game.instance().setState(GameState.MENU);
+                        gamePage.setVisible(false);
+                        startPage.setVisible(true);
+                    });
+                    resumeButton.setOnAction(ev -> {
+                        gamePage.getChildren().remove(gamePausedPane);
+                        Game.instance().getCurrentLevel().maxTimeProperty().add(System.currentTimeMillis() - gamePausedAt);
+                        gameLoop.play();
+                        Game.instance().setState(GameState.LEVEL_PLAYING);
+                    });
+                    break;
             }
         }));
         gameLoop.setCycleCount(Timeline.INDEFINITE);
-        gameLoop.play();
 
+    }
+
+    public void handleInput() {
+
+        Game.instance().getPlayer().setMoving(false);
+
+        if(upKeyPressed) {
+            Game.instance().getPlayer().setMoving(true);
+            if(Game.instance().getPlayer().isOnSurface()) {
+                Game.instance().getPlayer().setYVelocity(Game.instance().getPlayer().getYVelocity() - 8);
+            }
+        }
+        
+        if(leftKeyPressed && !rightKeyPressed) {
+            Game.instance().getPlayer().setMoving(true);
+            Game.instance().getPlayer().setXVelocity(Math.max(-Game.instance().getPlayer().getMaxSpeed(), Game.instance().getPlayer().getXVelocity() - (10 / Game.FPS)));
+            Game.instance().getPlayer().setDirection(EntityDirection.LEFT);
+        }
+        
+        if(rightKeyPressed && !leftKeyPressed) {
+            Game.instance().getPlayer().setMoving(true);
+            Game.instance().getPlayer().setXVelocity(Math.min(Game.instance().getPlayer().getMaxSpeed(), Game.instance().getPlayer().getXVelocity() + (10 / Game.FPS)));
+            Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
+        }
+
+        if(escapeKeyPressed) {
+            Game.instance().setState(GameState.LEVEL_PAUSED);
+        }
+
+        if(Game.instance().getPlayer().getMaxY() > window.getHeight()) {
+            Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
+            Game.instance().getPlayer().setXVelocity(0);
+            Game.instance().getPlayer().setYVelocity(0);
+            // If the player falls off the screen, deduct 10 HP
+            Game.instance().getPlayer().setHealth(Game.instance().getPlayer().getHealth() - 10);
+        }
+
+    }
+
+    public void update() {
+        if(Game.instance().getPlayer().getDirection() == EntityDirection.LEFT) {
+            playerImage.setImage(new Image("assets/images/player/player-standing-left-1.png"));
+        } else {
+            playerImage.setImage(new Image("assets/images/player/player-standing-right-1.png"));
+        }
     }
 
     @FXML
     public void startGame(ActionEvent e) {
+
+        window.getScene().getRoot().requestFocus();
+
+        gameLoop.play();
+
+        if(!keysBound) {
+            keysBound = true;
+            window.getScene().setOnKeyPressed(ev -> {
+                if(ev.getCode() == KeyCode.UP) {
+                    upKeyPressed = true;
+                } else if(ev.getCode() == KeyCode.LEFT) {
+                    leftKeyPressed = true;
+                } else if(ev.getCode() == KeyCode.RIGHT) {
+                    rightKeyPressed = true;
+                } else if(ev.getCode() == KeyCode.ESCAPE) {
+                    escapeKeyPressed = true;
+                }
+            });
+            window.getScene().setOnKeyReleased(ev -> {
+                if(ev.getCode() == KeyCode.UP) {
+                    upKeyPressed = false;
+                } else if(ev.getCode() == KeyCode.LEFT) {
+                    leftKeyPressed = false;
+                } else if(ev.getCode() == KeyCode.RIGHT) {
+                    rightKeyPressed = false;
+                } else if(ev.getCode() == KeyCode.ESCAPE) {
+                    escapeKeyPressed = false;
+                }
+            });
+        }
 
         startPage.setVisible(false);
         gamePage.getChildren().removeAll();
@@ -60,6 +229,7 @@ public class MainWindow {
         // Create/load level
 
         Level level = new Level();
+        level.setSpawnPoint(new Point(100, 540));
         Game.instance().startLevel(level);
         switch(Game.instance().getDifficulty()) {
             case EASY:
@@ -143,29 +313,42 @@ public class MainWindow {
 
 
 
-        ImageView playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
+        playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
         playerImage.xProperty().bind(Game.instance().getPlayer().minXProperty());
         playerImage.yProperty().bind(Game.instance().getPlayer().minYProperty());
         gamePage.getChildren().add(playerImage);
 
 
+        for(int i = 0; i < 10; i++) {
+            ImageView blockImage = new ImageView(new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
+            Block block = new Block();
+            block.centerPoint().setXY(100 + (i * 128), 600);
+            block.setWidth(128);
+            block.setHeight(128);
+            Game.instance().getCurrentLevel().getBlocks().add(block);
+            blockImage.xProperty().bind(block.minXProperty());
+            blockImage.yProperty().bind(block.minYProperty());
+            gamePage.getChildren().add(blockImage);
+        }
 
-        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-1.png"));
-        Block block = new Block();
-        block.centerPoint().setXY(100, 600);
-        block.setWidth(128);
-        block.setHeight(128);
-        Game.instance().getCurrentLevel().getBlocks().add(block);
-        blockImage.xProperty().bind(block.minXProperty());
-        blockImage.yProperty().bind(block.minYProperty());
-        gamePage.getChildren().add(blockImage);
+        for(int i = 0; i < 3; i++) {
+            ImageView blockImage = new ImageView(new Image("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
+            Block block = new Block();
+            block.centerPoint().setXY(500 + (i * 128), 418);
+            block.setWidth(128);
+            block.setHeight(93);
+            Game.instance().getCurrentLevel().getBlocks().add(block);
+            blockImage.xProperty().bind(block.minXProperty());
+            blockImage.yProperty().bind(block.minYProperty());
+            gamePage.getChildren().add(blockImage);
+        }
 
 
 
 
 
 
-        Game.instance().getPlayer().centerPoint().setXY(100, 100);
+        Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
         Game.instance().getPlayer().setWidth(50);
         Game.instance().getPlayer().setHeight(54);
         //Game.instance().getPlayer().setXVelocity(1);
