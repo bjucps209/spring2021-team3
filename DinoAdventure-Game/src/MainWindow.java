@@ -318,32 +318,46 @@ public class MainWindow implements GameObserver {
         playerImage.yProperty().bind(Game.instance().getPlayer().minYProperty());
         gamePage.getChildren().add(playerImage);
 
+        // Generate some testing dummy terrain
+        // Please leave here for now so I can test with it
+        // Enable dummy terrain if you want to demo the gameplay
+        boolean dummyTerrain = false;
+        if(dummyTerrain) {
 
-        for(int i = 0; i < 10; i++) {
-            ImageView blockImage = new ImageView(new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
-            Block block = new Block();
-            block.centerPoint().setXY(100 + (i * 128), 600);
-            block.setWidth(128);
-            block.setHeight(128);
-            Game.instance().getCurrentLevel().getBlocks().add(block);
-            blockImage.xProperty().bind(block.minXProperty());
-            blockImage.yProperty().bind(block.minYProperty());
-            gamePage.getChildren().add(blockImage);
+            for(int i = 0; i < 10; i++) {
+                ImageView blockImage = new ImageView(new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
+                Block block = new Block();
+                block.centerPoint().setXY(100 + (i * 128), 600);
+                block.setWidth(128);
+                block.setHeight(128);
+                Game.instance().getCurrentLevel().getBlocks().add(block);
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                gamePage.getChildren().add(blockImage);
+            }
+
+            for(int i = 0; i < 3; i++) {
+                ImageView blockImage = new ImageView(new Image("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
+                Block block = new Block();
+                block.centerPoint().setXY(500 + (i * 128), 418);
+                block.setWidth(128);
+                block.setHeight(93);
+                Game.instance().getCurrentLevel().getBlocks().add(block);
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                gamePage.getChildren().add(blockImage);
+            }
+
+        } else {
+
+            // Generate real terrain
+            Game.instance().getCurrentLevel().getBlocks().stream().forEach(block -> {
+                ImageView blockImage = new ImageView(new Image("assets/images/world/ground-2.png"));
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                gamePage.getChildren().add(blockImage);
+            });
         }
-
-        for(int i = 0; i < 3; i++) {
-            ImageView blockImage = new ImageView(new Image("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
-            Block block = new Block();
-            block.centerPoint().setXY(500 + (i * 128), 418);
-            block.setWidth(128);
-            block.setHeight(93);
-            Game.instance().getCurrentLevel().getBlocks().add(block);
-            blockImage.xProperty().bind(block.minXProperty());
-            blockImage.yProperty().bind(block.minYProperty());
-            gamePage.getChildren().add(blockImage);
-        }
-
-
 
 
 
