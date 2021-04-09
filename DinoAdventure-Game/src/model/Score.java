@@ -16,7 +16,9 @@ public class Score implements Comparable<Score> {
      * @author
      */
     public Score(String name, int score, DifficultyType difficultyType) {
-
+        this.name = name; // Name of the player with highscore
+        this.score = score;
+        this.difficultyType = difficultyType;
     }
 
     /**
@@ -81,7 +83,16 @@ public class Score implements Comparable<Score> {
 
     // compares two scores to see which score is greater.
     public int compareTo(Score scoreObj) {
-        return -1;
+        int scoreToCompare = ((Score) scoreObj).getScore(); // making sure the object is of the same type
+        if (this.score > scoreToCompare) {
+            return 1;
+        }
+        else if (this.score < scoreToCompare){
+            return -1;
+        }
+        else {
+            return 0;
+        }
     }
 
 }

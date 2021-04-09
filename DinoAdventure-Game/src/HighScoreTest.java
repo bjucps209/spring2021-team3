@@ -39,6 +39,7 @@ public class HighScoreTest {
         // Create 2nd Score and add to High Scores
         score = new Score("Joe", 25000, DifficultyType.MEDIUM);
         highScores.addHighScore(score);
+        highScores.sortScoresList();
         assertEquals("Joe", highScores.getScoresList().get(0).getName());
 
         assertEquals(2, highScores.getScoresList().size());
@@ -66,14 +67,17 @@ public class HighScoreTest {
 
         assertTrue(highScores.getScoresList().get(0).getName().equals("Frank"));
         assertTrue(highScores.getScoresList().get(0).getScore() == 40000);
+        assertTrue(highScores.getScoresList().get(0).getDifficultyType() == DifficultyType.HARD);
 
         assertTrue(highScores.getScoresList().get(1).getName().equals("Joe"));
         assertTrue(highScores.getScoresList().get(1).getScore() == 35000);
+        assertTrue(highScores.getScoresList().get(1).getDifficultyType() == DifficultyType.EASY);
 
         assertTrue(highScores.getScoresList().get(2).getName().equals("Sue"));
         assertTrue(highScores.getScoresList().get(2).getScore() == 30000);
+        assertTrue(highScores.getScoresList().get(2).getDifficultyType() == DifficultyType.MEDIUM);
         
-        assertEquals(12, highScores.getScoresList().size());
+        assertEquals(10, highScores.getScoresList().size());
     }
     
     @Test
