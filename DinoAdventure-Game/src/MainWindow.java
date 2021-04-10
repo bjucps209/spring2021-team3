@@ -126,6 +126,7 @@ public class MainWindow implements GameObserver {
                     gameLoop.stop();
 
                     long gamePausedAt = System.currentTimeMillis();
+
                     VBox gamePausedPane = new VBox();
                     gamePausedPane.setAlignment(Pos.CENTER);
                     gamePausedPane.getStyleClass().add("gamePausedPane");
@@ -190,13 +191,13 @@ public class MainWindow implements GameObserver {
                     });
 
                     resumeButton.setOnAction(ev -> {
-                        gamePage.getChildren().remove(playButtonHBox);
+                        Game.instance().getCurrentLevel().idleTimeProperty().set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis() - gamePausedAt);
                         pauseLoop.stop();
+                        gamePage.getChildren().remove(playButtonHBox);
                         gamePage.getChildren().remove(gamePausedPane);
-                        Game.instance().getCurrentLevel().idleTimeProperty().add(System.currentTimeMillis() - gamePausedAt);
-                        gameLoop.play();
                         Game.instance().setState(GameState.LEVEL_PLAYING);
                         window.getScene().getRoot().requestFocus();
+                        gameLoop.play();
                     });
 
                     restartButtonPaused.setOnAction(ev -> {
