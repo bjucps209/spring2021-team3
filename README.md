@@ -1,26 +1,28 @@
 # Dino Adventure
 
-## Project overview
+[Main Wiki Page](https://github.com/bjucps209/spring2021-team3/wiki)
 
-### Game
+## Instructions: How to play
 
-* [Project Proposal](https://github.com/bjucps209/spring2021-team3/wiki/Project-Proposal) 
+## Work Completed: List work completed.
 
-* [Features](https://github.com/bjucps209/spring2021-team3/wiki/Features)
+*
 
-* [Screenshots](https://github.com/bjucps209/spring2021-team3/wiki/Screenshots)
 
-### Design Documents
+## Known Issues: List any major issues.
+*
 
-* [Design Documents](https://github.com/bjucps209/spring2021-team3/wiki/Design-Documents)
+## Recordings: A link to your screen recording.
+[Game Recording1]()
 
-* [Game Specification](https://github.com/bjucps209/spring2021-team3/wiki/Game-Specifications)
+## Expenses 
 
-* [Road Map](https://github.com/bjucps209/spring2021-team3/wiki/Road-Map)
-
-### Assets
-
-* [Assets Documentation](https://github.com/bjucps209/spring2021-team3/tree/main/DinoAdventure-Game/src/assets/images)
+| Developer | Time Spent | Remaining |
+| --- | --- | ---:|
+| Luke | | |
+| Reshi | | |
+| Rebecca | | |
+| Christopher | | |
 
 
 ### Journals
@@ -32,3 +34,4 @@
 * [Rebecca's Journal](https://github.com/bjucps209/spring2021-team3/wiki/Rebecca's-Journal)
 
 * [Christopher's Journal](https://github.com/bjucps209/spring2021-team3/wiki/Christopher's-Journal)
+
