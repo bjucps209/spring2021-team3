@@ -31,7 +31,6 @@ public class SerializationTest {
         enemy2.setId(2);
         enemy2.setState(EnemyState.DEAD);
         enemy2.setHealth(0);
-        //enemy2.setDirection(EntityDirection.RIGHT);
 
         level.addEntity(enemy); level.addEntity(enemy2);
         level.setLevelName("Beginner");
@@ -93,9 +92,6 @@ public class SerializationTest {
         assertEquals(100, checkedBlock.getHeight());
         assertEquals(20, checkedBlock.centerPoint().getIntX());
         assertEquals(100, checkedBlock.centerPoint().getIntY());
-        block.centerPoint.setXY(20, 100);
-        block.setHeight(100);
-        block.setWidth(500);
 
     }
 }
