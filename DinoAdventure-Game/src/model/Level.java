@@ -5,13 +5,10 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.*;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 
 public class Level {
@@ -26,12 +23,16 @@ public class Level {
     private LongProperty currentTimeProperty = new SimpleLongProperty();
     private LongProperty maxTimeProperty = new SimpleLongProperty();
     private LongProperty remainingTimeProperty = new SimpleLongProperty();
+    private LongProperty idleTimeProperty = new SimpleLongProperty();
     private Point spawnPoint = new Point();
 
     public Level() {
 
+        // Add Player to Level
         entities.add(Game.instance().getPlayer());
-        // TODO: Generate enemies
+
+        // TODO: Load level
+
         Block block = new Block();
         block.centerPoint().setXY(100, 600);
         block.setWidth(128);
@@ -44,9 +45,12 @@ public class Level {
         block2.setHeight(128);
         this.addBlock(block2);
 
+
+        // Setup timer bindings
+
         runTimeProperty.bind(Bindings.createLongBinding(() -> {
-            return currentTimeProperty.get() - startTimeProperty.get();
-        }, currentTimeProperty, startTimeProperty));
+            return currentTimeProperty.get() - (startTimeProperty.get() + idleTimeProperty.get());
+        }, currentTimeProperty, startTimeProperty, idleTimeProperty));
 
         remainingTimeProperty.bind(Bindings.createLongBinding(() -> {
             return maxTimeProperty.get() - runTimeProperty.get();
@@ -72,6 +76,10 @@ public class Level {
 
     public LongProperty maxTimeProperty() {
         return maxTimeProperty;
+    }
+
+    public LongProperty idleTimeProperty() {
+        return idleTimeProperty;
     }
 
     public LongProperty remainingTimeProperty() {

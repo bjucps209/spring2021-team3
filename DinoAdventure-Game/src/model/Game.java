@@ -14,6 +14,7 @@ public class Game {
     private String gameOverMessage;
 
     public static final double FPS = 60;
+    public static final double FRICTION = 0.75;
 
     // Real gravity: 386.0886
     public static final double GRAVITY = 30;

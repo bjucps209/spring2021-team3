@@ -48,10 +48,33 @@
 }
 
 .gamePausedPane {
-    -fx-background-color: rgba(0, 0, 0, 0.25);
+    -fx-background-color: rgba(0, 0, 0, 0.9);
 }
 
 .gamePausedHeader {
     -fx-font-size: 48px;
     -fx-text-fill: #FFFFFF;
+}
+
+.playPauseButton {
+    -fx-background-color: #EEEEEE;
+    -fx-padding: 10px;
+    -fx-font-size: 24px;
+    -fx-border-radius: 100px;
+    -fx-background-radius: 100px;
+    -fx-border: none;
+    -fx-min-width: 48px;
+    -fx-min-height: 48px;
+    -fx-max-width: 48px;
+    -fx-max-height: 48px;
+    -fx-background-insets: 0px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 0);
+}
+
+.playPauseButton:hover {
+    -fx-background-color: #FFFFFF;
+}
+
+.playPauseLabel {
+    -fx-text-fill: #EEEEEE;
 }
