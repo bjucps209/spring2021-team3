@@ -4,15 +4,15 @@
 
 ## Instructions: How to play
 
-## Work Completed: List work completed.
+## Work Completed:
 
 *
 
 
-## Known Issues: List any major issues.
+## Known Issues:
 *
 
-## Recordings: A link to your screen recording.
+## Recordings:
 [Game Recording1]()
 
 ## Expenses 
