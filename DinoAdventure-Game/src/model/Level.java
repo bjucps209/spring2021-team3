@@ -12,9 +12,11 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 
 public class Level {
-    
-    private ArrayList<Entity> entities = new ArrayList<Entity>();
+
+    private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     private ArrayList<Block> blocks = new ArrayList<Block>();
+    private ArrayList<Collectable> collectables = new ArrayList<Collectable>();
+    private Player player;
     private int width;
     private int height;
     private String levelName;
@@ -28,11 +30,10 @@ public class Level {
 
     public Level() {
 
-        // Add Player to Level
-        entities.add(Game.instance().getPlayer());
 
-        // TODO: Load level
-
+        player = Game.instance().getPlayer();
+        // TODO: Generate enemies
+        
         Block block = new Block();
         block.centerPoint().setXY(100, 600);
         block.setWidth(128);
@@ -89,7 +90,9 @@ public class Level {
     public void tick() {
 
         currentTimeProperty.set(System.currentTimeMillis());
-        for(Entity e : entities) e.tick();
+        for (Entity e : enemies)
+            e.tick();
+        player.tick();
 
     }
 
@@ -118,21 +121,6 @@ public class Level {
     }
 
     /**
-     * find the Entity with the given id
-     * 
-     * @param id
-     * @return Entity
-     */
-    public Entity findEntity(int id) {
-        for (Entity entity : entities) {
-            if (entity.getId() == id) {
-                return entity;
-            }
-        }
-        return null;
-    }
-
-    /**
      * get the name of the level
      * 
      * @return - levelName
@@ -151,11 +139,27 @@ public class Level {
     }
 
     /**
+     * find the Entity with the given id
+     * 
+     * @param id
+     * @return Entity
+     */
+    public Entity findEntity(int id) {
+        for (Entity entity : enemies) {
+            if (entity.getId() == id) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    /**
      * remove the Entity with the id from entities
      * 
      * @param id
      */
-    public void removeEntity(int id) {
+    public void removeEntity(Entity entity) {
+        enemies.remove(entity); 
     }
 
     /**
@@ -173,12 +177,37 @@ public class Level {
         return null;
     }
 
+    // /**
+    //  * find the surface with the given id
+    //  * 
+    //  * @param id
+    //  * @return Block
+    //  */
+    // public Collectable findCollectable(int id) {
+    //     for (Collectable item : collectables) {
+    //         if (item.getId() == id) {
+    //             return item;
+    //         }
+    //     }
+    //     return null;
+    // }
+
     /**
-     * remove the surface with the given surface from surfaces
+     * remove the surface with the given surface id from surfaces
      * 
      * @param id
      */
     public void removeBlock(int id) {
+        blocks.remove(findBlock(id));
+    }
+
+    /**
+     * remove the given item from collectables
+     * 
+     * @param id
+     */
+    public void removeCollectable(Collectable item) {
+        collectables.remove(item);
     }
 
     /**
@@ -186,8 +215,8 @@ public class Level {
      * 
      * @param object
      */
-    public void addEntity(Entity entity) {
-        entities.add(entity);
+    public void addEntity(Enemy entity) {
+        enemies.add(entity);
     }
 
     /**
@@ -197,6 +226,15 @@ public class Level {
      */
     public void addBlock(Block block) {
         blocks.add(block);
+    }
+
+    /**
+     * adds item to collectables
+     * 
+     * @param object
+     */
+    public void addCollectable(Collectable item) {
+        collectables.add(item);
     }
 
     /**
@@ -213,8 +251,17 @@ public class Level {
      * 
      * @return surfaces
      */
-    public ArrayList<Entity> getEntites() {
-        return entities;
+    public ArrayList<Enemy> getEntites() {
+        return enemies;
+    }
+
+    /**
+     * Gets the items in the level
+     * 
+     * @return surfaces
+     */
+    public ArrayList<Collectable> getCollectables() {
+        return collectables;
     }
 
     /**
@@ -252,7 +299,7 @@ public class Level {
     public void setHeight(int height) {
         this.height = height;
     }
-    
+
     /**
      * Save the file
      */
@@ -262,13 +309,13 @@ public class Level {
             writer.writeInt(width);
             writer.writeInt(height);
             // write how many entities their are
-            writer.writeInt(entities.size());
+            writer.writeInt(enemies.size());
             // Iterate through the entities saving each's data
-            for (int i = 0; i < entities.size(); ++i) {
-                writer.writeInt(entities.get(i).getId());
+            for (int i = 0; i < enemies.size(); ++i) {
+                writer.writeInt(enemies.get(i).getId());
                 // writer.writeUTF(entities.get(i).getType());
-                writer.writeInt(entities.get(i).centerPoint().getIntX());
-                writer.writeInt(entities.get(i).centerPoint().getIntY());
+                writer.writeInt(enemies.get(i).centerPoint().getIntX());
+                writer.writeInt(enemies.get(i).centerPoint().getIntY());
                 // writer.writeInt(entities.get(i).getHeight());
                 // writer.writeInt(entities.get(i).getWidth());
             }
@@ -301,13 +348,15 @@ public class Level {
         int sizeOfEntities = reader.readInt();
         // get how many players there are
         for (int i = 0; i < sizeOfEntities; ++i) { // iterate over each playing gathering their values
-            Entity entity = new Enemy() {};
+            Enemy entity = new Enemy() {
+            };
             entity.setId(reader.readInt());
             // reader.readUTF();
             entity.centerPoint().setX(reader.readInt());
             entity.centerPoint().setY(reader.readInt());
-            entities.add(entity);
+            enemies.add(entity);
         }
+
         // get blocks
         int sizeOfBlocks = reader.readInt();
         for (int i = 0; i < sizeOfBlocks; ++i) { // iterate over each playing gathering their values

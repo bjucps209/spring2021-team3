@@ -93,7 +93,7 @@ public class LevelTest {
         level2.load("Custom1.dat");
 
         Entity enemy2 = level2.findEntity(2);
-        Box block2 = level2.findBlock(1);
+        Block block2 = level2.findBlock(1);
 
         //test the loaded level
         // assertEquals("Custom1", level2.getLevelName());
