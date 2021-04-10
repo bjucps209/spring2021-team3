@@ -19,25 +19,27 @@
     -->
 
     <VBox fx:id="titlePage" styleClass="titlePage" managed="${titlePage.visible}" visible="true" alignment="CENTER" prefHeight="800">
-        <Label text="Dino Adventure" fx:id="title">
+        <Label text="DINO ADVENTURE" fx:id="title"  prefHeight="150">
         <style>
             -fx-font-size: 80px;
         </style>
         </Label>
 
-        <Label text="Main Menu" style="-fx-font-size: 30px; -fx-text-fill: BROWN"/>
-        <HBox spacing="20" alignment="CENTER" prefHeight="200">
-            <Button onAction="#onAboutClicked" style="-fx-graphic: url('assets/images/TitleScreen/about.jpg')" />
-            <Button onAction="#onHelpClicked" style="-fx-graphic: url('assets/images/TitleScreen/instructions.png')"/>
-            <Button onAction="#onLoadClicked" style="-fx-graphic: url('assets/images/TitleScreen/load.png')" />
-            <Button onAction="#onHighScoreClicked" style="-fx-graphic: url('assets/images/TitleScreen/highScore.png')" />
-            <Button onAction="#play" style="-fx-graphic: url('assets/images/TitleScreen/play.png'); -fx-font-size: 19px" /> 
+        <Label prefHeight="300" style="-fx-graphic: url('assets/images/TitleScreen/gameImage.jpg')" />
+
+        <Label text="MAIN MENU" fx:id="mainMenu" prefHeight="100" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE"/>
+        <HBox spacing="20" alignment="CENTER" >
+            <Button text="ABOUT" onAction="#onAboutClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE" />
+            <Button text="HELP" onAction="#onHelpClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE"/>
+            <Button text="LOAD" onAction="#onLoadClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE" />
+            <Button text="HIGHSCORE" onAction="#onHighScoreClicked" style="-fx-background-color: DARKBLUE; -fx-font-size: 20px; -fx-text-fill: WHITE" />
+            <Button text="PLAY" onAction="#play" style="-fx-background-color: DARKBLUE; -fx-font-size: 20px; -fx-text-fill: WHITE" /> 
         </HBox>
 
-        <HBox spacing="20" alignment="CENTER">
-            <Label text = "Enter your name:" prefHeight = "20" prefWidth = "110" />
+        <HBox spacing="20" alignment="CENTER" prefHeight="100">
+            <Label text = "Enter your name:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" prefWidth = "150" />
             <TextField fx:id="name" text = "" />
-            <Label text = "Difficulty Level:" prefHeight = "20" />
+            <Label text = "Difficulty Level:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
             <ChoiceBox fx:id="difficultyLevels">
                 <items>
                     <FXCollections fx:factory="observableArrayList">

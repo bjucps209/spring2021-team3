@@ -1,6 +1,7 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -41,6 +42,8 @@ public class MainWindow implements GameObserver {
     @FXML
     Label title; // title on the title screen
     @FXML
+    Label mainMenu; // main menu
+    @FXML
     TextField name; // textfield for the player to enter their name
     @FXML
     ChoiceBox<String> difficultyLevels; // dropdown for difficulty levels
@@ -58,11 +61,14 @@ public class MainWindow implements GameObserver {
     public void initialize() {
 
         // Title screen initialization
-        title.setTextFill(Color.AQUAMARINE);
+        title.setTextFill(Color.DARKBLUE);
         // create a font
-        Font font = Font.font("Verdana", FontWeight.EXTRA_BOLD, 35);
-        // set font of title
+        Font font = Font.font("Garamond", FontWeight.EXTRA_BOLD, 35);
+        // set font of title and main menu
         title.setFont(font);
+        mainMenu.setFont(font);
+
+        name.requestFocus();
 
         Game.instance().observers().add(this);
 
