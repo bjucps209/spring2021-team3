@@ -14,7 +14,7 @@ public class Entity extends Box {
         // Apply gravity
         yVelocity += Game.GRAVITY / Game.FPS;
 
-        // Create a dummy box to check whether our velocity places us on a surface
+        // Create dummy boxes for checking where our future velocities will place us
         Box xCheck = new Box();
         xCheck.centerPoint().copyFrom(centerPoint);
         xCheck.widthProperty().set(widthProperty.get());
@@ -30,16 +30,23 @@ public class Entity extends Box {
 
         // Check if the entity would be colliding with a surface based on the future velocities
         for(Block b : Game.instance().getCurrentLevel().getBlocks()) {
-            if(b.overlaps(xCheck)) {
+            if(b.overlaps(xCheck) && b.overlaps(yCheck)) {
                 xVelocity = 0;
-                // if(centerPoint.getX() < b.centerPoint().getX()) {
-                //     centerPoint.setX(b.getMinX() - (widthProperty.get() / 2));
-                // }
-                // if(centerPoint.getX() > b.centerPoint().getX()) {
-                //     centerPoint.setX(b.getMaxX() + (widthProperty.get() / 2));
-                // }
-            }
-            if(b.overlaps(yCheck)) {
+                yVelocity = 0;
+                if(centerPoint.getY() < b.centerPoint().getY()) {
+                    // Handle spawning inside a Block
+                    // Move the entity up to the surface if Entity.centerPoint is higher than Block.centerPoint
+                    centerPoint.setY(b.getMinY() - (heightProperty.get() / 2) - 1);
+                } else {
+                    // Handle corners/spawning inside the bottom of a Block
+                    // Move the Entity down to the bottom of a Block if Block.centerPoint is higher than Entity.centerPoint
+                    centerPoint.setY(b.getMaxY() + (heightProperty.get() / 2) + 1);
+                }
+            } else if(b.overlaps(xCheck)) {
+                // Handle hitting a wall
+                xVelocity = 0;
+            } else if(b.overlaps(yCheck)) {
+                // Handle hitting a ceiling/landing on a surface
                 yVelocity = 0;
                 if(centerPoint.getY() < b.centerPoint().getY()) {
                     centerPoint.setY(b.getMinY() - (heightProperty.get() / 2) - 1);
@@ -49,8 +56,8 @@ public class Entity extends Box {
         }
 
         if(onSurface && !(this instanceof Player && ((Player) this).isMoving())) {
-            // Apply friction
-            xVelocity = xVelocity * 0.75;
+            // Apply friction unless this Entity is a Player and the user is moving the Player
+            xVelocity = xVelocity * Game.FRICTION;
         }
 
         centerPoint.add(xVelocity, yVelocity);

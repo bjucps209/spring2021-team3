@@ -68,91 +68,136 @@ public class MainWindow implements GameObserver {
 
         gameLoop = new Timeline(new KeyFrame(Duration.millis(1000 / Game.FPS), e -> {
 
-            switch (Game.instance().getState()) {
+            switch(Game.instance().getState()) {
 
-            case LEVEL_PLAYING:
-                handleInput();
-                Game.instance().getCurrentLevel().tick();
-                Game.instance().observers().forEach(o -> o.update());
-                break;
+                case LEVEL_PLAYING:
+                    handleInput();
+                    Game.instance().getCurrentLevel().tick();
+                    Game.instance().observers().forEach(o -> o.update());
+                    break;
 
-            case GAME_OVER:
-                gameLoop.stop();
-                VBox gameOverPane = new VBox();
-                gameOverPane.setAlignment(Pos.CENTER);
-                gameOverPane.getStyleClass().add("gameOverPane");
-                AnchorPane.setTopAnchor(gameOverPane, 0.0);
-                AnchorPane.setLeftAnchor(gameOverPane, 0.0);
-                AnchorPane.setRightAnchor(gameOverPane, 0.0);
-                gameOverPane.setPrefHeight(window.getHeight());
-                gameOverPane.setSpacing(10);
-                gamePage.getChildren().add(gameOverPane);
-                Label gameOverHeader = new Label();
-                gameOverHeader.setText("GAME OVER");
-                gameOverHeader.getStyleClass().add("gameOverHeader");
-                gameOverPane.getChildren().add(gameOverHeader);
-                Label gameOverMessage = new Label();
-                gameOverMessage.setText(Game.instance().getGameOverMessage());
-                gameOverMessage.getStyleClass().add("gameOverMessage");
-                gameOverPane.getChildren().add(gameOverMessage);
-                HBox buttons = new HBox();
-                buttons.setAlignment(Pos.CENTER);
-                buttons.setSpacing(10);
-                gameOverPane.getChildren().add(buttons);
-                Button menuButton = new Button();
-                menuButton.setText("Menu");
-                buttons.getChildren().add(menuButton);
-                Button restartButton = new Button();
-                restartButton.setText("Try Again");
-                buttons.getChildren().add(restartButton);
-                menuButton.setOnAction(ev -> {
-                    Game.instance().setState(GameState.MENU);
-                    gamePage.setVisible(false);
-                    titlePage.setVisible(true);
-                });
-                restartButton.setOnAction(ev -> {
-                    play(new ActionEvent());
-                });
-                break;
+                case GAME_OVER:
+                    gameLoop.stop();
+                    VBox gameOverPane = new VBox();
+                    gameOverPane.setAlignment(Pos.CENTER);
+                    gameOverPane.getStyleClass().add("gameOverPane");
+                    AnchorPane.setTopAnchor(gameOverPane, 0.0);
+                    AnchorPane.setLeftAnchor(gameOverPane, 0.0);
+                    AnchorPane.setRightAnchor(gameOverPane, 0.0);
+                    gameOverPane.setPrefHeight(window.getHeight());
+                    gameOverPane.setSpacing(10);
+                    gamePage.getChildren().add(gameOverPane);
+                    Label gameOverHeader = new Label();
+                    gameOverHeader.setText("GAME OVER");
+                    gameOverHeader.getStyleClass().add("gameOverHeader");
+                    gameOverPane.getChildren().add(gameOverHeader);
+                    Label gameOverMessage = new Label();
+                    gameOverMessage.setText(Game.instance().getGameOverMessage());
+                    gameOverMessage.getStyleClass().add("gameOverMessage");
+                    gameOverPane.getChildren().add(gameOverMessage);
+                    HBox buttons = new HBox();
+                    buttons.setAlignment(Pos.CENTER);
+                    buttons.setSpacing(10);
+                    gameOverPane.getChildren().add(buttons);
+                    Button menuButton = new Button();
+                    menuButton.setText("Menu");
+                    buttons.getChildren().add(menuButton);
+                    Button restartButton = new Button();
+                    restartButton.setText("Try Again");
+                    buttons.getChildren().add(restartButton);
+                    menuButton.setOnAction(ev -> {
+                        Game.instance().setState(GameState.MENU);
+                        gamePage.setVisible(false);
+                        titlePage.setVisible(true);
+                    });
+                    restartButton.setOnAction(ev -> {
+                        play(new ActionEvent());
+                    });
+                    break;
 
-            case LEVEL_PAUSED:
-                gameLoop.stop();
-                long gamePausedAt = System.currentTimeMillis();
-                VBox gamePausedPane = new VBox();
-                gamePausedPane.setAlignment(Pos.CENTER);
-                gamePausedPane.getStyleClass().add("gamePausedPane");
-                AnchorPane.setTopAnchor(gamePausedPane, 0.0);
-                AnchorPane.setLeftAnchor(gamePausedPane, 0.0);
-                AnchorPane.setRightAnchor(gamePausedPane, 0.0);
-                gamePausedPane.setPrefHeight(window.getHeight());
-                gamePausedPane.setSpacing(10);
-                gamePage.getChildren().add(gamePausedPane);
-                Label gamePausedHeader = new Label();
-                gamePausedHeader.setText("GAME PAUSED");
-                gamePausedHeader.getStyleClass().add("gamePausedHeader");
-                gamePausedPane.getChildren().add(gamePausedHeader);
-                HBox buttonsPaused = new HBox();
-                buttonsPaused.setAlignment(Pos.CENTER);
-                buttonsPaused.setSpacing(10);
-                gamePausedPane.getChildren().add(buttonsPaused);
-                Button menuButtonPaused = new Button();
-                menuButtonPaused.setText("Menu");
-                buttonsPaused.getChildren().add(menuButtonPaused);
-                Button resumeButton = new Button();
-                resumeButton.setText("Resume");
-                buttonsPaused.getChildren().add(resumeButton);
-                menuButtonPaused.setOnAction(ev -> {
-                    Game.instance().setState(GameState.MENU);
-                    gamePage.setVisible(false);
-                    titlePage.setVisible(true);
-                });
-                resumeButton.setOnAction(ev -> {
-                    gamePage.getChildren().remove(gamePausedPane);
-                    Game.instance().getCurrentLevel().maxTimeProperty().add(System.currentTimeMillis() - gamePausedAt);
-                    gameLoop.play();
-                    Game.instance().setState(GameState.LEVEL_PLAYING);
-                });
-                break;
+                case LEVEL_PAUSED:
+
+                    gameLoop.stop();
+
+                    long gamePausedAt = System.currentTimeMillis();
+                    VBox gamePausedPane = new VBox();
+                    gamePausedPane.setAlignment(Pos.CENTER);
+                    gamePausedPane.getStyleClass().add("gamePausedPane");
+                    AnchorPane.setTopAnchor(gamePausedPane, 0.0);
+                    AnchorPane.setLeftAnchor(gamePausedPane, 0.0);
+                    AnchorPane.setRightAnchor(gamePausedPane, 0.0);
+                    gamePausedPane.setPrefHeight(window.getHeight());
+                    gamePausedPane.setSpacing(10);
+                    gamePage.getChildren().add(gamePausedPane);
+                    Label gamePausedHeader = new Label();
+                    gamePausedHeader.setText("GAME PAUSED");
+                    gamePausedHeader.getStyleClass().add("gamePausedHeader");
+                    gamePausedPane.getChildren().add(gamePausedHeader);
+                    HBox buttonsPaused = new HBox();
+                    buttonsPaused.setAlignment(Pos.CENTER);
+                    buttonsPaused.setSpacing(10);
+                    gamePausedPane.getChildren().add(buttonsPaused);
+                    Button menuButtonPaused = new Button();
+                    menuButtonPaused.setText("Menu");
+                    buttonsPaused.getChildren().add(menuButtonPaused);
+                    Button restartButtonPaused = new Button();
+                    restartButtonPaused.setText("Restart");
+                    buttonsPaused.getChildren().add(restartButtonPaused);
+                    Button resumeButton = new Button();
+                    resumeButton.setText("Resume");
+                    buttonsPaused.getChildren().add(resumeButton);
+
+                    HBox playButtonHBox = new HBox();
+                    playButtonHBox.setAlignment(Pos.CENTER_LEFT);
+                    playButtonHBox.setSpacing(10);
+                    AnchorPane.setTopAnchor(playButtonHBox, 10.0);
+                    AnchorPane.setLeftAnchor(playButtonHBox, 10.0);
+                    gamePage.getChildren().add(playButtonHBox);
+
+                    Button playButton = new Button();
+                    playButton.getStyleClass().add("material-icons");
+                    playButton.getStyleClass().add("playPauseButton");
+                    playButton.setText("\ue037");
+                    playButton.setOnAction(ev -> resumeButton.fire());
+                    playButtonHBox.getChildren().add(playButton);
+
+                    Label playLabel = new Label();
+                    playLabel.setText("Press Esc to pause/resume");
+                    playLabel.getStyleClass().add("playPauseLabel");
+                    playButtonHBox.getChildren().add(playLabel);
+
+                    escapeKeyPressed = false;
+
+                    Timeline pauseLoop = new Timeline(new KeyFrame(Duration.millis(1000 / Game.FPS), ev -> {
+                        if(escapeKeyPressed) {
+                            escapeKeyPressed = false;
+                            resumeButton.fire();
+                        }
+                    }));
+                    pauseLoop.setCycleCount(Timeline.INDEFINITE);
+                    pauseLoop.play();
+
+                    menuButtonPaused.setOnAction(ev -> {
+                        Game.instance().setState(GameState.MENU);
+                        gamePage.setVisible(false);
+                        titlePage.setVisible(true);
+                    });
+
+                    resumeButton.setOnAction(ev -> {
+                        gamePage.getChildren().remove(playButtonHBox);
+                        pauseLoop.stop();
+                        gamePage.getChildren().remove(gamePausedPane);
+                        Game.instance().getCurrentLevel().idleTimeProperty().add(System.currentTimeMillis() - gamePausedAt);
+                        gameLoop.play();
+                        Game.instance().setState(GameState.LEVEL_PLAYING);
+                        window.getScene().getRoot().requestFocus();
+                    });
+
+                    restartButtonPaused.setOnAction(ev -> {
+                        play(new ActionEvent());
+                    });
+                    break;
+
             }
         }));
         gameLoop.setCycleCount(Timeline.INDEFINITE);
@@ -188,12 +233,19 @@ public class MainWindow implements GameObserver {
             Game.instance().setState(GameState.LEVEL_PAUSED);
         }
 
-        if (Game.instance().getPlayer().getMaxY() > window.getHeight()) {
-            Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
-            Game.instance().getPlayer().setXVelocity(0);
-            Game.instance().getPlayer().setYVelocity(0);
+        if(Game.instance().getPlayer().getMaxY() > window.getHeight()) {
+
             // If the player falls off the screen, deduct 10 HP
             Game.instance().getPlayer().setHealth(Game.instance().getPlayer().getHealth() - 10);
+
+            // If the player isn't out of health, respawn them
+            if(Game.instance().getPlayer().getHealth() > 0) {
+                Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
+                Game.instance().getPlayer().centerPoint().subtract(0, 50);
+                Game.instance().getPlayer().setXVelocity(0);
+                Game.instance().getPlayer().setYVelocity(0);
+            }
+
         }
 
     }
@@ -327,6 +379,20 @@ public class MainWindow implements GameObserver {
 
         gamePage.getChildren().add(dataVBox);
 
+
+        // Show pause button
+
+        Button pauseButton = new Button();
+        pauseButton.getStyleClass().add("material-icons");
+        pauseButton.getStyleClass().add("playPauseButton");
+        pauseButton.setText("\ue034");
+        AnchorPane.setTopAnchor(pauseButton, 10.0);
+        AnchorPane.setLeftAnchor(pauseButton, 10.0);
+        pauseButton.setOnAction(ev -> Game.instance().setState(GameState.LEVEL_PAUSED));
+        gamePage.getChildren().add(pauseButton);
+
+
+
         gamePage.setVisible(true);
 
         playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
@@ -337,8 +403,8 @@ public class MainWindow implements GameObserver {
         // Generate some testing dummy terrain
         // Please leave here for now so I can test with it
         // Enable dummy terrain if you want to demo the gameplay
-        boolean dummyTerrain = false;
-        if (dummyTerrain) {
+        boolean dummyTerrain = true;
+        if(dummyTerrain) {
 
             for (int i = 0; i < 10; i++) {
                 ImageView blockImage = new ImageView(
@@ -380,7 +446,8 @@ public class MainWindow implements GameObserver {
         Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
         Game.instance().getPlayer().setWidth(50);
         Game.instance().getPlayer().setHeight(54);
-        // Game.instance().getPlayer().setXVelocity(1);
+        Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
+        //Game.instance().getPlayer().setXVelocity(1);
 
     }
 

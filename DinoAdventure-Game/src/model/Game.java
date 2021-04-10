@@ -14,6 +14,7 @@ public class Game {
     private String gameOverMessage;
 
     public static final double FPS = 60;
+    public static final double FRICTION = 0.75;
 
     // Real gravity: 386.0886
     public static final double GRAVITY = 30;
@@ -91,9 +92,12 @@ public class Game {
     // Should also save others objects of the game needed to load the game back to a previous state. 
     public void save(String filename)throws IOException{
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))){
+            writer.writeInt(difficulty.ordinal());  
             player.serialize(writer);
-            // TODO: writer.writeInt(number of enemies);
-            // TODO: loop through all the enemies;
+            if (currentLevel == null){
+                Game.instance().setCurrentLevel(new Level());
+            }
+            currentLevel.serialize(writer);
         } catch (IOException e) {
             throw new IOException("Something went wrong when writing the file in the save method. :(");
 
@@ -104,9 +108,9 @@ public class Game {
     public void load(String filename)throws IOException{
         try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))){
             state = GameState.LEVEL_PLAYING;
+            difficulty = DifficultyType.values()[reader.readInt()];
             player.deserialize(reader);
-            //loop through all the enemies
-
+            currentLevel.deserialize(reader);
         }catch (IOException e) {
             throw new IOException("Something went wrong when reading the file in the load message. :(");
         }
