@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+<?import java.lang.String?>
 
 <VBox fx:controller="MainWindow" fx:id="window" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css" spacing="0">
 
@@ -16,11 +18,40 @@
         * Use `<fx:id>.setVisible(boolean)` to show and hide pages within the Java, just make sure only one is shown at a time.
     -->
 
-    <VBox fx:id="startPage" styleClass="startPage" managed="${startPage.visible}" visible="true">
+    <VBox fx:id="titlePage" styleClass="titlePage" managed="${titlePage.visible}" visible="true" alignment="CENTER" prefHeight="800">
+        <Label text="Dino Adventure" fx:id="title">
+        <style>
+            -fx-font-size: 80px;
+        </style>
+        </Label>
 
-        <Label text="[TEST] Start Page" />
-        <Button text="Start Game" onAction="#startGame" />
-        <!-- TODO: Build main page here -->
+        <Label text="Main Menu" style="-fx-font-size: 30px; -fx-text-fill: BROWN"/>
+        <HBox spacing="20" alignment="CENTER" prefHeight="200">
+            <Button onAction="#onAboutClicked" style="-fx-graphic: url('assets/images/TitleScreen/about.jpg')" />
+            <Button onAction="#onHelpClicked" style="-fx-graphic: url('assets/images/TitleScreen/instructions.png')"/>
+            <Button onAction="#onLoadClicked" style="-fx-graphic: url('assets/images/TitleScreen/load.png')" />
+            <Button onAction="#onHighScoreClicked" style="-fx-graphic: url('assets/images/TitleScreen/highScore.png')" />
+            <Button onAction="#play" style="-fx-graphic: url('assets/images/TitleScreen/play.png'); -fx-font-size: 19px" /> 
+        </HBox>
+
+        <HBox spacing="20" alignment="CENTER">
+            <Label text = "Enter your name:" prefHeight = "20" prefWidth = "110" />
+            <TextField fx:id="name" text = "" />
+            <Label text = "Difficulty Level:" prefHeight = "20" />
+            <ChoiceBox fx:id="difficultyLevels">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="EASY" />
+                    <String fx:value="MEDIUM" />
+                    <String fx:value="HARD" />
+                    <String fx:value="CUSTOM" />
+                    </FXCollections>
+                </items>
+                <value>
+                    <String fx:value="EASY" />
+                </value>
+            </ChoiceBox>
+        </HBox>
 
     </VBox>
 

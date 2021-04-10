@@ -14,7 +14,9 @@
 }
 
 /* Page styles */
-
+.titlePage {
+    -fx-background-color: #25ac3b;
+}
 
 
 /* Game styles */
