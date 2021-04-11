@@ -55,6 +55,26 @@ public class Entity extends Box {
             }
         }
 
+        if(this instanceof Player) {
+            for(Enemy e : Game.instance().getCurrentLevel().getEntites()) {
+                if(e.overlaps(xCheck) || e.overlaps(yCheck)) {
+
+                    if(e.overlaps(xCheck)) {
+                        xVelocity = -xVelocity;
+                    }
+                    if(e.overlaps(yCheck)) {
+                        yVelocity = -yVelocity;
+                    }
+
+                    if(getMaxY() < e.getMinY()) {
+                        e.kill();
+                    } else {
+                        ((Player) this).setHealth(((Player) this).getHealth() - 2);
+                    }
+                }
+            }
+        }
+
         if(onSurface && !(this instanceof Player && ((Player) this).isMoving())) {
             // Apply friction unless this Entity is a Player and the user is moving the Player
             xVelocity = xVelocity * Game.FRICTION;

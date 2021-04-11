@@ -452,7 +452,8 @@ public class MainWindow implements GameObserver {
                 gamePage.getChildren().add(blockImage);
             }
 
-            spawnWanderingEnemy(400, 400);
+            spawnWanderingEnemy(500, 456);
+            spawnWanderingEnemy(550, 200);
 
         } else {
 

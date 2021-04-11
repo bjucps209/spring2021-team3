@@ -30,6 +30,11 @@ public abstract class Enemy extends Entity implements Living {
         this.state = state;
     }
 
+    public void kill() {
+        // TODO: Properly kill enemy
+        centerPoint.setXY(-1000, 0);
+    }
+
     // writes the each property to the DataOutputStream passed in the parameters of the enemy to the file to be saved.
     public void serialize(DataOutputStream writer) throws IOException{
             writer.writeDouble(centerPoint().getX());
