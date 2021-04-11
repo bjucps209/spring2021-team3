@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.util.Duration;
 
@@ -262,6 +263,8 @@ public class MainWindow implements GameObserver {
 
     public void update() {
 
+        ArrayList<Node> toRemove = new ArrayList<Node>();
+
         if (Game.instance().getPlayer().getDirection() == EntityDirection.LEFT) {
             playerImage.setImage(new Image("assets/images/player/player-standing-left-1.png"));
         } else {
@@ -269,12 +272,22 @@ public class MainWindow implements GameObserver {
         }
 
         for(ImageView e : enemyImages) {
-            if (((Enemy) e.getUserData()).getDirection() == EntityDirection.LEFT) {
-                e.setImage(new Image("assets/images/enemies/wandering-standing-left-1.png"));
+            if(Game.instance().getCurrentLevel().getEntites().contains((Enemy) e.getUserData())) {
+                if (((Enemy) e.getUserData()).getDirection() == EntityDirection.LEFT) {
+                    e.setImage(new Image("assets/images/enemies/wandering-standing-left-1.png"));
+                } else {
+                    e.setImage(new Image("assets/images/enemies/wandering-standing-right-1.png"));
+                }
             } else {
-                e.setImage(new Image("assets/images/enemies/wandering-standing-right-1.png"));
+                e.setImage(new Image("assets/images/enemies/wandering-dying-right-14.png"));
+                toRemove.add(e);
+                new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+                    gamePage.getChildren().remove(e);
+                })).play();
             }
         }
+
+        for(Node n : toRemove) enemyImages.remove(n);
 
     }
 

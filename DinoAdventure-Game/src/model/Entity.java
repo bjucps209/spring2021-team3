@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Entity extends Box {
 
     protected double weight;
@@ -10,6 +12,8 @@ public class Entity extends Box {
     protected boolean onSurface;
     
     public void tick() {
+
+        ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
 
         // Apply gravity
         yVelocity += Game.GRAVITY / Game.FPS;
@@ -55,22 +59,28 @@ public class Entity extends Box {
             }
         }
 
+        // Handle Player colliding with Enemy
         if(this instanceof Player) {
             for(Enemy e : Game.instance().getCurrentLevel().getEntites()) {
                 if(e.overlaps(xCheck) || e.overlaps(yCheck)) {
 
                     if(e.overlaps(xCheck)) {
-                        xVelocity = -xVelocity;
-                    }
-                    if(e.overlaps(yCheck)) {
-                        yVelocity = -yVelocity;
+                        if(centerPoint.getX() < e.centerPoint().getX()) {
+                            xVelocity -= 5;
+                        } else {
+                            xVelocity += 5;
+                        }
+                        yVelocity -= 5;
                     }
 
                     if(getMaxY() < e.getMinY()) {
-                        e.kill();
+                        yVelocity = -yVelocity;
+                        enemiesToRemove.add(e);
+                        ((Player) this).scoreProperty().set(((Player) this).scoreProperty().get() + 25);
                     } else {
-                        ((Player) this).setHealth(((Player) this).getHealth() - 2);
+                        ((Player) this).setHealth(((Player) this).getHealth() - 1);
                     }
+
                 }
             }
         }
@@ -81,6 +91,8 @@ public class Entity extends Box {
         }
 
         centerPoint.add(xVelocity, yVelocity);
+
+        for(Enemy e : enemiesToRemove) Game.instance().getCurrentLevel().getEntites().remove(e);
 
     }
 
