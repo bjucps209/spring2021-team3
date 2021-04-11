@@ -157,6 +157,16 @@ public class MainWindow implements GameObserver {
                     Button resumeButton = new Button();
                     resumeButton.setText("Resume");
                     buttonsPaused.getChildren().add(resumeButton);
+                    HBox buttonsPaused2 = new HBox();
+                    buttonsPaused2.setAlignment(Pos.CENTER);
+                    buttonsPaused2.setSpacing(10);
+                    gamePausedPane.getChildren().add(buttonsPaused2);
+                    Button loadButton = new Button();
+                    loadButton.setText("Load");
+                    buttonsPaused2.getChildren().add(loadButton);
+                    Button saveButton = new Button();
+                    saveButton.setText("Save");
+                    buttonsPaused2.getChildren().add(saveButton);
 
                     HBox playButtonHBox = new HBox();
                     playButtonHBox.setAlignment(Pos.CENTER_LEFT);
@@ -207,6 +217,15 @@ public class MainWindow implements GameObserver {
                     restartButtonPaused.setOnAction(ev -> {
                         play(new ActionEvent());
                     });
+
+                    loadButton.setOnAction(ev -> {
+                        // TODO: Load saved game state here
+                    });
+
+                    saveButton.setOnAction(ev -> {
+                        // TODO: Save game state here
+                    });
+
                     break;
 
             }
