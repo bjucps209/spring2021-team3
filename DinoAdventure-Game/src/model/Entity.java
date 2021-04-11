@@ -96,10 +96,6 @@ public class Entity extends Box {
 
     }
 
-    public String getType() {
-        return null;
-    }
-
     public boolean isOnSurface() {
         return onSurface;
     }

@@ -274,12 +274,12 @@ public class MainWindow implements GameObserver {
         for(ImageView e : enemyImages) {
             if(Game.instance().getCurrentLevel().getEntites().contains((Enemy) e.getUserData())) {
                 if (((Enemy) e.getUserData()).getDirection() == EntityDirection.LEFT) {
-                    e.setImage(new Image("assets/images/enemies/wandering-standing-left-1.png"));
+                    e.setImage(new Image("assets/images/enemies/" + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-left-1.png"));
                 } else {
-                    e.setImage(new Image("assets/images/enemies/wandering-standing-right-1.png"));
+                    e.setImage(new Image("assets/images/enemies/" + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-right-1.png"));
                 }
             } else {
-                e.setImage(new Image("assets/images/enemies/wandering-dying-right-14.png"));
+                e.setImage(new Image("assets/images/enemies/" + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-dying-right-14.png"));
                 toRemove.add(e);
                 new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
                     gamePage.getChildren().remove(e);
@@ -465,8 +465,9 @@ public class MainWindow implements GameObserver {
                 gamePage.getChildren().add(blockImage);
             }
 
-            spawnWanderingEnemy(500, 456);
-            spawnWanderingEnemy(550, 200);
+            spawnEnemy(500, 456, EnemyState.WANDERING);
+            spawnEnemy(550, 200, EnemyState.WANDERING);
+            spawnEnemy(1200, 456, EnemyState.FOLLOWING);
 
         } else {
 
@@ -487,14 +488,13 @@ public class MainWindow implements GameObserver {
 
     }
 
-    public void spawnWanderingEnemy(double x, double y) {
-        Enemy enemy = new WanderingEnemy();
-        enemy.centerPoint().setXY(x, y);
+    public void spawnEnemy(double x, double y, EnemyState type) {
+        Enemy enemy = new Enemy(x, y, type);
         enemy.setWidth(59);
         enemy.setHeight(50);
         enemy.setDirection(EntityDirection.LEFT);
         Game.instance().getCurrentLevel().addEntity(enemy);
-        ImageView enemyImage = new ImageView(new Image("assets/images/enemies/wandering-standing-left-1.png"));
+        ImageView enemyImage = new ImageView(new Image("assets/images/enemies/" + type.toString().toLowerCase() + "-standing-left-1.png"));
         enemyImage.xProperty().bind(enemy.minXProperty());
         enemyImage.yProperty().bind(enemy.minYProperty());
         enemyImage.setUserData(enemy);

@@ -348,8 +348,7 @@ public class Level {
         int sizeOfEntities = reader.readInt();
         // get how many players there are
         for (int i = 0; i < sizeOfEntities; ++i) { // iterate over each playing gathering their values
-            Enemy entity = new Enemy() {
-            };
+            Enemy entity = new Enemy();
             entity.setId(reader.readInt());
             // reader.readUTF();
             entity.centerPoint().setX(reader.readInt());
@@ -421,7 +420,7 @@ public class Level {
                Enemy enemy = (Enemy) this.findEntity(id);
                 enemy.deserialize(reader);
            }else{
-               Enemy enemy = new WanderingEnemy();
+               Enemy enemy = new Enemy();
                this.addEntity(enemy);
                 enemy.deserialize(reader);
                 enemies.add(enemy);
