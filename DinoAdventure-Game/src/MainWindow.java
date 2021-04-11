@@ -12,9 +12,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.Node;
 import model.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -54,8 +56,9 @@ public class MainWindow implements GameObserver {
     private boolean upKeyPressed;
     private boolean leftKeyPressed;
     private boolean rightKeyPressed;
-    private boolean downKeyPressed;
     private boolean escapeKeyPressed;
+
+    private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
 
     @FXML
     public void initialize() {
@@ -258,11 +261,21 @@ public class MainWindow implements GameObserver {
     }
 
     public void update() {
+
         if (Game.instance().getPlayer().getDirection() == EntityDirection.LEFT) {
             playerImage.setImage(new Image("assets/images/player/player-standing-left-1.png"));
         } else {
             playerImage.setImage(new Image("assets/images/player/player-standing-right-1.png"));
         }
+
+        for(ImageView e : enemyImages) {
+            if (((Enemy) e.getUserData()).getDirection() == EntityDirection.LEFT) {
+                e.setImage(new Image("assets/images/enemies/wandering-standing-left-1.png"));
+            } else {
+                e.setImage(new Image("assets/images/enemies/wandering-standing-right-1.png"));
+            }
+        }
+
     }
 
     @FXML
@@ -439,6 +452,8 @@ public class MainWindow implements GameObserver {
                 gamePage.getChildren().add(blockImage);
             }
 
+            spawnWanderingEnemy(400, 400);
+
         } else {
 
             // Generate real terrain
@@ -458,25 +473,40 @@ public class MainWindow implements GameObserver {
 
     }
 
-        // Event Handlers for Title Screen
-        @FXML
-        void onAboutClicked(ActionEvent event) throws IOException {
-    
-        }
-    
-        @FXML
-        void onHelpClicked(ActionEvent event) throws IOException {
-    
-        }
-    
-        @FXML
-        void onLoadClicked(ActionEvent event) throws IOException {
-    
-        }
-    
-        @FXML
-        void onHighScoreClicked(ActionEvent event) throws IOException {
-            
-        }
+    public void spawnWanderingEnemy(double x, double y) {
+        Enemy enemy = new WanderingEnemy();
+        enemy.centerPoint().setXY(x, y);
+        enemy.setWidth(59);
+        enemy.setHeight(50);
+        enemy.setDirection(EntityDirection.LEFT);
+        Game.instance().getCurrentLevel().addEntity(enemy);
+        ImageView enemyImage = new ImageView(new Image("assets/images/enemies/wandering-standing-left-1.png"));
+        enemyImage.xProperty().bind(enemy.minXProperty());
+        enemyImage.yProperty().bind(enemy.minYProperty());
+        enemyImage.setUserData(enemy);
+        gamePage.getChildren().add(enemyImage);
+        enemyImages.add(enemyImage);
+    }
+
+    // Event Handlers for Title Screen
+    @FXML
+    void onAboutClicked(ActionEvent event) throws IOException {
+
+    }
+
+    @FXML
+    void onHelpClicked(ActionEvent event) throws IOException {
+
+    }
+
+    @FXML
+    void onLoadClicked(ActionEvent event) throws IOException {
+
+    }
+
+    @FXML
+    void onHighScoreClicked(ActionEvent event) throws IOException {
+        
+    }
 
 }

@@ -23,11 +23,15 @@ public class Box {
             return centerPoint.xProperty().get() + (widthProperty.get() / 2);
         }, centerPoint.xProperty(), widthProperty));
 
+        id = nextId;
+        nextId++;
+
     }
 
     // Physical properties
 
     protected int id;
+    private static int nextId;
     protected Point centerPoint = new Point();
     protected IntegerProperty widthProperty = new SimpleIntegerProperty();
     protected IntegerProperty heightProperty = new SimpleIntegerProperty();
