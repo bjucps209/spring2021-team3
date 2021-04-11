@@ -23,7 +23,7 @@ after starting the program, click play. Once the game starts you can move move b
 
 | Developer | Time Spent | Remaining |
 | --- | --- | ---:|
-| Luke | 9:15 | 40:45 |
+| Luke | 26:00 | 24:00 |
 | Reshi | 18:00 | 32:00 |
 | Rebecca | 20:55 | 29:05 |
 | Christopher | 10:20 | 33:40 |
