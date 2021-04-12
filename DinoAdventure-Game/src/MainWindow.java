@@ -497,6 +497,14 @@ public class MainWindow implements GameObserver {
                 blockImage.yProperty().bind(block.minYProperty());
                 gamePage.getChildren().add(blockImage);
             });
+            // Generate enemies from the level
+            Game.instance().getCurrentLevel().getEntites().stream().forEach(enemy -> {
+                spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(), enemy.getType());
+            });
+            // Generate Collectables from the level
+            Game.instance().getCurrentLevel().getCollectables().stream().forEach(enemy -> {
+                //TODO: create logic to load in collectables
+            });
         }
 
         Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
