@@ -130,13 +130,7 @@ public class Enemy extends Entity implements Living {
      * @return String value of enemy type 
      */
     public String getTypeString() {
-        if (type == EnemyState.WANDERING) {
-            return "WANDERING";
-        }
-        else if (type == EnemyState.FOLLOWING) {
-            return "FOLLOWING";
-        }
-        return "";
+        return type.toString();
     }
 
     // writes the each property to the DataOutputStream passed in the parameters of the enemy to the file to be saved.
@@ -164,12 +158,7 @@ public class Enemy extends Entity implements Living {
     }
 
     public void setType(String type) {
-        if (type == "FOLLOWING") {
-            this.type = EnemyState.FOLLOWING;
-        }
-        else if (type == "WANDERING") {
-            this.type = EnemyState.WANDERING;
-        }
+        this.type = EnemyState.valueOf(type);
     }
     
 }
