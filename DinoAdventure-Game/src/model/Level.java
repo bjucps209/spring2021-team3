@@ -299,7 +299,7 @@ public class Level {
             // Iterate through the entities saving each's data
             for (int i = 0; i < enemies.size(); ++i) {
                 writer.writeInt(enemies.get(i).getId());
-                writer.writeUTF(enemies.get(i).getTypeString());
+                writer.writeUTF(enemies.get(i).getType().toString());
                 writer.writeInt(enemies.get(i).centerPoint().getIntX());
                 writer.writeInt(enemies.get(i).centerPoint().getIntY());
                 // writer.writeInt(entities.get(i).getHeight());
