@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:controller="MainWindow" xmlns:fx="http://javafx.com/fxml"  stylesheets="@MainWindow.css"
-    spacing="10" prefHeight="400" prefWidth="250">
+<VBox alignment="CENTER" spacing="10" stylesheets="@MainWindow.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="MainWindow" >
 
-    <Button onAction="#onGreetClicked" text="Greet"  />
-
+    <!-- <ImageView><image><Image url="@images/logo.png" /></image></ImageView> -->
+    <HBox spacing="10">
+        <Pane fx:id="pane" prefHeight="800" prefWidth="1600" style="-fx-background-color: lightgray" />
+        <HBox spacing="10" styleClass="propview">
+            <VBox spacing="10">
+                <TextField fx:id="levelname"/>
+                <Button text="_Save" fx:id="btnSave" />
+            <!-- <VBox spacing="10">
+                <Label text="Id:" fx:id="lblId"/>
+                <Label text="Position:" />
+                <Label text="Heading:" />
+                <Label text="Speed:" />
+                <Label text="State:" />
+            </VBox>
+            <VBox spacing="10" minWidth="30">
+                <Label fx:id="lblId" text="" />
+                <Label fx:id="lblLoc" text="" />
+                <Label fx:id="lblHeading" text="" />
+                <Label fx:id="lblSpeed" text="" />
+                <Label fx:id="lblState" text="" />
+            </VBox> -->
+            </VBox>
+        </HBox>
+    </HBox>
+    
 </VBox>
