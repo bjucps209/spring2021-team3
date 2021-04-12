@@ -12,12 +12,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.Node;
 import model.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.util.Duration;
 
@@ -54,8 +57,9 @@ public class MainWindow implements GameObserver {
     private boolean upKeyPressed;
     private boolean leftKeyPressed;
     private boolean rightKeyPressed;
-    private boolean downKeyPressed;
     private boolean escapeKeyPressed;
+
+    private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
 
     @FXML
     public void initialize() {
@@ -153,6 +157,16 @@ public class MainWindow implements GameObserver {
                     Button resumeButton = new Button();
                     resumeButton.setText("Resume");
                     buttonsPaused.getChildren().add(resumeButton);
+                    HBox buttonsPaused2 = new HBox();
+                    buttonsPaused2.setAlignment(Pos.CENTER);
+                    buttonsPaused2.setSpacing(10);
+                    gamePausedPane.getChildren().add(buttonsPaused2);
+                    Button loadButton = new Button();
+                    loadButton.setText("Load");
+                    buttonsPaused2.getChildren().add(loadButton);
+                    Button saveButton = new Button();
+                    saveButton.setText("Save");
+                    buttonsPaused2.getChildren().add(saveButton);
 
                     HBox playButtonHBox = new HBox();
                     playButtonHBox.setAlignment(Pos.CENTER_LEFT);
@@ -203,6 +217,15 @@ public class MainWindow implements GameObserver {
                     restartButtonPaused.setOnAction(ev -> {
                         play(new ActionEvent());
                     });
+
+                    loadButton.setOnAction(ev -> {
+                        // TODO: Load saved game state here
+                    });
+
+                    saveButton.setOnAction(ev -> {
+                        // TODO: Save game state here
+                    });
+
                     break;
 
             }
@@ -258,11 +281,33 @@ public class MainWindow implements GameObserver {
     }
 
     public void update() {
+
+        ArrayList<Node> toRemove = new ArrayList<Node>();
+
         if (Game.instance().getPlayer().getDirection() == EntityDirection.LEFT) {
             playerImage.setImage(new Image("assets/images/player/player-standing-left-1.png"));
         } else {
             playerImage.setImage(new Image("assets/images/player/player-standing-right-1.png"));
         }
+
+        for(ImageView e : enemyImages) {
+            if(Game.instance().getCurrentLevel().getEntites().contains((Enemy) e.getUserData())) {
+                if (((Enemy) e.getUserData()).getDirection() == EntityDirection.LEFT) {
+                    e.setImage(new Image("assets/images/enemies/" + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-left-1.png"));
+                } else {
+                    e.setImage(new Image("assets/images/enemies/" + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-right-1.png"));
+                }
+            } else {
+                e.setImage(new Image("assets/images/enemies/" + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-dying-right-14.png"));
+                toRemove.add(e);
+                new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+                    gamePage.getChildren().remove(e);
+                })).play();
+            }
+        }
+
+        for(Node n : toRemove) enemyImages.remove(n);
+
     }
 
     @FXML
@@ -439,6 +484,10 @@ public class MainWindow implements GameObserver {
                 gamePage.getChildren().add(blockImage);
             }
 
+            spawnEnemy(500, 456, EnemyState.WANDERING);
+            spawnEnemy(550, 200, EnemyState.WANDERING);
+            spawnEnemy(1200, 456, EnemyState.FOLLOWING);
+
         } else {
 
             // Generate real terrain
@@ -458,25 +507,39 @@ public class MainWindow implements GameObserver {
 
     }
 
-        // Event Handlers for Title Screen
-        @FXML
-        void onAboutClicked(ActionEvent event) throws IOException {
-    
-        }
-    
-        @FXML
-        void onHelpClicked(ActionEvent event) throws IOException {
-    
-        }
-    
-        @FXML
-        void onLoadClicked(ActionEvent event) throws IOException {
-    
-        }
-    
-        @FXML
-        void onHighScoreClicked(ActionEvent event) throws IOException {
-            
-        }
+    public void spawnEnemy(double x, double y, EnemyState type) {
+        Enemy enemy = new Enemy(x, y, type);
+        enemy.setWidth(59);
+        enemy.setHeight(50);
+        enemy.setDirection(EntityDirection.LEFT);
+        Game.instance().getCurrentLevel().addEntity(enemy);
+        ImageView enemyImage = new ImageView(new Image("assets/images/enemies/" + type.toString().toLowerCase() + "-standing-left-1.png"));
+        enemyImage.xProperty().bind(enemy.minXProperty());
+        enemyImage.yProperty().bind(enemy.minYProperty());
+        enemyImage.setUserData(enemy);
+        gamePage.getChildren().add(enemyImage);
+        enemyImages.add(enemyImage);
+    }
+
+    // Event Handlers for Title Screen
+    @FXML
+    void onAboutClicked(ActionEvent event) throws IOException {
+
+    }
+
+    @FXML
+    void onHelpClicked(ActionEvent event) throws IOException {
+
+    }
+
+    @FXML
+    void onLoadClicked(ActionEvent event) throws IOException {
+
+    }
+
+    @FXML
+    void onHighScoreClicked(ActionEvent event) throws IOException {
+        
+    }
 
 }

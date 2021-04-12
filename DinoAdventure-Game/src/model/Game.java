@@ -13,6 +13,8 @@ public class Game {
     private DifficultyType difficulty = DifficultyType.EASY;
     private String gameOverMessage;
 
+    public static Random random = new Random();
+
     public static final double FPS = 60;
     public static final double FRICTION = 0.75;
 
