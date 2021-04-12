@@ -149,12 +149,15 @@ public class MainWindow implements GameObserver {
                     buttonsPaused.setSpacing(10);
                     gamePausedPane.getChildren().add(buttonsPaused);
                     Button menuButtonPaused = new Button();
+                    menuButtonPaused.getStyleClass().add("pausedButton");
                     menuButtonPaused.setText("Menu");
                     buttonsPaused.getChildren().add(menuButtonPaused);
                     Button restartButtonPaused = new Button();
+                    restartButtonPaused.getStyleClass().add("pausedButton");
                     restartButtonPaused.setText("Restart");
                     buttonsPaused.getChildren().add(restartButtonPaused);
                     Button resumeButton = new Button();
+                    resumeButton.getStyleClass().add("pausedButton");
                     resumeButton.setText("Resume");
                     buttonsPaused.getChildren().add(resumeButton);
                     HBox buttonsPaused2 = new HBox();
@@ -162,9 +165,11 @@ public class MainWindow implements GameObserver {
                     buttonsPaused2.setSpacing(10);
                     gamePausedPane.getChildren().add(buttonsPaused2);
                     Button loadButton = new Button();
+                    loadButton.getStyleClass().add("pausedButton");
                     loadButton.setText("Load");
                     buttonsPaused2.getChildren().add(loadButton);
                     Button saveButton = new Button();
+                    saveButton.getStyleClass().add("pausedButton");
                     saveButton.setText("Save");
                     buttonsPaused2.getChildren().add(saveButton);
 

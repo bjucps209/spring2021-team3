@@ -74,7 +74,9 @@ public class Entity extends Box {
                     }
 
                     if(getMaxY() < e.getMinY()) {
-                        yVelocity = -yVelocity;
+                        if(yVelocity > 0) {
+                            yVelocity = -15;
+                        }
                         enemiesToRemove.add(e);
                         ((Player) this).scoreProperty().set(((Player) this).scoreProperty().get() + 25);
                     } else {

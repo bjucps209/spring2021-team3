@@ -59,7 +59,7 @@
 }
 
 .playPauseButton {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: rgba(255, 255, 255, 1);
     -fx-padding: 10px;
     -fx-font-size: 24px;
     -fx-border-radius: 100px;
@@ -74,9 +74,26 @@
 }
 
 .playPauseButton:hover {
-    -fx-background-color: #EEEEEE;
+    -fx-background-color: rgba(255, 255, 255, 0.75);
 }
 
 .playPauseLabel {
-    -fx-text-fill: #EEEEEE;
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+}
+
+.pausedButton {
+    -fx-background-color: rgba(255, 255, 255, 1);
+    -fx-padding: 10px;
+    -fx-font-size: 16px;
+    -fx-border-radius: 100px;
+    -fx-background-radius: 100px;
+    -fx-border: none;
+    -fx-min-width: 128px;
+    -fx-max-width: 128px;
+    -fx-background-insets: 0px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 0);
+}
+
+.pausedButton:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.75);
 }
