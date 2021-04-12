@@ -2,7 +2,8 @@ package model;
 
 public class Block extends Box {
 
-    private String texture;
+    //initiat default texture
+    private String texture = "assets/images/world/ground-2.png";
 
     public String getTexture() {
         return texture;

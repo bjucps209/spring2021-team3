@@ -32,20 +32,6 @@ public class Level {
 
 
         player = Game.instance().getPlayer();
-        // TODO: Generate enemies
-        
-        Block block = new Block();
-        block.centerPoint().setXY(100, 600);
-        block.setWidth(128);
-        block.setHeight(128);
-        this.addBlock(block);
-
-        Block block2 = new Block();
-        block2.centerPoint().setXY(200, 600);
-        block2.setWidth(128);
-        block2.setHeight(128);
-        this.addBlock(block2);
-
 
         // Setup timer bindings
 
@@ -313,7 +299,7 @@ public class Level {
             // Iterate through the entities saving each's data
             for (int i = 0; i < enemies.size(); ++i) {
                 writer.writeInt(enemies.get(i).getId());
-                // writer.writeUTF(entities.get(i).getType());
+                writer.writeUTF(enemies.get(i).getTypeString());
                 writer.writeInt(enemies.get(i).centerPoint().getIntX());
                 writer.writeInt(enemies.get(i).centerPoint().getIntY());
                 // writer.writeInt(entities.get(i).getHeight());
@@ -324,12 +310,20 @@ public class Level {
             // Iterate through the blocks saving each's data
             for (int i = 0; i < blocks.size(); ++i) {
                 writer.writeInt(blocks.get(i).getId());
-                // writer.writeUTF(blocks.get(i).getType());
+                writer.writeUTF(blocks.get(i).getTexture());
                 writer.writeInt(blocks.get(i).centerPoint().getIntX());
                 writer.writeInt(blocks.get(i).centerPoint().getIntY());
                 writer.writeInt(blocks.get(i).getWidth());
                 writer.writeInt(blocks.get(i).getHeight());
             }
+            // writer.writeInt(collectables.size());
+            // // Iterate through the collectables saving each's data
+            // for (int i = 0; i < collectables.size(); ++i) {
+            //     // writer.writeInt(collectables.get(i).getId());
+            //     writer.writeUTF(collectables.get(i).getType());
+            //     writer.writeInt(collectables.get(i).centerPoint().getIntX());
+            //     writer.writeInt(collectables.get(i).centerPoint().getIntY());
+            // }
         }
     }
 
@@ -350,7 +344,7 @@ public class Level {
         for (int i = 0; i < sizeOfEntities; ++i) { // iterate over each playing gathering their values
             Enemy entity = new Enemy();
             entity.setId(reader.readInt());
-            // reader.readUTF();
+            entity.setType(reader.readUTF());
             entity.centerPoint().setX(reader.readInt());
             entity.centerPoint().setY(reader.readInt());
             enemies.add(entity);
@@ -361,9 +355,8 @@ public class Level {
         for (int i = 0; i < sizeOfBlocks; ++i) { // iterate over each playing gathering their values
             Block box = new Block();
             box.setId(reader.readInt());
-            // box.setType(reader.readUTF());
-            box.centerPoint().setX(reader.readInt());
-            box.centerPoint().setY(reader.readInt());
+            box.setTexture(reader.readUTF());
+            box.centerPoint().setXY(reader.readInt(), reader.readInt());
             box.setWidth(reader.readInt());
             box.setHeight(reader.readInt());
             blocks.add(box);
