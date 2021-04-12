@@ -12,7 +12,7 @@ public class LevelTest {
     public void test_level_findEntity() {
         Level level = new Level();
 
-        Enemy enemy = new WanderingEnemy();
+        Enemy enemy = new Enemy();
 
         enemy.setId(3);
 
@@ -37,7 +37,7 @@ public class LevelTest {
     public void test_level_methods() throws Exception {
         Level level = new Level();
 
-        Enemy enemy = new WanderingEnemy();
+        Enemy enemy = new Enemy();
         enemy.setId(2);
         enemy.centerPoint().setXY(10, 25);
 
@@ -65,7 +65,7 @@ public class LevelTest {
     public void test_Level_Save_Load() throws Exception {
         Level level = new Level();
 
-        Enemy enemy = new WanderingEnemy();
+        Enemy enemy = new Enemy();
         enemy.setId(2);
         enemy.centerPoint().setXY(10, 25);
 
@@ -93,7 +93,7 @@ public class LevelTest {
         level2.load("Custom1.dat");
 
         Entity enemy2 = level2.findEntity(2);
-        Box block2 = level2.findBlock(1);
+        Block block2 = level2.findBlock(1);
 
         //test the loaded level
         // assertEquals("Custom1", level2.getLevelName());
