@@ -95,6 +95,21 @@ public class Enemy extends Entity implements Living {
                 }
                 break;
 
+            case FLEEING:
+                if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 500) {
+                    state = EnemyState.FOLLOWING;
+                    if(centerPoint.getX() > Game.instance().getPlayer().centerPoint().getX()) {
+                        xVelocity = Math.min(maxSpeed, xVelocity + (10 / Game.FPS));
+                        direction = EntityDirection.RIGHT;
+                    } else {
+                        xVelocity = Math.max(-maxSpeed, xVelocity - (10 / Game.FPS));
+                        direction = EntityDirection.LEFT;
+                    }
+                } else {
+                    state = EnemyState.STANDING;
+                }
+                break;
+
             default:
                 break;
 

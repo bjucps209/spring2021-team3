@@ -1,15 +1,12 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.Node;
@@ -20,7 +17,6 @@ import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.util.Duration;
 
@@ -78,160 +74,168 @@ public class MainWindow implements GameObserver {
 
         gameLoop = new Timeline(new KeyFrame(Duration.millis(1000 / Game.FPS), e -> {
 
-            switch(Game.instance().getState()) {
+            switch (Game.instance().getState()) {
 
-                case LEVEL_PLAYING:
-                    handleInput();
-                    Game.instance().getCurrentLevel().tick();
-                    Game.instance().observers().forEach(o -> o.update());
-                    break;
+            case LEVEL_PLAYING:
+                handleInput();
+                Game.instance().getCurrentLevel().tick();
+                Game.instance().observers().forEach(o -> o.update());
+                break;
 
-                case GAME_OVER:
-                    gameLoop.stop();
-                    VBox gameOverPane = new VBox();
-                    gameOverPane.setAlignment(Pos.CENTER);
-                    gameOverPane.getStyleClass().add("gameOverPane");
-                    AnchorPane.setTopAnchor(gameOverPane, 0.0);
-                    AnchorPane.setLeftAnchor(gameOverPane, 0.0);
-                    AnchorPane.setRightAnchor(gameOverPane, 0.0);
-                    gameOverPane.setPrefHeight(window.getHeight());
-                    gameOverPane.setSpacing(10);
-                    gamePage.getChildren().add(gameOverPane);
-                    Label gameOverHeader = new Label();
-                    gameOverHeader.setText("GAME OVER");
-                    gameOverHeader.getStyleClass().add("gameOverHeader");
-                    gameOverPane.getChildren().add(gameOverHeader);
-                    Label gameOverMessage = new Label();
-                    gameOverMessage.setText(Game.instance().getGameOverMessage());
-                    gameOverMessage.getStyleClass().add("gameOverMessage");
-                    gameOverPane.getChildren().add(gameOverMessage);
-                    HBox buttons = new HBox();
-                    buttons.setAlignment(Pos.CENTER);
-                    buttons.setSpacing(10);
-                    gameOverPane.getChildren().add(buttons);
-                    Button menuButton = new Button();
-                    menuButton.setText("Menu");
-                    buttons.getChildren().add(menuButton);
-                    Button restartButton = new Button();
-                    restartButton.setText("Try Again");
-                    buttons.getChildren().add(restartButton);
-                    menuButton.setOnAction(ev -> {
-                        Game.instance().setState(GameState.MENU);
-                        gamePage.setVisible(false);
-                        titlePage.setVisible(true);
-                    });
-                    restartButton.setOnAction(ev -> {
-                        play(new ActionEvent());
-                    });
-                    break;
+            case GAME_OVER:
+                gameLoop.stop();
+                VBox gameOverPane = new VBox();
+                gameOverPane.setAlignment(Pos.CENTER);
+                gameOverPane.getStyleClass().add("gameOverPane");
+                AnchorPane.setTopAnchor(gameOverPane, 0.0);
+                AnchorPane.setLeftAnchor(gameOverPane, 0.0);
+                AnchorPane.setRightAnchor(gameOverPane, 0.0);
+                gameOverPane.setPrefHeight(window.getHeight());
+                gameOverPane.setSpacing(10);
+                gamePage.getChildren().add(gameOverPane);
+                Label gameOverHeader = new Label();
+                gameOverHeader.setText("GAME OVER");
+                gameOverHeader.getStyleClass().add("gameOverHeader");
+                gameOverPane.getChildren().add(gameOverHeader);
+                Label gameOverMessage = new Label();
+                gameOverMessage.setText(Game.instance().getGameOverMessage());
+                gameOverMessage.getStyleClass().add("gameOverMessage");
+                gameOverPane.getChildren().add(gameOverMessage);
+                HBox buttons = new HBox();
+                buttons.setAlignment(Pos.CENTER);
+                buttons.setSpacing(10);
+                gameOverPane.getChildren().add(buttons);
+                Button menuButton = new Button();
+                menuButton.setText("Menu");
+                buttons.getChildren().add(menuButton);
+                Button restartButton = new Button();
+                restartButton.setText("Try Again");
+                buttons.getChildren().add(restartButton);
+                menuButton.setOnAction(ev -> {
+                    Game.instance().setState(GameState.MENU);
+                    gamePage.setVisible(false);
+                    titlePage.setVisible(true);
+                });
+                restartButton.setOnAction(ev -> {
+                    play(new ActionEvent());
+                });
+                break;
 
-                case LEVEL_PAUSED:
+            case LEVEL_PAUSED:
 
-                    gameLoop.stop();
+                gameLoop.stop();
 
-                    long gamePausedAt = System.currentTimeMillis();
+                long gamePausedAt = System.currentTimeMillis();
 
-                    VBox gamePausedPane = new VBox();
-                    gamePausedPane.setAlignment(Pos.CENTER);
-                    gamePausedPane.getStyleClass().add("gamePausedPane");
-                    AnchorPane.setTopAnchor(gamePausedPane, 0.0);
-                    AnchorPane.setLeftAnchor(gamePausedPane, 0.0);
-                    AnchorPane.setRightAnchor(gamePausedPane, 0.0);
-                    gamePausedPane.setPrefHeight(window.getHeight());
-                    gamePausedPane.setSpacing(10);
-                    gamePage.getChildren().add(gamePausedPane);
-                    Label gamePausedHeader = new Label();
-                    gamePausedHeader.setText("GAME PAUSED");
-                    gamePausedHeader.getStyleClass().add("gamePausedHeader");
-                    gamePausedPane.getChildren().add(gamePausedHeader);
-                    HBox buttonsPaused = new HBox();
-                    buttonsPaused.setAlignment(Pos.CENTER);
-                    buttonsPaused.setSpacing(10);
-                    gamePausedPane.getChildren().add(buttonsPaused);
-                    Button menuButtonPaused = new Button();
-                    menuButtonPaused.getStyleClass().add("pausedButton");
-                    menuButtonPaused.setText("Menu");
-                    buttonsPaused.getChildren().add(menuButtonPaused);
-                    Button restartButtonPaused = new Button();
-                    restartButtonPaused.getStyleClass().add("pausedButton");
-                    restartButtonPaused.setText("Restart");
-                    buttonsPaused.getChildren().add(restartButtonPaused);
-                    Button resumeButton = new Button();
-                    resumeButton.getStyleClass().add("pausedButton");
-                    resumeButton.setText("Resume");
-                    buttonsPaused.getChildren().add(resumeButton);
-                    HBox buttonsPaused2 = new HBox();
-                    buttonsPaused2.setAlignment(Pos.CENTER);
-                    buttonsPaused2.setSpacing(10);
-                    gamePausedPane.getChildren().add(buttonsPaused2);
-                    Button loadButton = new Button();
-                    loadButton.getStyleClass().add("pausedButton");
-                    loadButton.setText("Load");
-                    buttonsPaused2.getChildren().add(loadButton);
-                    Button saveButton = new Button();
-                    saveButton.getStyleClass().add("pausedButton");
-                    saveButton.setText("Save");
-                    buttonsPaused2.getChildren().add(saveButton);
+                VBox gamePausedPane = new VBox();
+                gamePausedPane.setAlignment(Pos.CENTER);
+                gamePausedPane.getStyleClass().add("gamePausedPane");
+                AnchorPane.setTopAnchor(gamePausedPane, 0.0);
+                AnchorPane.setLeftAnchor(gamePausedPane, 0.0);
+                AnchorPane.setRightAnchor(gamePausedPane, 0.0);
+                gamePausedPane.setPrefHeight(window.getHeight());
+                gamePausedPane.setSpacing(10);
+                gamePage.getChildren().add(gamePausedPane);
+                Label gamePausedHeader = new Label();
+                gamePausedHeader.setText("GAME PAUSED");
+                gamePausedHeader.getStyleClass().add("gamePausedHeader");
+                gamePausedPane.getChildren().add(gamePausedHeader);
 
-                    HBox playButtonHBox = new HBox();
-                    playButtonHBox.setAlignment(Pos.CENTER_LEFT);
-                    playButtonHBox.setSpacing(10);
-                    AnchorPane.setTopAnchor(playButtonHBox, 10.0);
-                    AnchorPane.setLeftAnchor(playButtonHBox, 10.0);
-                    gamePage.getChildren().add(playButtonHBox);
+                VBox buttonsPaused = new VBox();
+                buttonsPaused.setAlignment(Pos.CENTER);
+                buttonsPaused.setSpacing(10);
+                gamePausedPane.getChildren().add(buttonsPaused);
+                HBox buttonsPaused2 = new HBox();
+                buttonsPaused2.getStyleClass().add("load-save");
+                buttonsPaused2.setAlignment(Pos.CENTER);
+                buttonsPaused2.setSpacing(10);
+                gamePausedPane.getChildren().add(buttonsPaused2);
 
-                    Button playButton = new Button();
-                    playButton.getStyleClass().add("material-icons");
-                    playButton.getStyleClass().add("playPauseButton");
-                    playButton.setText("\ue037");
-                    playButton.setOnAction(ev -> resumeButton.fire());
-                    playButtonHBox.getChildren().add(playButton);
+                Button resumeButton = new Button();
+                resumeButton.getStyleClass().add("pausedButton");
+                resumeButton.setText("RESUME");
+                buttonsPaused.getChildren().add(resumeButton);
+                Button restartButtonPaused = new Button();
+                restartButtonPaused.getStyleClass().add("pausedButton");
+                restartButtonPaused.setText("RESTART");
+                buttonsPaused.getChildren().add(restartButtonPaused);
+                Button menuButtonPaused = new Button();
+                menuButtonPaused.getStyleClass().add("pausedButton");
+                menuButtonPaused.setText("MENU");
+                buttonsPaused.getChildren().add(menuButtonPaused);
+                Button loadButton = new Button();
+                loadButton.getStyleClass().add("pausedButton2");
+                loadButton.setText("LOAD");
+                buttonsPaused2.getChildren().add(loadButton);
+                Button saveButton = new Button();
+                saveButton.getStyleClass().add("pausedButton2");
+                saveButton.setText("SAVE");
+                buttonsPaused2.getChildren().add(saveButton);
 
-                    Label playLabel = new Label();
-                    playLabel.setText("Press Esc to pause/resume");
-                    playLabel.getStyleClass().add("playPauseLabel");
-                    playButtonHBox.getChildren().add(playLabel);
+                HBox playButtonHBox = new HBox();
+                playButtonHBox.setAlignment(Pos.CENTER_LEFT);
+                playButtonHBox.setSpacing(10);
+                AnchorPane.setTopAnchor(playButtonHBox, 10.0);
+                AnchorPane.setLeftAnchor(playButtonHBox, 10.0);
+                gamePage.getChildren().add(playButtonHBox);
 
-                    escapeKeyPressed = false;
+                Button playButton = new Button();
+                playButton.getStyleClass().add("material-icons");
+                playButton.getStyleClass().add("playPauseButton");
+                playButton.setText("\ue037");
+                playButton.setOnAction(ev -> resumeButton.fire());
+                playButtonHBox.getChildren().add(playButton);
 
-                    Timeline pauseLoop = new Timeline(new KeyFrame(Duration.millis(1000 / Game.FPS), ev -> {
-                        if(escapeKeyPressed) {
-                            escapeKeyPressed = false;
-                            resumeButton.fire();
-                        }
-                    }));
-                    pauseLoop.setCycleCount(Timeline.INDEFINITE);
-                    pauseLoop.play();
+                Label playLabel = new Label();
+                playLabel.setText("Press Esc to pause/resume");
+                playLabel.getStyleClass().add("playPauseLabel");
+                playButtonHBox.getChildren().add(playLabel);
 
-                    menuButtonPaused.setOnAction(ev -> {
-                        Game.instance().setState(GameState.MENU);
-                        gamePage.setVisible(false);
-                        titlePage.setVisible(true);
-                    });
+                escapeKeyPressed = false;
 
-                    resumeButton.setOnAction(ev -> {
-                        Game.instance().getCurrentLevel().idleTimeProperty().set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis() - gamePausedAt);
-                        pauseLoop.stop();
-                        gamePage.getChildren().remove(playButtonHBox);
-                        gamePage.getChildren().remove(gamePausedPane);
-                        Game.instance().setState(GameState.LEVEL_PLAYING);
-                        window.getScene().getRoot().requestFocus();
-                        gameLoop.play();
-                    });
+                Timeline pauseLoop = new Timeline(new KeyFrame(Duration.millis(1000 / Game.FPS), ev -> {
+                    if (escapeKeyPressed) {
+                        escapeKeyPressed = false;
+                        resumeButton.fire();
+                    }
+                }));
+                pauseLoop.setCycleCount(Timeline.INDEFINITE);
+                pauseLoop.play();
 
-                    restartButtonPaused.setOnAction(ev -> {
-                        play(new ActionEvent());
-                    });
+                menuButtonPaused.setOnAction(ev -> {
+                    Game.instance().setState(GameState.MENU);
+                    gamePage.setVisible(false);
+                    titlePage.setVisible(true);
+                });
 
-                    loadButton.setOnAction(ev -> {
-                        // TODO: Load saved game state here
-                    });
+                resumeButton.setOnAction(ev -> {
+                    Game.instance().getCurrentLevel().idleTimeProperty()
+                            .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
+                                    - gamePausedAt);
+                    pauseLoop.stop();
+                    gamePage.getChildren().remove(playButtonHBox);
+                    gamePage.getChildren().remove(gamePausedPane);
+                    Game.instance().setState(GameState.LEVEL_PLAYING);
+                    window.getScene().getRoot().requestFocus();
+                    gameLoop.play();
+                });
 
-                    saveButton.setOnAction(ev -> {
-                        // TODO: Save game state here
-                    });
+                restartButtonPaused.setOnAction(ev -> {
+                    play(new ActionEvent());
+                });
 
-                    break;
+                loadButton.setOnAction(ev -> {
+                    // TODO: Load saved game state here
+                });
+
+                saveButton.setOnAction(ev -> {
+                    // TODO: Save game state here
+                });
+
+                break;
+
+            default:
+                break;
 
             }
         }));
@@ -268,13 +272,13 @@ public class MainWindow implements GameObserver {
             Game.instance().setState(GameState.LEVEL_PAUSED);
         }
 
-        if(Game.instance().getPlayer().getMaxY() > window.getHeight()) {
+        if (Game.instance().getPlayer().getMinY() > window.getHeight()) {
 
             // If the player falls off the screen, deduct 10 HP
             Game.instance().getPlayer().setHealth(Game.instance().getPlayer().getHealth() - 10);
 
             // If the player isn't out of health, respawn them
-            if(Game.instance().getPlayer().getHealth() > 0) {
+            if (Game.instance().getPlayer().getHealth() > 0) {
                 Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
                 Game.instance().getPlayer().centerPoint().subtract(0, 50);
                 Game.instance().getPlayer().setXVelocity(0);
@@ -295,23 +299,38 @@ public class MainWindow implements GameObserver {
             playerImage.setImage(new Image("assets/images/player/player-standing-right-1.png"));
         }
 
-        for(ImageView e : enemyImages) {
-            if(Game.instance().getCurrentLevel().getEntites().contains((Enemy) e.getUserData())) {
+        for (ImageView e : enemyImages) {
+
+            if (Game.instance().getCurrentLevel().getEntites().contains((Enemy) e.getUserData())) {
                 if (((Enemy) e.getUserData()).getDirection() == EntityDirection.LEFT) {
-                    e.setImage(new Image("assets/images/enemies/" + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-left-1.png"));
+                    e.setImage(new Image("assets/images/enemies/"
+                            + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-left-1.png"));
                 } else {
-                    e.setImage(new Image("assets/images/enemies/" + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-right-1.png"));
+                    e.setImage(new Image("assets/images/enemies/"
+                            + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-right-1.png"));
                 }
             } else {
-                e.setImage(new Image("assets/images/enemies/" + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-dying-right-14.png"));
+                e.setImage(new Image("assets/images/enemies/"
+                        + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-dying-right-14.png"));
                 toRemove.add(e);
                 new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
                     gamePage.getChildren().remove(e);
                 })).play();
             }
+
+            // Remove the enemy if it's falling off the screen
+            if (((Enemy) e.getUserData()).getMinY() > window.getHeight()) {
+    
+                Game.instance().getCurrentLevel().getEntites().remove((Enemy) e.getUserData());
+
+                toRemove.add(e);
+                gamePage.getChildren().remove(e);
+
+            }
         }
 
-        for(Node n : toRemove) enemyImages.remove(n);
+        for (Node n : toRemove)
+            enemyImages.remove(n);
 
     }
 
@@ -380,6 +399,8 @@ public class MainWindow implements GameObserver {
             Game.instance().getPlayer().setHealth(10);
             Game.instance().getCurrentLevel().setMaxTime(300);
             break;
+        default:
+            break;
         }
 
         // Show player stats
@@ -436,7 +457,6 @@ public class MainWindow implements GameObserver {
 
         gamePage.getChildren().add(dataVBox);
 
-
         // Show pause button
 
         Button pauseButton = new Button();
@@ -447,8 +467,6 @@ public class MainWindow implements GameObserver {
         AnchorPane.setLeftAnchor(pauseButton, 10.0);
         pauseButton.setOnAction(ev -> Game.instance().setState(GameState.LEVEL_PAUSED));
         gamePage.getChildren().add(pauseButton);
-
-
 
         gamePage.setVisible(true);
 
@@ -461,7 +479,7 @@ public class MainWindow implements GameObserver {
         // Please leave here for now so I can test with it
         // Enable dummy terrain if you want to demo the gameplay
         boolean dummyTerrain = true;
-        if(dummyTerrain) {
+        if (dummyTerrain) {
 
             for (int i = 0; i < 10; i++) {
                 ImageView blockImage = new ImageView(
@@ -492,6 +510,7 @@ public class MainWindow implements GameObserver {
             spawnEnemy(500, 456, EnemyState.WANDERING);
             spawnEnemy(550, 200, EnemyState.WANDERING);
             spawnEnemy(1200, 456, EnemyState.FOLLOWING);
+            spawnEnemy(800, 456, EnemyState.FLEEING);
 
         } else {
 
@@ -508,7 +527,9 @@ public class MainWindow implements GameObserver {
         Game.instance().getPlayer().setWidth(50);
         Game.instance().getPlayer().setHeight(54);
         Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
-        //Game.instance().getPlayer().setXVelocity(1);
+        // Game.instance().getPlayer().setXVelocity(1);
+
+        Game.instance().getCurrentLevel().idleTimeProperty().set(0);
 
     }
 
@@ -518,7 +539,8 @@ public class MainWindow implements GameObserver {
         enemy.setHeight(50);
         enemy.setDirection(EntityDirection.LEFT);
         Game.instance().getCurrentLevel().addEntity(enemy);
-        ImageView enemyImage = new ImageView(new Image("assets/images/enemies/" + type.toString().toLowerCase() + "-standing-left-1.png"));
+        ImageView enemyImage = new ImageView(
+                new Image("assets/images/enemies/" + type.toString().toLowerCase() + "-standing-left-1.png"));
         enemyImage.xProperty().bind(enemy.minXProperty());
         enemyImage.yProperty().bind(enemy.minYProperty());
         enemyImage.setUserData(enemy);
@@ -544,7 +566,7 @@ public class MainWindow implements GameObserver {
 
     @FXML
     void onHighScoreClicked(ActionEvent event) throws IOException {
-        
+
     }
 
 }
