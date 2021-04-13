@@ -55,7 +55,7 @@ public class Enemy extends Entity implements Living {
     @Override
     public void tick() {
     
-        if(Game.instance().getPlayer().centerPoint().distanceFrom(this.centerPoint) > 2000) {
+        if(Game.instance().getPlayer().centerPoint().distanceFrom(this.centerPoint) > 2202.91) {
             return;
         }
 
