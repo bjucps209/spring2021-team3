@@ -203,6 +203,7 @@ public class MainWindow implements GameObserver {
                 pauseLoop.play();
 
                 menuButtonPaused.setOnAction(ev -> {
+                    pauseLoop.stop();
                     Game.instance().setState(GameState.MENU);
                     gamePage.setVisible(false);
                     titlePage.setVisible(true);
@@ -221,14 +222,17 @@ public class MainWindow implements GameObserver {
                 });
 
                 restartButtonPaused.setOnAction(ev -> {
+                    pauseLoop.stop();
                     play(new ActionEvent());
                 });
 
                 loadButton.setOnAction(ev -> {
+                    pauseLoop.stop();
                     // TODO: Load saved game state here
                 });
 
                 saveButton.setOnAction(ev -> {
+                    pauseLoop.stop();
                     // TODO: Save game state here
                 });
 
@@ -511,6 +515,7 @@ public class MainWindow implements GameObserver {
             spawnEnemy(550, 200, EnemyState.WANDERING);
             spawnEnemy(1200, 456, EnemyState.FOLLOWING);
             spawnEnemy(800, 456, EnemyState.FLEEING);
+            spawnEnemy(1100, 456, EnemyState.JUMPING);
 
         } else {
 

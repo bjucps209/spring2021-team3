@@ -54,6 +54,10 @@ public class Enemy extends Entity implements Living {
 
     @Override
     public void tick() {
+    
+        if(Game.instance().getPlayer().centerPoint().distanceFrom(this.centerPoint) > 2000) {
+            return;
+        }
 
         switch(type) {
 
@@ -95,20 +99,38 @@ public class Enemy extends Entity implements Living {
                 }
                 break;
 
-            case FLEEING:
-                if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 500) {
-                    state = EnemyState.FOLLOWING;
-                    if(centerPoint.getX() > Game.instance().getPlayer().centerPoint().getX()) {
-                        xVelocity = Math.min(maxSpeed, xVelocity + (10 / Game.FPS));
-                        direction = EntityDirection.RIGHT;
+                case FLEEING:
+                    if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 500) {
+                        state = EnemyState.FOLLOWING;
+                        if(centerPoint.getX() > Game.instance().getPlayer().centerPoint().getX()) {
+                            xVelocity = Math.min(maxSpeed, xVelocity + (10 / Game.FPS));
+                            direction = EntityDirection.RIGHT;
+                        } else {
+                            xVelocity = Math.max(-maxSpeed, xVelocity - (10 / Game.FPS));
+                            direction = EntityDirection.LEFT;
+                        }
                     } else {
-                        xVelocity = Math.max(-maxSpeed, xVelocity - (10 / Game.FPS));
-                        direction = EntityDirection.LEFT;
+                        state = EnemyState.STANDING;
                     }
-                } else {
-                    state = EnemyState.STANDING;
-                }
-                break;
+                    break;
+
+                case JUMPING:
+                    if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 1000) {
+                        state = EnemyState.JUMPING;
+                        if(centerPoint.getX() - 15 > Game.instance().getPlayer().centerPoint().getX()) {
+                            xVelocity = Math.max(-maxSpeed, xVelocity - (5 / Game.FPS));
+                            direction = EntityDirection.LEFT;
+                        } else if(centerPoint.getX() + 15 < Game.instance().getPlayer().centerPoint().getX()) {
+                            xVelocity = Math.min(maxSpeed, xVelocity + (5 / Game.FPS));
+                            direction = EntityDirection.RIGHT;
+                        }
+                        if(onSurface) {
+                            yVelocity = -5;
+                        }
+                    } else {
+                        state = EnemyState.STANDING;
+                    }
+                    break;
 
             default:
                 break;
