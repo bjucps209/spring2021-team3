@@ -80,7 +80,7 @@ public class Enemy extends Entity implements Living {
                 }
                 break;
 
-            case FOLLOWING:
+                case FOLLOWING:
                 if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 1000) {
                     state = EnemyState.FOLLOWING;
                     if(centerPoint.getX() - 15 > Game.instance().getPlayer().centerPoint().getX()) {
@@ -125,6 +125,19 @@ public class Enemy extends Entity implements Living {
 
     }
 
+    /**
+     * gets the type of the enemy and returns a string value of it's type
+     * @return String value of enemy type 
+     */
+    public String getTypeString() {
+        if (type == EnemyState.WANDERING) {
+            return "WANDERING";
+        }
+        else if (type == EnemyState.FOLLOWING) {
+            return "FOLLOWING";
+        }
+        return "";
+    }
 
     // writes the each property to the DataOutputStream passed in the parameters of the enemy to the file to be saved.
     public void serialize(DataOutputStream writer) throws IOException{
@@ -151,12 +164,13 @@ public class Enemy extends Entity implements Living {
     }
 
     public void setType(String type) {
-        if (type == "FOLLOWING") {
-            this.type = EnemyState.FOLLOWING;
-        }
-        else if (type == "WANDERING") {
-            this.type = EnemyState.WANDERING;
-        }
+        // if (type == "FOLLOWING") {
+        //     this.type = EnemyState.FOLLOWING;
+        // }
+        // else if (type == "WANDERING") {
+        //     this.type = EnemyState.WANDERING;
+        // }
+        this.type = EnemyState.WANDERING;
     }
     
 }

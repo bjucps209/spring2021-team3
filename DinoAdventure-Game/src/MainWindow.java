@@ -513,17 +513,26 @@ public class MainWindow implements GameObserver {
             spawnEnemy(800, 456, EnemyState.FLEEING);
 
         } else {
-
-            // Generate real terrain
+            // Game.instance().setCurrentLevel(new Level());
+            try { Game.instance().getCurrentLevel().load("lvl1.dat");} catch (Exception er) {}
+            // Generate real terrain from file
             Game.instance().getCurrentLevel().getBlocks().stream().forEach(block -> {
-                ImageView blockImage = new ImageView(new Image("assets/images/world/ground-2.png"));
+                ImageView blockImage = new ImageView(new Image(block.getTexture()));
                 blockImage.xProperty().bind(block.minXProperty());
                 blockImage.yProperty().bind(block.minYProperty());
                 gamePage.getChildren().add(blockImage);
             });
             // Generate enemies from the level
             Game.instance().getCurrentLevel().getEntites().stream().forEach(enemy -> {
-                spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(), enemy.getType());
+                ImageView enemyImage = new ImageView(
+                new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
+                enemyImage.xProperty().bind(enemy.minXProperty());
+                enemyImage.yProperty().bind(enemy.minYProperty());
+                enemyImage.setUserData(enemy);
+                gamePage.getChildren().add(enemyImage);
+                enemyImages.add(enemyImage);
+                // spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(), EnemyState.WANDERING);
+
             });
             // Generate Collectables from the level
             Game.instance().getCurrentLevel().getCollectables().stream().forEach(enemy -> {

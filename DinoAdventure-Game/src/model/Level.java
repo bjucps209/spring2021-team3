@@ -33,6 +33,28 @@ public class Level {
 
         player = Game.instance().getPlayer();
 
+
+
+        // for (int i = 0; i < 10; i++) {
+        //     Block block = new Block();
+        //     block.setTexture("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png");
+        //     block.centerPoint().setXY(100 + (i * 128), 600);
+        //     block.setWidth(128);
+        //     block.setHeight(128);
+        //     addBlock(block);
+        // }
+
+        // for (int i = 0; i < 3; i++) {
+        //     Block block = new Block();
+        //     block.setTexture(("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
+        //     block.centerPoint().setXY(500 + (i * 128), 418);
+        //     block.setWidth(128);
+        //     block.setHeight(93);
+        //     addBlock(block);
+        // }
+
+    
+
         // Setup timer bindings
 
         runTimeProperty.bind(Bindings.createLongBinding(() -> {
@@ -299,7 +321,7 @@ public class Level {
             // Iterate through the entities saving each's data
             for (int i = 0; i < enemies.size(); ++i) {
                 writer.writeInt(enemies.get(i).getId());
-                writer.writeUTF(enemies.get(i).getType().toString());
+                writer.writeUTF(enemies.get(i).getTypeString());
                 writer.writeInt(enemies.get(i).centerPoint().getIntX());
                 writer.writeInt(enemies.get(i).centerPoint().getIntY());
                 // writer.writeInt(entities.get(i).getHeight());
@@ -329,9 +351,12 @@ public class Level {
 
     /**
      * 
-     * @return
+     * 
      */
     public void load(String fileName) throws IOException {
+        enemies.clear();
+        blocks.clear();
+        collectables.clear();
         setLevelName(fileName);
         // Load Playermanager instance from itmes.dat binary file
         var reader = new DataInputStream(new FileInputStream(fileName)); // Create loader
@@ -347,6 +372,16 @@ public class Level {
             entity.setType(reader.readUTF());
             entity.centerPoint().setX(reader.readInt());
             entity.centerPoint().setY(reader.readInt());
+            entity.setHeight(50);
+            entity.setWidth(59);
+            enemies.add(entity);
+
+            // int id = reader.readInt();
+            // String type = reader.readUTF();
+            // int x = reader.readInt();
+            // int y = reader.readInt();
+
+            // Enemy entity = new Enemy(x, y, EnemyState.STANDING);
             enemies.add(entity);
         }
 
