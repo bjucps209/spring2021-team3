@@ -40,6 +40,7 @@ public class LevelTest {
         Enemy enemy = new Enemy();
         enemy.setId(2);
         enemy.centerPoint().setXY(10, 25);
+        enemy.setType(EnemyState.WANDERING);
 
         Block block = new Block();
         block.setId(1);
@@ -68,6 +69,7 @@ public class LevelTest {
         Enemy enemy = new Enemy();
         enemy.setId(2);
         enemy.centerPoint().setXY(10, 25);
+        enemy.setType(EnemyState.WANDERING);
 
         Block block = new Block();
         block.setId(1);
@@ -92,7 +94,7 @@ public class LevelTest {
         Level level2 = new Level();
         level2.load("Custom1.dat");
 
-        Entity enemy2 = level2.findEntity(2);
+        Enemy enemy2 = level2.findEntity(2);
         Block block2 = level2.findBlock(1);
 
         //test the loaded level
@@ -104,7 +106,9 @@ public class LevelTest {
         //ensure the entities loaded properly
         assertEquals(10, (int)enemy2.centerPoint().getX());
         assertEquals(25, (int)enemy2.centerPoint().getY());
-
+        assertEquals(EnemyState.WANDERING, enemy2.getType());
+        assertEquals(1, level2.getEntites().size());
+        assertEquals(1, level2.getBlocks().size());
         //Ensure the Boxes loaded properly
         assertEquals(1, block2.getId());
         assertEquals(100, (int)block2.centerPoint().getX());

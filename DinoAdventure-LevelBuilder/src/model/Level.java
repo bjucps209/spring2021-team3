@@ -17,8 +17,8 @@ public class Level {
     private ArrayList<Block> blocks = new ArrayList<Block>();
     private ArrayList<Collectable> collectables = new ArrayList<Collectable>();
     private Player player;
-    private int width;
-    private int height;
+    private int width = 0;
+    private int height = 0;
     private String levelName;
     private LongProperty startTimeProperty = new SimpleLongProperty();
     private LongProperty runTimeProperty = new SimpleLongProperty();
@@ -130,8 +130,8 @@ public class Level {
      * @param id
      * @return Entity
      */
-    public Entity findEntity(int id) {
-        for (Entity entity : enemies) {
+    public Enemy findEntity(int id) {
+        for (Enemy entity : enemies) {
             if (entity.getId() == id) {
                 return entity;
             }
@@ -299,7 +299,7 @@ public class Level {
             // Iterate through the entities saving each's data
             for (int i = 0; i < enemies.size(); ++i) {
                 writer.writeInt(enemies.get(i).getId());
-                writer.writeUTF(enemies.get(i).getTypeString());
+                writer.writeUTF(enemies.get(i).getType().toString());
                 writer.writeInt(enemies.get(i).centerPoint().getIntX());
                 writer.writeInt(enemies.get(i).centerPoint().getIntY());
                 // writer.writeInt(entities.get(i).getHeight());
@@ -333,6 +333,9 @@ public class Level {
      */
     public void load(String fileName) throws IOException {
         setLevelName(fileName);
+        enemies.clear();
+        blocks.clear();
+        collectables.clear();
         // Load Playermanager instance from itmes.dat binary file
         var reader = new DataInputStream(new FileInputStream(fileName)); // Create loader
         // read the size of the level
@@ -345,8 +348,9 @@ public class Level {
             Enemy entity = new Enemy();
             entity.setId(reader.readInt());
             entity.setType(reader.readUTF());
-            entity.centerPoint().setX(reader.readInt());
-            entity.centerPoint().setY(reader.readInt());
+            entity.setWidth(59);
+            entity.setHeight(50);
+            entity.centerPoint().setXY(reader.readInt(), reader.readInt());
             enemies.add(entity);
         }
 

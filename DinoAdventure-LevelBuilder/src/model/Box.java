@@ -23,11 +23,15 @@ public class Box {
             return centerPoint.xProperty().get() + (widthProperty.get() / 2);
         }, centerPoint.xProperty(), widthProperty));
 
+        id = nextId;
+        nextId++;
+
     }
 
     // Physical properties
 
     protected int id;
+    private static int nextId;
     protected Point centerPoint = new Point();
     protected IntegerProperty widthProperty = new SimpleIntegerProperty();
     protected IntegerProperty heightProperty = new SimpleIntegerProperty();
@@ -111,10 +115,6 @@ public class Box {
 
     public boolean overlaps(Box b) {
         return getMaxX() >= b.getMinX() && getMinX() <= b.getMaxX() && getMaxY() >= b.getMinY() && getMinY() <= b.getMaxY();
-    }
-
-    public String getType() {
-        return null;
     }
 
 }
