@@ -23,14 +23,18 @@ public class SerializationTest {
         player.setHealth(9);
         world.setDifficulty(DifficultyType.MEDIUM);
         Enemy enemy = new Enemy();
+        enemy.setState(EnemyState.WANDERING);
         enemy.setId(10);
         enemy.centerPoint().setXY(300, 250);
         enemy.setDirection(EntityDirection.RIGHT);
         assertEquals(EntityDirection.RIGHT, enemy.getDirection());
+        enemy.setType(EnemyState.FOLLOWING);
         Enemy enemy2 = new Enemy();
         enemy2.setId(2);
         enemy2.setState(EnemyState.STANDING);
         enemy2.setHealth(0);
+        enemy2.setDirection(EntityDirection.LEFT);
+        assertEquals(EntityDirection.LEFT, enemy2.getDirection());
 
         level.addEntity(enemy); level.addEntity(enemy2);
         level.setLevelName("Beginner");
@@ -85,6 +89,7 @@ public class SerializationTest {
         assertEquals(EntityDirection.LEFT, enemyTwo.direction);
         assertEquals(enemyTwo.getHealth(), 0);
         assertEquals(enemyTwo.getState(), EnemyState.STANDING);
+        assertEquals(enemy0.getType(), EnemyState.FOLLOWING);
 
         // check boxes
         Block checkedBlock = level.findBlock(5);
