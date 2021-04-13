@@ -226,14 +226,56 @@ public class MainWindow implements GameObserver {
                     play(new ActionEvent());
                 });
 
+                //bugs: timer doesn't load the right time and doesn't load enemies properly
                 loadButton.setOnAction(ev -> {
-                    pauseLoop.stop();
-                    // TODO: Load saved game state here
+                    try{
+                    final Game game = Game.instance();
+                    long time = game.load("saveFile.dat"); // time is the long at which the System was paused and the save button was clicked
+                    
+                    //I am not sure how to set the time this adds too much time.
+                    Game.instance().getCurrentLevel().idleTimeProperty()
+                            .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
+                                    - time);
+                   
+                } catch (Exception ex){
+                    System.out.println("Something went wrong with loading the file");
+                }
+                pauseLoop.stop();
+                gamePage.getChildren().remove(playButtonHBox);
+                gamePage.getChildren().remove(gamePausedPane);
+
+                // committed out code below causes this to be thrown for me:
+                // a java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "InvokeLaterDispatcher" java.lang.OutOfMemoryError: Java heap space
+
+                // for ( int i = 0; i < gamePage.getChildren().size(); i++){
+                //     if (gamePage.getChildren().get(i) instanceof Node){
+                //         Node node = (Node) gamePage.getChildren().get(i);
+                //         if ( node.getUserData() instanceof Enemy){
+                //             gamePage.getChildren().remove(node);
+                //         }
+                //     }
+                // }
+                // window.getScene().getRoot().requestFocus();
+                // for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
+                //     if (Game.instance().getCurrentLevel().getEntites().get(i) instanceof Enemy){
+                //         Enemy enemy = Game.instance().getCurrentLevel().getEntites().get(i);
+                //         spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType());
+                //     }
+                // }
+
+                update();
+                gameLoop.play();
                 });
 
                 saveButton.setOnAction(ev -> {
-                    pauseLoop.stop();
-                    // TODO: Save game state here
+                    final Game game = Game.instance();
+                    long time = gamePausedAt; 
+                    try{
+                    game.save("saveFile.dat", time);
+                    } catch (Exception ex){
+                        System.out.println(ex);
+                        System.out.println("Something went wrong with saving the file");
+                    }
                 });
 
                 break;
