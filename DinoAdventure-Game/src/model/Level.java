@@ -400,6 +400,10 @@ public class Level {
             writer.writeUTF("None");
         }
         writer.writeLong(currentTimeProperty.longValue());
+        //writer.writeLong(runTimeProperty.longValue());
+        writer.writeLong(maxTimeProperty.longValue());
+        //writer.writeLong(remainingTimeProperty.longValue());
+        writer.writeLong(idleTimeProperty.longValue());
     }
             
     // this was made for serialization the Game model. This method loads everything that was saved in the serialize method. 
@@ -443,5 +447,9 @@ public class Level {
         }
     levelName = reader.readUTF();  
     currentTimeProperty.setValue(reader.readLong());
+    //runTimeProperty.setValue(reader.readLong());
+    maxTimeProperty.setValue(reader.readLong());
+    //remainingTimeProperty.setValue(reader.readLong());
+    idleTimeProperty.setValue(reader.readLong());
     }
 }
