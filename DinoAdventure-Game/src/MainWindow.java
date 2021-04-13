@@ -230,12 +230,8 @@ public class MainWindow implements GameObserver {
                 loadButton.setOnAction(ev -> {
                     try{
                     final Game game = Game.instance();
-                    long time = game.load("saveFile.dat"); // time is the long at which the System was paused and the save button was clicked
+                    game.load("saveFile.dat"); // time is the long at which the System was paused and the save button was clicked
                     
-                    //I am not sure how to set the time this adds too much time.
-                    Game.instance().getCurrentLevel().idleTimeProperty()
-                            .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
-                                    - time);
                    
                 } catch (Exception ex){
                     System.out.println("Something went wrong with loading the file");
@@ -269,13 +265,15 @@ public class MainWindow implements GameObserver {
 
                 saveButton.setOnAction(ev -> {
                     final Game game = Game.instance();
-                    long time = gamePausedAt; 
                     try{
-                    game.save("saveFile.dat", time);
+                    game.save("saveFile.dat");
                     } catch (Exception ex){
                         System.out.println(ex);
                         System.out.println("Something went wrong with saving the file");
                     }
+                    /**You should just be able to save from and load into the runTimeProperty and the maxTimeProperty. 
+                     * You also need to set the startTimeProperty to the current time minus runTimeProperty
+                     *  when you load the level. The rest of the values are calculated based on those */
                 });
 
                 break;

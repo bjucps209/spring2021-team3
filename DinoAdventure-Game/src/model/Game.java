@@ -92,9 +92,8 @@ public class Game {
 
     //save the current Game state. Saves the player to file passed in the parameters.
     // Should also save others objects of the game needed to load the game back to a previous state. 
-    public void save(String filename, long time)throws IOException{
+    public void save(String filename)throws IOException{
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))){
-            writer.writeLong(time);
             writer.writeInt(difficulty.ordinal());  
             player.serialize(writer);
             if (currentLevel == null){
@@ -108,14 +107,12 @@ public class Game {
     }
 
     //read through the filename passed in the parameters to load the game back to previous state.
-    public long load(String filename)throws IOException{
+    public void load(String filename)throws IOException{
         try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))){
-            long time = reader.readLong();
             state = GameState.LEVEL_PLAYING;
             difficulty = DifficultyType.values()[reader.readInt()];
             player.deserialize(reader);
             currentLevel.deserialize(reader);
-            return time;
         }catch (IOException e) {
             throw new IOException("Something went wrong when reading the file in the load message. :(");
         }

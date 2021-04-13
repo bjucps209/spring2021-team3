@@ -48,7 +48,7 @@ public class SerializationTest {
         block.setId(5);
         level.addBlock(block);
         player.setState(PlayerState.RUNNING);
-        world.save(filename, 50);
+        world.save(filename);
 
         // changing the player/ enemies to see if the load is really changing it back as before
         player.setHealth(2);
@@ -61,10 +61,9 @@ public class SerializationTest {
         block.setWidth(50);
         block.centerPoint.setXY(200, 10);
 
-        long Time = world.load(filename);
+        world.load(filename);
         
-        //check time and player
-        assertEquals(50, Time);
+        //check player
         assertEquals(100, player.centerPoint().getX(), 0);
         assertEquals(200, player.centerPoint().getY(), 0);
         assertEquals(9, player.getHealth());
