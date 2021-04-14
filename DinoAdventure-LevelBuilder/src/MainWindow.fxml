@@ -15,10 +15,13 @@
                 <Button text="_Load" fx:id="btnLoad" />
                 <Button text="_Delete" fx:id="btnDelete" />
                 <Button fx:id="btnNewBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-2.png" /></image></ImageView></graphic></Button>
-                <Button fx:id="btnNewEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/wandering-standing-left-1.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewFleeingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/fleeing-standing-left-1.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewFollowingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/following-standing-left-1.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewJumpingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/jumping-standing-left-1.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewWanderingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/wandering-standing-left-1.png" /></image></ImageView></graphic></Button>
             </VBox>
         </HBox>
-        <Pane fx:id="pane" prefHeight="800" prefWidth="1600" style="-fx-background-color: lightgray" />
+        <Pane fx:id="pane" prefHeight="950" prefWidth="1700" style="-fx-background-color: lightgray" />
        
     </HBox>
     

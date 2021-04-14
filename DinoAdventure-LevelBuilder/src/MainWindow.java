@@ -34,7 +34,16 @@ public class MainWindow {
     Button btnNewBlock;
 
     @FXML 
-    Button btnNewEnemy;
+    Button btnNewFleeingEnemy;
+
+    @FXML 
+    Button btnNewFollowingEnemy;
+
+    @FXML 
+    Button btnNewJumpingEnemy;
+
+    @FXML 
+    Button btnNewWanderingEnemy;
 
     @FXML
     TextField txtLevelName;
@@ -69,31 +78,40 @@ public class MainWindow {
             }
         });
         btnNewBlock.setOnAction(e -> onNewBlockClicked());
-        btnNewEnemy.setOnAction(e -> onNewEnemyClicked());
+        btnNewFleeingEnemy.setOnAction(e -> onNewFleeingEnemyClicked());
+        btnNewFollowingEnemy.setOnAction(e -> onNewFollowingEnemyClicked());
+        btnNewJumpingEnemy.setOnAction(e -> onNewJumpingEnemyClicked());
+        btnNewWanderingEnemy.setOnAction(e -> onNewWanderingEnemyClicked());
+        
         
         
 
     }
 
-    private void onNewEnemyClicked() {
-        var type = EnemyState.WANDERING;
-        // Enemy enemy = new Enemy(100, 200, type);
+    private void onNewFleeingEnemyClicked() {
+        var type = EnemyState.FLEEING;
         spawnEnemy(100, 200, type);
-        // enemy.setWidth(59);
-        // enemy.setHeight(50);
-        // enemy.setDirection(EntityDirection.LEFT);
-        // enemy.setType(type);
-        // LevelDesigner.instance().getLevel().addEntity(enemy);
-        // ImageView enemyImage = new ImageView(
-        //         new Image("assets/images/enemies/" + type.toString().toLowerCase() + "-standing-left-1.png"));
-        // enemyImage.xProperty().bindBidirectional(enemy.centerPoint().xProperty());
-        // enemyImage.yProperty().bindBidirectional(enemy.centerPoint().yProperty());
-        // enemyImage.setUserData(enemy);
-        // pane.getChildren().add(enemyImage);
-        // // makeDraggable(enemyImage);
-        // enemyImages.add(enemyImage);
         
     }
+
+    private void onNewFollowingEnemyClicked() {
+        var type = EnemyState.FOLLOWING;
+        spawnEnemy(100, 200, type);
+        
+    }
+
+    private void onNewJumpingEnemyClicked() {
+        var type = EnemyState.JUMPING;
+        spawnEnemy(100, 200, type);
+        
+    }
+
+    private void onNewWanderingEnemyClicked() {
+        var type = EnemyState.WANDERING;
+        spawnEnemy(100, 200, type);
+        
+    }
+
 
     private void onNewBlockClicked() {
         var block = new Block();
@@ -159,8 +177,8 @@ public class MainWindow {
             node.getScene().setCursor(Cursor.MOVE);
         });
         node.setOnMouseDragged(me -> {
-            node.setLayoutX(node.getLayoutX() + me.getX() - dragDelta.x);
-            node.setLayoutY(node.getLayoutY() + me.getY() - dragDelta.y);
+            node.setLayoutX(round(node.getLayoutX() + me.getX() - dragDelta.x, 32));
+            node.setLayoutY(round(node.getLayoutY() + me.getY() - dragDelta.y, 32));
         });
         node.setOnMouseReleased(me -> {
             node.getScene().setCursor(Cursor.HAND);
@@ -183,7 +201,7 @@ public class MainWindow {
         enemy.setDirection(EntityDirection.LEFT);
         LevelDesigner.instance().getLevel().addEntity(enemy);
         ImageView enemyImage = new ImageView(
-                new Image("assets/images/enemies/" + "wandering" + "-standing-left-1.png"));
+                new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
         enemyImage.layoutXProperty().set(enemy.centerPoint().xProperty().get());
         enemyImage.layoutYProperty().set(enemy.centerPoint().yProperty().get());
         enemy.centerPoint().xProperty().bind(enemyImage.layoutXProperty());
@@ -193,4 +211,26 @@ public class MainWindow {
         makeDraggable(enemyImage);
         enemyImages.add(enemyImage);
     }
+
+    
+int round(double number, int multiple) {
+
+    int result = multiple;
+
+    if (number % multiple == 0) {
+        return (int) number;
+    }
+
+    // If not already multiple of given number
+
+    if (number % multiple != 0) {
+
+        int division = (int) ((number / multiple) + 1);
+
+        result = division * multiple;
+
+    }
+    return result;
+
+}
 }

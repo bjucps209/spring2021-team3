@@ -433,7 +433,7 @@ public class MainWindow implements GameObserver {
         // Generate some testing dummy terrain
         // Please leave here for now so I can test with it
         // Enable dummy terrain if you want to demo the gameplay
-        boolean dummyTerrain = true;
+        boolean dummyTerrain = false;
         if (dummyTerrain) {
 
 
