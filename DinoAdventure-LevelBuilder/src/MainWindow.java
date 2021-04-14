@@ -34,6 +34,21 @@ public class MainWindow {
     Button btnNewBlock;
 
     @FXML 
+    Button btnNewLeftBlock;
+
+    @FXML 
+    Button btnNewMiddleBlock;
+
+    @FXML 
+    Button btnNewRightBlock;
+
+    @FXML 
+    Button btnNewLeftFullBlock;
+
+    @FXML 
+    Button btnNewRightFullBlock;
+
+    @FXML 
     Button btnNewFleeingEnemy;
 
     @FXML 
@@ -82,8 +97,13 @@ public class MainWindow {
         btnNewFollowingEnemy.setOnAction(e -> onNewFollowingEnemyClicked());
         btnNewJumpingEnemy.setOnAction(e -> onNewJumpingEnemyClicked());
         btnNewWanderingEnemy.setOnAction(e -> onNewWanderingEnemyClicked());
+        btnNewLeftBlock.setOnAction(e -> onNewLeftBlockClicked());
+        btnNewMiddleBlock.setOnAction(e -> onNewMiddleBlockClicked());
+        btnNewRightBlock.setOnAction(e -> onNewRightBlockClicked());
+        btnNewLeftFullBlock.setOnAction(e -> onNewLeftFullBlockClicked());
+        btnNewRightFullBlock.setOnAction(e -> onNewRightFullBlockClicked());
         
-        
+ 
         
 
     }
@@ -116,9 +136,82 @@ public class MainWindow {
     private void onNewBlockClicked() {
         var block = new Block();
         block.centerPoint().setXY(200, 100);
-        
+        block.setTexture("assets/images/world/ground-2.png");
         LevelDesigner.instance().getLevel().addBlock(block);
         ImageView blockImage = new ImageView(new Image("assets/images/world/ground-2.png"));
+        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
+        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
+        block.setWidth(128);
+        block.setHeight(128);
+        pane.getChildren().add(blockImage);
+        makeDraggable(blockImage);
+    }
+
+    private void onNewLeftBlockClicked() {
+        var block = new Block();
+        block.centerPoint().setXY(200, 100);
+        block.setTexture("assets/images/world/ground-13.png");
+        LevelDesigner.instance().getLevel().addBlock(block);
+        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-13.png"));
+        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
+        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
+        block.setWidth(128);
+        block.setHeight(93);
+        pane.getChildren().add(blockImage);
+        makeDraggable(blockImage);
+    }
+
+    private void onNewMiddleBlockClicked() {
+        var block = new Block();
+        block.centerPoint().setXY(200, 100);
+        block.setTexture("assets/images/world/ground-14.png");
+        
+        LevelDesigner.instance().getLevel().addBlock(block);
+        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-14.png"));
+        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
+        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
+        block.setWidth(128);
+        block.setHeight(93);
+        pane.getChildren().add(blockImage);
+        makeDraggable(blockImage);
+    }
+    private void onNewRightBlockClicked() {
+        var block = new Block();
+        block.centerPoint().setXY(200, 100);
+        block.setTexture("assets/images/world/ground-15.png");
+        
+        LevelDesigner.instance().getLevel().addBlock(block);
+        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-15.png"));
+        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
+        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
+        block.setWidth(128);
+        block.setHeight(93);
+        pane.getChildren().add(blockImage);
+        makeDraggable(blockImage);
+    }
+
+    private void onNewLeftFullBlockClicked() {
+        var block = new Block();
+        block.centerPoint().setXY(200, 100);
+        block.setTexture("assets/images/world/ground-1.png");
+        
+        LevelDesigner.instance().getLevel().addBlock(block);
+        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-1.png"));
+        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
+        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
+        block.setWidth(128);
+        block.setHeight(128);
+        pane.getChildren().add(blockImage);
+        makeDraggable(blockImage);
+    }
+
+    private void onNewRightFullBlockClicked() {
+        var block = new Block();
+        block.centerPoint().setXY(200, 100);
+        block.setTexture("assets/images/world/ground-3.png");
+        
+        LevelDesigner.instance().getLevel().addBlock(block);
+        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-3.png"));
         block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
         block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
         block.setWidth(128);

@@ -11,14 +11,25 @@
         <HBox spacing="10" styleClass="propview">
             <VBox spacing="10">
                 <TextField fx:id="txtLevelName"/>
-                <Button text="_Save" fx:id="btnSave" />
-                <Button text="_Load" fx:id="btnLoad" />
-                <Button text="_Delete" fx:id="btnDelete" />
+                <HBox spacing="10">
+                    <Button text="_Save" fx:id="btnSave" />
+                    <Button text="_Load" fx:id="btnLoad" />
+                </HBox>
+                <!-- <Button text="_Delete" fx:id="btnDelete" /> -->
                 <Button fx:id="btnNewBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-2.png" /></image></ImageView></graphic></Button>
-                <Button fx:id="btnNewFleeingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/fleeing-standing-left-1.png" /></image></ImageView></graphic></Button>
-                <Button fx:id="btnNewFollowingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/following-standing-left-1.png" /></image></ImageView></graphic></Button>
-                <Button fx:id="btnNewJumpingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/jumping-standing-left-1.png" /></image></ImageView></graphic></Button>
-                <Button fx:id="btnNewWanderingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/wandering-standing-left-1.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewLeftBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-13.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewMiddleBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-14.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewRightBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-15.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewLeftFullBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-1.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewRightFullBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-3.png" /></image></ImageView></graphic></Button>
+                <HBox spacing="10">
+                    <Button fx:id="btnNewFleeingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/fleeing-standing-left-1.png" /></image></ImageView></graphic></Button>
+                    <Button fx:id="btnNewFollowingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/following-standing-left-1.png" /></image></ImageView></graphic></Button>
+                </HBox>
+                <HBox spacing="10">
+                    <Button fx:id="btnNewJumpingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/jumping-standing-left-1.png" /></image></ImageView></graphic></Button>
+                    <Button fx:id="btnNewWanderingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/wandering-standing-left-1.png" /></image></ImageView></graphic></Button>
+                </HBox>
             </VBox>
         </HBox>
         <Pane fx:id="pane" prefHeight="950" prefWidth="1700" style="-fx-background-color: lightgray" />
