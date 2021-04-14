@@ -63,6 +63,8 @@ public class MainWindow implements GameObserver {
 
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
 
+    private String levelToLoad = "level1";
+
     @FXML
     public void initialize() {
 
@@ -473,7 +475,7 @@ public class MainWindow implements GameObserver {
         // Generate some testing dummy terrain
         // Please leave here for now so I can test with it
         // Enable dummy terrain if you want to demo the gameplay
-        boolean dummyTerrain = true;
+        boolean dummyTerrain = false;
         if (dummyTerrain) {
 
 
@@ -542,7 +544,7 @@ public class MainWindow implements GameObserver {
 
         
             try {
-                level.load("lvl1.dat");
+                level.load("src/levels/level1.dat");
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
