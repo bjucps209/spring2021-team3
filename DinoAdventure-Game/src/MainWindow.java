@@ -492,8 +492,8 @@ public class MainWindow implements GameObserver {
         // Enable dummy terrain if you want to demo the gameplay
 
         
-        boolean dummyTerrain = false;
-        if (dummyTerrain) {
+        // boolean dummyTerrain = false;
+        if (levelsChoice.getValue().equals("Demo")) {
 
 
             level = new Level();
