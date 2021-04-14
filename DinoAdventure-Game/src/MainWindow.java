@@ -119,7 +119,7 @@ public class MainWindow implements GameObserver {
                 buttons.getChildren().add(restartButton);
                 menuButton.setOnAction(ev -> {
                     Game.instance().setState(GameState.MENU);
-                    levelPane.setVisible(false);
+                    gamePage.setVisible(false);
                     titlePage.setVisible(true);
                 });
                 restartButton.setOnAction(ev -> {
