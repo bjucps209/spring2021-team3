@@ -57,6 +57,7 @@ public class Enemy extends Entity implements Living {
 
         switch(type) {
 
+            
             case WANDERING:
                 if(tps / Game.FPS == 1) {
                     // Apply specific WanderingEnemy physics/behavior
@@ -164,12 +165,13 @@ public class Enemy extends Entity implements Living {
     }
 
     public void setType(String type) {
-        if (type == "FOLLOWING") {
-            this.type = EnemyState.FOLLOWING;
-        }
-        else if (type == "WANDERING") {
-            this.type = EnemyState.WANDERING;
-        }
+        // if (type == "FOLLOWING") {
+        //     this.type = EnemyState.FOLLOWING;
+        // }
+        // else if (type == "WANDERING") {
+        //     this.type = EnemyState.WANDERING;
+        // }
+        this.type = EnemyState.WANDERING;
     }
     
 }

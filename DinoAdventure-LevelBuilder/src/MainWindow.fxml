@@ -4,31 +4,22 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10" stylesheets="@MainWindow.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="MainWindow" >
+<VBox fx:id="VboxMain" alignment="CENTER" spacing="10" stylesheets="@MainWindow.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="MainWindow" >
 
     <!-- <ImageView><image><Image url="@images/logo.png" /></image></ImageView> -->
     <HBox spacing="10">
-        <Pane fx:id="pane" prefHeight="800" prefWidth="1600" style="-fx-background-color: lightgray" />
         <HBox spacing="10" styleClass="propview">
             <VBox spacing="10">
-                <TextField fx:id="levelname"/>
+                <TextField fx:id="txtLevelName"/>
                 <Button text="_Save" fx:id="btnSave" />
-            <!-- <VBox spacing="10">
-                <Label text="Id:" fx:id="lblId"/>
-                <Label text="Position:" />
-                <Label text="Heading:" />
-                <Label text="Speed:" />
-                <Label text="State:" />
-            </VBox>
-            <VBox spacing="10" minWidth="30">
-                <Label fx:id="lblId" text="" />
-                <Label fx:id="lblLoc" text="" />
-                <Label fx:id="lblHeading" text="" />
-                <Label fx:id="lblSpeed" text="" />
-                <Label fx:id="lblState" text="" />
-            </VBox> -->
+                <Button text="_Load" fx:id="btnLoad" />
+                <Button text="_Delete" fx:id="btnDelete" />
+                <Button fx:id="btnNewBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-2.png" /></image></ImageView></graphic></Button>
+                <Button fx:id="btnNewEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/wandering-standing-left-1.png" /></image></ImageView></graphic></Button>
             </VBox>
         </HBox>
+        <Pane fx:id="pane" prefHeight="800" prefWidth="1600" style="-fx-background-color: lightgray" />
+       
     </HBox>
     
 </VBox>

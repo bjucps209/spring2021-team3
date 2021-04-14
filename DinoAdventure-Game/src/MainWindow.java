@@ -1,3 +1,4 @@
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -480,22 +481,39 @@ public class MainWindow implements GameObserver {
             level = new Level();
             level.setSpawnPoint(new Point(100, 540));
 
+        
+            try {
+                level.load("lvl1.dat");
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+
             // Set level as the current level
             Game.instance().startLevel(level);
 
             // Generate real terrain
-            level.getBlocks().stream().forEach(block -> {
-                ImageView blockImage = new ImageView(new Image("assets/images/world/ground-2.png"));
+            Game.instance().getCurrentLevel().getBlocks().stream().forEach(block -> {
+                ImageView blockImage = new ImageView(new Image(block.getTexture()));
                 blockImage.xProperty().bind(block.minXProperty());
                 blockImage.yProperty().bind(block.minYProperty());
                 gamePage.getChildren().add(blockImage);
             });
             // Generate enemies from the level
-            level.getEntites().stream().forEach(enemy -> {
-                spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(), enemy.getType());
+            Game.instance().getCurrentLevel().getEntites().stream().forEach(enemy -> {
+                ImageView enemyImage = new ImageView(
+                new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
+                enemyImage.xProperty().bind(enemy.minXProperty());
+                enemyImage.yProperty().bind(enemy.minYProperty());
+                enemyImage.setUserData(enemy);
+                gamePage.getChildren().add(enemyImage);
+                enemyImages.add(enemyImage);
+                // spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(), EnemyState.WANDERING);
+
             });
             // Generate Collectables from the level
-            level.getCollectables().stream().forEach(enemy -> {
+            Game.instance().getCurrentLevel().getCollectables().stream().forEach(enemy -> {
                 //TODO: create logic to load in collectables
             });
         }
