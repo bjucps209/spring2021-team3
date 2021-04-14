@@ -144,7 +144,7 @@ public class Level {
      * 
      * @param id
      */
-    public void removeEntity(Entity entity) {
+    public void removeEntity(Enemy entity) {
         enemies.remove(entity); 
     }
 
@@ -183,8 +183,8 @@ public class Level {
      * 
      * @param id
      */
-    public void removeBlock(int id) {
-        blocks.remove(findBlock(id));
+    public void removeBlock(Block block) {
+        blocks.remove(block);
     }
 
     /**

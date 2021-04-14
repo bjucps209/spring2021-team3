@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -185,8 +186,10 @@ public class MainWindow {
         block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
         block.setWidth(128);
         block.setHeight(128);
+        blockImage.setUserData(block);
         pane.getChildren().add(blockImage);
         makeDraggable(blockImage);
+        makeBlockDeletable(blockImage);
     }
 
     private void onNewLeftBlockClicked() {
@@ -199,8 +202,10 @@ public class MainWindow {
         block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
         block.setWidth(128);
         block.setHeight(93);
+        blockImage.setUserData(block);
         pane.getChildren().add(blockImage);
         makeDraggable(blockImage);
+        makeBlockDeletable(blockImage);
     }
 
     private void onNewMiddleBlockClicked() {
@@ -214,8 +219,10 @@ public class MainWindow {
         block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
         block.setWidth(128);
         block.setHeight(93);
+        blockImage.setUserData(block);
         pane.getChildren().add(blockImage);
         makeDraggable(blockImage);
+        makeBlockDeletable(blockImage);
     }
 
     private void onNewRightBlockClicked() {
@@ -229,8 +236,10 @@ public class MainWindow {
         block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
         block.setWidth(128);
         block.setHeight(93);
+        blockImage.setUserData(block);
         pane.getChildren().add(blockImage);
         makeDraggable(blockImage);
+        makeBlockDeletable(blockImage);
     }
 
     private void onNewLeftFullBlockClicked() {
@@ -244,8 +253,10 @@ public class MainWindow {
         block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
         block.setWidth(128);
         block.setHeight(128);
+        blockImage.setUserData(block);
         pane.getChildren().add(blockImage);
         makeDraggable(blockImage);
+        makeBlockDeletable(blockImage);
     }
 
     private void onNewRightFullBlockClicked() {
@@ -259,8 +270,10 @@ public class MainWindow {
         block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
         block.setWidth(128);
         block.setHeight(128);
+        blockImage.setUserData(block);
         pane.getChildren().add(blockImage);
         makeDraggable(blockImage);
+        makeBlockDeletable(blockImage);
     }
 
     private void onSaveClicked() throws IOException {
@@ -283,6 +296,7 @@ public class MainWindow {
             blockImage.layoutYProperty().set(block.centerPoint().yProperty().get());
             block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
             block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
+            blockImage.setUserData(block);
             makeDraggable(blockImage);
             pane.getChildren().add(blockImage);
         });
@@ -304,6 +318,40 @@ public class MainWindow {
         LevelDesigner.instance().getLevel().getCollectables().stream().forEach(enemy -> {
             // TODO: create logic to load in collectables
         });
+    }
+
+
+    private void makeBlockDeletable(ImageView node) {
+        node.setOnMouseClicked( ev ->
+        {
+            if (ev.getButton() == MouseButton.SECONDARY) {
+                LevelDesigner.instance().getLevel().removeBlock((Block)node.getUserData());
+                pane.getChildren().remove(node);
+            }
+        });
+            
+    }
+
+    private void makeEnemyDeletable(ImageView node) {
+        node.setOnMouseClicked( ev ->
+        {
+            if (ev.getButton() == MouseButton.SECONDARY) {
+                LevelDesigner.instance().getLevel().removeEntity((Enemy)node.getUserData());
+                pane.getChildren().remove(node);
+            }
+        });
+            
+    }
+
+    private void makeCollectableDeletable(ImageView node) {
+        node.setOnMouseClicked( ev ->
+        {
+            if (ev.getButton() == MouseButton.SECONDARY) {
+                LevelDesigner.instance().getLevel().removeCollectable((Collectable)node.getUserData());
+                pane.getChildren().remove(node);
+            }
+        });
+            
     }
 
     // From
@@ -336,6 +384,7 @@ public class MainWindow {
         public double y;
     }
 
+
     public void spawnEnemy(double x, double y, EnemyState type) {
         Enemy enemy = new Enemy(x, y, type);
         enemy.setWidth(59);
@@ -351,6 +400,7 @@ public class MainWindow {
         enemyImage.setUserData(enemy);
         pane.getChildren().add(enemyImage);
         makeDraggable(enemyImage);
+        makeEnemyDeletable(enemyImage);
         enemyImages.add(enemyImage);
     }
 

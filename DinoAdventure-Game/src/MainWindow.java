@@ -544,7 +544,7 @@ public class MainWindow implements GameObserver {
 
         
             try {
-                level.load("src/levels/level1.dat");
+                level.load("src/levels/" + levelToLoad + ".dat");
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
