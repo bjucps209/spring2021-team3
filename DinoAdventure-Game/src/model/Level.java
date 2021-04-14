@@ -131,6 +131,7 @@ public class Level {
      * @return Entity
      */
     public Entity findEntity(int id) {
+        
         for (Entity entity : enemies) {
             if (entity.getId() == id) {
                 return entity;
@@ -412,17 +413,14 @@ public class Level {
         width = reader.readInt(); 
         height = reader.readInt();
         int entitiesSize = reader.readInt();
+        enemies.clear();
          for (int i = 0; i < entitiesSize; i++){   
             int id = reader.readInt();
-            if (this.findEntity(id) != null){
-               Enemy enemy = (Enemy) this.findEntity(id);
-                enemy.deserialize(reader);
-           }else{
-               Enemy enemy = new Enemy();
-               this.addEntity(enemy);
-                enemy.deserialize(reader);
-                enemies.add(enemy);
-               }
+            Enemy enemy = new Enemy();
+            this.addEntity(enemy);
+            enemy.deserialize(reader);
+            enemy.setId(id);
+            enemies.add(enemy);
             }
 
         int surfaceSize = reader.readInt();

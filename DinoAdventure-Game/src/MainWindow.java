@@ -228,15 +228,18 @@ public class MainWindow implements GameObserver {
 
                 //bugs: timer doesn't load the right time and doesn't load enemies properly
                 loadButton.setOnAction(ev -> {
+                    Game.instance().getCurrentLevel().getEntites().clear();
                     try{
                     final Game game = Game.instance();
-                    game.load("saveFile.dat"); // time is the long at which the System was paused and the save button was clicked
-                    
-                   
+                    game.load("saveFile.dat");
+        
                     } catch (Exception ex){
                         System.out.println("Something went wrong with loading the file");
                     }
+                    Game.instance().observers().forEach(o -> o.update());
                     pauseLoop.stop();
+                    window.getScene().getRoot().requestFocus();
+                    gameLoop.play();
                     gamePage.getChildren().remove(playButtonHBox);
                     gamePage.getChildren().remove(gamePausedPane);
 
@@ -251,16 +254,15 @@ public class MainWindow implements GameObserver {
                     //         }
                     //     }
                     // }
-                    // window.getScene().getRoot().requestFocus();
-                    // for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
-                    //     if (Game.instance().getCurrentLevel().getEntites().get(i) instanceof Enemy){
-                    //         Enemy enemy = Game.instance().getCurrentLevel().getEntites().get(i);
-                    //         spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType());
-                    //     }
-                    // }
+                    window.getScene().getRoot().requestFocus();
+                    //for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
+                        for (Enemy enemy: Game.instance().getCurrentLevel().getEntites()){
+                            System.out.println("" + Game.instance().getCurrentLevel().getEntites().size());
+                            spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType());
+                        }
+                    //}
 
                 update();
-                gameLoop.play();
                 });
 
                 saveButton.setOnAction(ev -> {
@@ -271,9 +273,6 @@ public class MainWindow implements GameObserver {
                         System.out.println(ex);
                         System.out.println("Something went wrong with saving the file");
                     }
-                    /**You should just be able to save from and load into the runTimeProperty and the maxTimeProperty. 
-                     * You also need to set the startTimeProperty to the current time minus runTimeProperty
-                     *  when you load the level. The rest of the values are calculated based on those */
                 });
 
                 break;
@@ -642,6 +641,37 @@ public class MainWindow implements GameObserver {
 
     @FXML
     void onLoadClicked(ActionEvent event) throws IOException {
+        try{
+            final Game game = Game.instance();
+            game.load("saveFile.dat");
+
+            } catch (Exception ex){
+                System.out.println("Something went wrong with loading the file");
+            }
+
+            window.getScene().getRoot().requestFocus();
+            gameLoop.play();
+            
+            // committed out code below causes this to be thrown for me:
+            // a java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "InvokeLaterDispatcher" java.lang.OutOfMemoryError: Java heap space
+
+            // for ( int i = 0; i < gamePage.getChildren().size(); i++){
+            //     if (gamePage.getChildren().get(i) instanceof Node){
+            //         Node node = (Node) gamePage.getChildren().get(i);
+            //         if ( node.getUserData() instanceof Enemy){
+            //             gamePage.getChildren().remove(node);
+            //         }
+            //     }
+            // }
+            // window.getScene().getRoot().requestFocus();
+            // for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
+            //     if (Game.instance().getCurrentLevel().getEntites().get(i) instanceof Enemy){
+            //         Enemy enemy = Game.instance().getCurrentLevel().getEntites().get(i);
+            //         spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType());
+            //     }
+            // }
+
+        update();
 
     }
 
