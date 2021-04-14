@@ -45,7 +45,6 @@ public class Game {
         player.scoreProperty().set(0);
 
         level.recordStartTime();
-        state = GameState.LEVEL_PLAYING;
     }
 
     public ArrayList<GameObserver> observers() {
