@@ -137,6 +137,15 @@ public class Enemy extends Entity implements Living {
         else if (type == EnemyState.FOLLOWING) {
             return "FOLLOWING";
         }
+        else if (type == EnemyState.STANDING) {
+            return "STANDING";
+        }
+        else if (type == EnemyState.JUMPING) {
+            return "JUMPING";
+        }
+        else if (type == EnemyState.FLEEING) {
+            return "FLEEING";
+        }
         return "";
     }
 
@@ -165,13 +174,7 @@ public class Enemy extends Entity implements Living {
     }
 
     public void setType(String type) {
-        // if (type == "FOLLOWING") {
-        //     this.type = EnemyState.FOLLOWING;
-        // }
-        // else if (type == "WANDERING") {
-        //     this.type = EnemyState.WANDERING;
-        // }
-        this.type = EnemyState.WANDERING;
+        this.type = EnemyState.valueOf(type);
     }
     
 }

@@ -9,13 +9,15 @@ after starting the program, click play. Once the game starts you can move move b
 ## Work Completed:
 
 * Implemented basic gameplay
-
+* Implemented Basic Level Builder that can save/load levels 
 
 ## Known Issues:
 __None__
 
 ## Recordings:
 [Game Recording1](https://youtu.be/u_dezk9elx8)
+
+[Level Builder Recording1](https://youtu.be/g001WTeK34Y)
 
 ## Expenses 
 
@@ -24,7 +26,7 @@ __None__
 | Luke | 26:00 | 24:00 |
 | Reshi | 18:00 | 32:00 |
 | Rebecca | 20:55 | 29:05 |
-| Christopher | 10:20 | 33:40 |
+| Christopher | 19:20 | 30:40 |
 
 
 ### Journals

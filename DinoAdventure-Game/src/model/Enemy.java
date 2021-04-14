@@ -158,6 +158,15 @@ public class Enemy extends Entity implements Living {
         else if (type == EnemyState.FOLLOWING) {
             return "FOLLOWING";
         }
+        else if (type == EnemyState.STANDING) {
+            return "STANDING";
+        }
+        else if (type == EnemyState.JUMPING) {
+            return "JUMPING";
+        }
+        else if (type == EnemyState.FLEEING) {
+            return "FLEEING";
+        }
         return "";
     }
 
