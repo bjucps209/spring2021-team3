@@ -183,7 +183,7 @@ public class MainWindow implements GameObserver {
                 playButtonHBox.setSpacing(10);
                 AnchorPane.setTopAnchor(playButtonHBox, 10.0);
                 AnchorPane.setLeftAnchor(playButtonHBox, 10.0);
-                levelPane.getChildren().add(playButtonHBox);
+                gamePage.getChildren().add(playButtonHBox);
 
                 Button playButton = new Button();
                 playButton.getStyleClass().add("material-icons");
@@ -473,7 +473,7 @@ public class MainWindow implements GameObserver {
         // Generate some testing dummy terrain
         // Please leave here for now so I can test with it
         // Enable dummy terrain if you want to demo the gameplay
-        boolean dummyTerrain = false;
+        boolean dummyTerrain = true;
         if (dummyTerrain) {
 
 
@@ -559,7 +559,7 @@ public class MainWindow implements GameObserver {
             // Generate enemies from the level
             level.getEntites().stream().forEach(enemy -> {
                 ImageView enemyImage = new ImageView(
-                new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
+                new Image("assets/images/enemies/" + enemy.getTypeString().toLowerCase() + "-standing-left-1.png"));
                 enemyImage.xProperty().bind(enemy.minXProperty());
                 enemyImage.yProperty().bind(enemy.minYProperty());
                 enemyImage.setUserData(enemy);
