@@ -264,27 +264,12 @@ public class MainWindow implements GameObserver {
                     
                     window.getScene().getRoot().requestFocus();
 
-                    System.out.println(Game.instance().getCurrentLevel().getEntites().size());
                     for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
                         Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
                         Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
                         }
 
-                        //Game.instance().getCurrentLevel().getEntites().remove(0);
-                    // System.out.println(Game.instance().getCurrentLevel().getEntites().size());
-                    
-                    // ArrayList<Integer> IDNumbers = new ArrayList<>();
-                    // for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++ ){
-                    //     if (IDNumbers.contains(Game.instance().getCurrentLevel().getEntites().get(i).getId())){
-                    //         Game.instance().getCurrentLevel().getEntites().remove(i);
-                    //     } else{
-                    //         IDNumbers.add(Game.instance().getCurrentLevel().getEntites().get(i).getId());
-
-                    //     }
-                    // }
-                    Game.instance().getCurrentLevel().getEntites().remove(Game.instance().getCurrentLevel().getEntites().size() -1);
-                        System.out.println(Game.instance().getCurrentLevel().getEntites().size());
-                        Game.instance().observers().forEach(o -> o.update());
+                        Game.instance().observers().forEach(o ->  o.update());
                         pauseLoop.stop();
                         window.getScene().getRoot().requestFocus();
                         gameLoop.play();
@@ -732,20 +717,6 @@ public class MainWindow implements GameObserver {
         enemyImages.add(enemyImage);
     }
 
-public void loadEnemy(double x, double y, EnemyState type) {
-    Enemy enemy = new Enemy(x, y, type);
-    enemy.setWidth(59);
-    enemy.setHeight(50);
-    enemy.setDirection(EntityDirection.LEFT);
-    //Game.instance().getCurrentLevel().addEntity(enemy);
-    ImageView enemyImage = new ImageView(
-            new Image("assets/images/enemies/" + type.toString().toLowerCase() + "-standing-left-1.png"));
-    enemyImage.xProperty().bind(enemy.minXProperty());
-    enemyImage.yProperty().bind(enemy.minYProperty());
-    enemyImage.setUserData(enemy);
-    levelPane.getChildren().add(enemyImage);
-    enemyImages.add(enemyImage);
-}
     // Event Handlers for Title Screen
     @FXML
     void onAboutClicked(ActionEvent event) throws IOException {

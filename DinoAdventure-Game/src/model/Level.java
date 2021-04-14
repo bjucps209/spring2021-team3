@@ -456,7 +456,6 @@ public class Level {
             this.addEntity(enemy);
             enemy.deserialize(reader);
             enemy.setId(id);
-            enemies.add(enemy);
             }
 
         int surfaceSize = reader.readInt();
