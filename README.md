@@ -26,7 +26,7 @@ __None__
 | Luke | 26:00 | 24:00 |
 | Reshi | 18:00 | 32:00 |
 | Rebecca | 20:55 | 29:05 |
-| Christopher | 10:20 | 33:40 |
+| Christopher | 19:20 | 30:40 |
 
 
 ### Journals
