@@ -114,11 +114,11 @@ public class MainWindow {
         lblLvlWidth.setFont(font);
         lblLvlHeight.setFont(font);
 
+
         btnSave.setOnAction(e -> {
             try {
                 onSaveClicked();
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         });
@@ -126,8 +126,7 @@ public class MainWindow {
             try {
                 onLoadClicked();
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+              e1.printStackTrace();
             }
         });
         btnNewBlock.setOnAction(e -> onNewBlockClicked());
@@ -141,6 +140,8 @@ public class MainWindow {
         btnNewLeftFullBlock.setOnAction(e -> onNewLeftFullBlockClicked());
         btnNewRightFullBlock.setOnAction(e -> onNewRightFullBlockClicked());
         btnCreate.setOnAction(e -> onCreateClicked());
+
+        
 
     }
     private void onCreateClicked() {
