@@ -410,6 +410,7 @@ public class Level {
         writer.writeInt(width); 
         writer.writeInt(height);
         int size = enemies.size();
+        System.out.println("" + size);
         writer.writeInt(size);
          for (int i = 0; i < size; i++) {
             if (enemies.get(i) instanceof Enemy){

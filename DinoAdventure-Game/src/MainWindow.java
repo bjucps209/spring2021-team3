@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.util.Duration;
 
@@ -237,34 +238,35 @@ public class MainWindow implements GameObserver {
                     } catch (Exception ex){
                         System.out.println("Something went wrong with loading the file");
                     }
-                    Game.instance().observers().forEach(o -> o.update());
-                    pauseLoop.stop();
+                    
                     window.getScene().getRoot().requestFocus();
-                    gameLoop.play();
-                    gamePage.getChildren().remove(playButtonHBox);
-                    gamePage.getChildren().remove(gamePausedPane);
 
-                    // committed out code below causes this to be thrown for me:
-                    // a java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "InvokeLaterDispatcher" java.lang.OutOfMemoryError: Java heap space
-
-                    // for ( int i = 0; i < gamePage.getChildren().size(); i++){
-                    //     if (gamePage.getChildren().get(i) instanceof Node){
-                    //         Node node = (Node) gamePage.getChildren().get(i);
-                    //         if ( node.getUserData() instanceof Enemy){
-                    //             gamePage.getChildren().remove(node);
-                    //         }
-                    //     }
-                    // }
-                    window.getScene().getRoot().requestFocus();
-                    //for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
-                        for (Enemy enemy: Game.instance().getCurrentLevel().getEntites()){
-                            System.out.println("" + Game.instance().getCurrentLevel().getEntites().size());
-                            spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType());
+                    System.out.println(Game.instance().getCurrentLevel().getEntites().size());
+                    for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
+                        Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
+                        Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
                         }
-                    //}
+                    System.out.println(Game.instance().getCurrentLevel().getEntites().size());
+                    
+                    ArrayList<Integer> IDNumbers = new ArrayList<>();
+                    for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++ ){
+                        if (IDNumbers.contains(Game.instance().getCurrentLevel().getEntites().get(i).getId())){
+                            Game.instance().getCurrentLevel().getEntites().remove(i);
+                        } else{
+                            IDNumbers.add(Game.instance().getCurrentLevel().getEntites().get(i).getId());
 
-                update();
-                });
+                        }
+                    }
+                        Game.instance().getCurrentLevel().getEntites().remove(Game.instance().getCurrentLevel().getEntites().size() -1);
+                        System.out.println(Game.instance().getCurrentLevel().getEntites().size());
+                        Game.instance().observers().forEach(o -> o.update());
+                        pauseLoop.stop();
+                        window.getScene().getRoot().requestFocus();
+                        gameLoop.play();
+                        gamePage.getChildren().remove(playButtonHBox);
+                        gamePage.getChildren().remove(gamePausedPane);
+                        update();
+                        });
 
                 saveButton.setOnAction(ev -> {
                     final Game game = Game.instance();
@@ -659,6 +661,7 @@ public class MainWindow implements GameObserver {
 
     @FXML
     void onLoadClicked(ActionEvent event) throws IOException {
+        play(event);
         try{
             final Game game = Game.instance();
             game.load("saveFile.dat");
@@ -666,32 +669,32 @@ public class MainWindow implements GameObserver {
             } catch (Exception ex){
                 System.out.println("Something went wrong with loading the file");
             }
-
-            window.getScene().getRoot().requestFocus();
-            gameLoop.play();
             
-            // committed out code below causes this to be thrown for me:
-            // a java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "InvokeLaterDispatcher" java.lang.OutOfMemoryError: Java heap space
+            window.getScene().getRoot().requestFocus();
 
-            // for ( int i = 0; i < gamePage.getChildren().size(); i++){
-            //     if (gamePage.getChildren().get(i) instanceof Node){
-            //         Node node = (Node) gamePage.getChildren().get(i);
-            //         if ( node.getUserData() instanceof Enemy){
-            //             gamePage.getChildren().remove(node);
-            //         }
-            //     }
-            // }
-            // window.getScene().getRoot().requestFocus();
-            // for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
-            //     if (Game.instance().getCurrentLevel().getEntites().get(i) instanceof Enemy){
-            //         Enemy enemy = Game.instance().getCurrentLevel().getEntites().get(i);
-            //         spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType());
-            //     }
-            // }
+            System.out.println(Game.instance().getCurrentLevel().getEntites().size());
+            for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
+                Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
+                Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
+                }
+            System.out.println(Game.instance().getCurrentLevel().getEntites().size());
+            
+            ArrayList<Integer> IDNumbers = new ArrayList<>();
+            for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++ ){
+                if (IDNumbers.contains(Game.instance().getCurrentLevel().getEntites().get(i).getId())){
+                    Game.instance().getCurrentLevel().getEntites().remove(i);
+                } else{
+                    IDNumbers.add(Game.instance().getCurrentLevel().getEntites().get(i).getId());
 
-        update();
-
-    }
+                }
+            }
+                Game.instance().getCurrentLevel().getEntites().remove(Game.instance().getCurrentLevel().getEntites().size() -1);
+                System.out.println(Game.instance().getCurrentLevel().getEntites().size());
+                Game.instance().observers().forEach(o -> o.update());
+                window.getScene().getRoot().requestFocus();
+                gameLoop.play();
+                update();
+                }
 
     @FXML
     void onHighScoreClicked(ActionEvent event) throws IOException {
