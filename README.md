@@ -9,7 +9,7 @@ after starting the program, click play. Once the game starts you can move move b
 ## Work Completed:
 
 * Implemented basic gameplay
-
+* Implemented Basic Level Builder that can save/load levels 
 
 ## Known Issues:
 __None__
