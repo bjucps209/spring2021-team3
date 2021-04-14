@@ -14,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.Node;
 import model.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -53,6 +54,9 @@ public class MainWindow implements GameObserver {
     @FXML
     ChoiceBox<String> difficultyLevels; // dropdown for difficulty levels
 
+    @FXML
+    ChoiceBox<String> levelsChoice; //dropdown for level selection TODO-update this list to show the levels in src/levels/
+
     private Timeline gameLoop;
 
     private boolean keysBound;
@@ -75,6 +79,17 @@ public class MainWindow implements GameObserver {
         // set font of title and main menu
         title.setFont(font);
         mainMenu.setFont(font);
+
+
+        //find the levels and add them to level choice
+        levelsChoice.setValue("Demo");
+        File[] files = new File("src/levels").listFiles();
+        for (File file : files) {
+                if (file.isFile()) {
+                    levelsChoice.getItems().add(file.getName());
+                }
+        }
+
 
         name.requestFocus();
 
@@ -475,6 +490,8 @@ public class MainWindow implements GameObserver {
         // Generate some testing dummy terrain
         // Please leave here for now so I can test with it
         // Enable dummy terrain if you want to demo the gameplay
+
+        
         boolean dummyTerrain = false;
         if (dummyTerrain) {
 
@@ -544,7 +561,7 @@ public class MainWindow implements GameObserver {
 
         
             try {
-                level.load("src/levels/" + levelToLoad + ".dat");
+                level.load("src/levels/" + levelsChoice.getSelectionModel().getSelectedItem());
             } catch (IOException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();

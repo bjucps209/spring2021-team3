@@ -53,6 +53,17 @@
                     <String fx:value="EASY" />
                 </value>
             </ChoiceBox>
+            <Label text = "Level Choice:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
+            <ChoiceBox fx:id="levelsChoice">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Demo" />
+                    </FXCollections>
+                </items>
+                <value>
+                    <String fx:value="EASY" />
+                </value>
+            </ChoiceBox>
         </HBox>
 
     </VBox>
