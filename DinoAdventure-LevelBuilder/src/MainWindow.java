@@ -177,103 +177,27 @@ public class MainWindow {
     }
 
     private void onNewBlockClicked() {
-        var block = new Block();
-        block.centerPoint().setXY(200, 100);
-        block.setTexture("assets/images/world/ground-2.png");
-        LevelDesigner.instance().getLevel().addBlock(block);
-        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-2.png"));
-        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
-        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
-        block.setWidth(128);
-        block.setHeight(128);
-        blockImage.setUserData(block);
-        pane.getChildren().add(blockImage);
-        makeDraggable(blockImage);
-        makeBlockDeletable(blockImage);
+        spawnBlock("assets/images/world/ground-2.png", 128, 128);
     }
 
     private void onNewLeftBlockClicked() {
-        var block = new Block();
-        block.centerPoint().setXY(200, 100);
-        block.setTexture("assets/images/world/ground-13.png");
-        LevelDesigner.instance().getLevel().addBlock(block);
-        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-13.png"));
-        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
-        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
-        block.setWidth(128);
-        block.setHeight(93);
-        blockImage.setUserData(block);
-        pane.getChildren().add(blockImage);
-        makeDraggable(blockImage);
-        makeBlockDeletable(blockImage);
+        spawnBlock("assets/images/world/ground-13.png", 128, 93);
     }
 
     private void onNewMiddleBlockClicked() {
-        var block = new Block();
-        block.centerPoint().setXY(200, 100);
-        block.setTexture("assets/images/world/ground-14.png");
-
-        LevelDesigner.instance().getLevel().addBlock(block);
-        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-14.png"));
-        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
-        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
-        block.setWidth(128);
-        block.setHeight(93);
-        blockImage.setUserData(block);
-        pane.getChildren().add(blockImage);
-        makeDraggable(blockImage);
-        makeBlockDeletable(blockImage);
+        spawnBlock("assets/images/world/ground-14.png", 128, 93);
     }
 
     private void onNewRightBlockClicked() {
-        var block = new Block();
-        block.centerPoint().setXY(200, 100);
-        block.setTexture("assets/images/world/ground-15.png");
-
-        LevelDesigner.instance().getLevel().addBlock(block);
-        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-15.png"));
-        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
-        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
-        block.setWidth(128);
-        block.setHeight(93);
-        blockImage.setUserData(block);
-        pane.getChildren().add(blockImage);
-        makeDraggable(blockImage);
-        makeBlockDeletable(blockImage);
+        spawnBlock("assets/images/world/ground-15.png", 128, 93);
     }
 
     private void onNewLeftFullBlockClicked() {
-        var block = new Block();
-        block.centerPoint().setXY(200, 100);
-        block.setTexture("assets/images/world/ground-1.png");
-
-        LevelDesigner.instance().getLevel().addBlock(block);
-        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-1.png"));
-        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
-        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
-        block.setWidth(128);
-        block.setHeight(128);
-        blockImage.setUserData(block);
-        pane.getChildren().add(blockImage);
-        makeDraggable(blockImage);
-        makeBlockDeletable(blockImage);
+        spawnBlock("assets/images/world/ground-1.png", 128, 128);
     }
 
     private void onNewRightFullBlockClicked() {
-        var block = new Block();
-        block.centerPoint().setXY(200, 100);
-        block.setTexture("assets/images/world/ground-3.png");
-
-        LevelDesigner.instance().getLevel().addBlock(block);
-        ImageView blockImage = new ImageView(new Image("assets/images/world/ground-3.png"));
-        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
-        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
-        block.setWidth(128);
-        block.setHeight(128);
-        blockImage.setUserData(block);
-        pane.getChildren().add(blockImage);
-        makeDraggable(blockImage);
-        makeBlockDeletable(blockImage);
+        spawnBlock("assets/images/world/ground-3.png", 128, 128);
     }
 
     private void onSaveClicked() throws IOException {
@@ -402,6 +326,24 @@ public class MainWindow {
         makeDraggable(enemyImage);
         makeEnemyDeletable(enemyImage);
         enemyImages.add(enemyImage);
+    }
+
+    public void spawnBlock(String texture, int Width, int Height) {
+        var block = new Block();
+        block.centerPoint().setXY(300, 300);
+        block.setTexture(texture);
+        LevelDesigner.instance().getLevel().addBlock(block);
+        ImageView blockImage = new ImageView(new Image(texture));
+        blockImage.layoutXProperty().set(block.centerPoint().xProperty().get());
+        blockImage.layoutYProperty().set(block.centerPoint().yProperty().get());
+        block.centerPoint().xProperty().bind(blockImage.layoutXProperty());
+        block.centerPoint().yProperty().bind(blockImage.layoutYProperty());
+        block.setWidth(Width);
+        block.setHeight(Height);
+        blockImage.setUserData(block);
+        pane.getChildren().add(blockImage);
+        makeDraggable(blockImage);
+        makeBlockDeletable(blockImage);
     }
 
     // From
