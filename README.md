@@ -12,9 +12,7 @@ after starting the program, click play. Once the game starts you can move move b
 
 
 ## Known Issues:
-* Enemy images don't reflect direction changes
-* Dino sometimes freezes
-    * This was caused by the way I'm temporarily killing enemies, it will be fixed very soon
+__None__
 
 ## Recordings:
 [Game Recording1](https://youtu.be/u_dezk9elx8)

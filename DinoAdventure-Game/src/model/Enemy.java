@@ -54,6 +54,10 @@ public class Enemy extends Entity implements Living {
 
     @Override
     public void tick() {
+    
+        if(Game.instance().getPlayer().centerPoint().distanceFrom(this.centerPoint) > 2202.91) {
+            return;
+        }
 
         switch(type) {
 
@@ -95,20 +99,38 @@ public class Enemy extends Entity implements Living {
                 }
                 break;
 
-            case FLEEING:
-                if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 500) {
-                    state = EnemyState.FOLLOWING;
-                    if(centerPoint.getX() > Game.instance().getPlayer().centerPoint().getX()) {
-                        xVelocity = Math.min(maxSpeed, xVelocity + (10 / Game.FPS));
-                        direction = EntityDirection.RIGHT;
+                case FLEEING:
+                    if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 500) {
+                        state = EnemyState.FOLLOWING;
+                        if(centerPoint.getX() > Game.instance().getPlayer().centerPoint().getX()) {
+                            xVelocity = Math.min(maxSpeed, xVelocity + (10 / Game.FPS));
+                            direction = EntityDirection.RIGHT;
+                        } else {
+                            xVelocity = Math.max(-maxSpeed, xVelocity - (10 / Game.FPS));
+                            direction = EntityDirection.LEFT;
+                        }
                     } else {
-                        xVelocity = Math.max(-maxSpeed, xVelocity - (10 / Game.FPS));
-                        direction = EntityDirection.LEFT;
+                        state = EnemyState.STANDING;
                     }
-                } else {
-                    state = EnemyState.STANDING;
-                }
-                break;
+                    break;
+
+                case JUMPING:
+                    if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 1000) {
+                        state = EnemyState.JUMPING;
+                        if(centerPoint.getX() - 15 > Game.instance().getPlayer().centerPoint().getX()) {
+                            xVelocity = Math.max(-maxSpeed, xVelocity - (5 / Game.FPS));
+                            direction = EntityDirection.LEFT;
+                        } else if(centerPoint.getX() + 15 < Game.instance().getPlayer().centerPoint().getX()) {
+                            xVelocity = Math.min(maxSpeed, xVelocity + (5 / Game.FPS));
+                            direction = EntityDirection.RIGHT;
+                        }
+                        if(onSurface) {
+                            yVelocity = -5;
+                        }
+                    } else {
+                        state = EnemyState.STANDING;
+                    }
+                    break;
 
             default:
                 break;
@@ -139,38 +161,53 @@ public class Enemy extends Entity implements Living {
         return "";
     }
 
+
     // writes the each property to the DataOutputStream passed in the parameters of the enemy to the file to be saved.
     public void serialize(DataOutputStream writer) throws IOException{
-            writer.writeDouble(centerPoint().getX());
-            writer.writeDouble(centerPoint().getY());
+        writer.writeDouble(centerPoint().getX());
+        writer.writeDouble(centerPoint().getY());
+        if (state != null){
+            writer.writeBoolean(true);
             writer.writeInt(state.ordinal());
-            if (super.direction != null){
-            writer.writeInt(super.direction.ordinal());
-            }
-            else{
-                writer.writeInt(direction.ordinal());
-            }
-            writer.writeInt(healthProperty.intValue());
         }
+        else{
+            writer.writeBoolean(false);
+        }
+        if (super.direction != null){
+        writer.writeInt(super.direction.ordinal());
+        }
+        else{
+            writer.writeInt(direction.ordinal());
+        }
+        writer.writeInt(healthProperty.intValue());
+        if (type != null){
+            writer.writeBoolean(true);
+            writer.writeInt(type.ordinal());
+        }
+        else{
+            writer.writeBoolean(false);
+        }
+    }
 
     // reads the DataOutputStream passed in the parameters and sets the Game model accordingly.
     public void deserialize(DataInputStream reader) throws IOException{
         centerPoint().setX(reader.readDouble()); 
         centerPoint().setY(reader.readDouble());
-        state = EnemyState.values()[reader.readInt()];
+        boolean b = reader.readBoolean();
+        if (b == true){
+            state = EnemyState.values()[reader.readInt()];;
+        }
         direction = EntityDirection.values()[reader.readInt()];
-        healthProperty = new SimpleIntegerProperty(reader.readInt());
-        
+        healthProperty.setValue(reader.readInt());
+        boolean b2 = reader.readBoolean();
+        if (b2 == true){
+            type = EnemyState.values()[reader.readInt()] ;
+        }
     }
 
     public void setType(String type) {
-        // if (type == "FOLLOWING") {
-        //     this.type = EnemyState.FOLLOWING;
-        // }
-        // else if (type == "WANDERING") {
-        //     this.type = EnemyState.WANDERING;
-        // }
-        this.type = EnemyState.WANDERING;
+        this.type = EnemyState.valueOf(type);
+
     }
     
 }

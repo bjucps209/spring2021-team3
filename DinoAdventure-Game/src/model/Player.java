@@ -94,8 +94,8 @@ public class Player extends Entity implements Living {
         try {
         direction = EntityDirection.values()[reader.readInt()];
         state = PlayerState.values()[reader.readInt()];
-        scoreProperty = new SimpleIntegerProperty(reader.readInt());
-        healthProperty = new SimpleIntegerProperty(reader.readInt());
+        scoreProperty.setValue(reader.readInt());
+        healthProperty.setValue(reader.readInt());
         centerPoint.setXY(reader.readDouble(), reader.readDouble());    
         } catch (IOException e) {
             throw new IOException("Some thing went wrong in the serialize method for the player class");

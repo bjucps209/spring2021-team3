@@ -117,5 +117,4 @@ public class Game {
             throw new IOException("Something went wrong when reading the file in the load message. :(");
         }
     }
-
 }

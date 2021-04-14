@@ -1,3 +1,4 @@
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -203,6 +204,7 @@ public class MainWindow implements GameObserver {
                 pauseLoop.play();
 
                 menuButtonPaused.setOnAction(ev -> {
+                    pauseLoop.stop();
                     Game.instance().setState(GameState.MENU);
                     gamePage.setVisible(false);
                     titlePage.setVisible(true);
@@ -221,15 +223,58 @@ public class MainWindow implements GameObserver {
                 });
 
                 restartButtonPaused.setOnAction(ev -> {
+                    pauseLoop.stop();
                     play(new ActionEvent());
                 });
 
+                //bugs: timer doesn't load the right time and doesn't load enemies properly
                 loadButton.setOnAction(ev -> {
-                    // TODO: Load saved game state here
+                    try{
+                    final Game game = Game.instance();
+                    game.load("saveFile.dat"); // time is the long at which the System was paused and the save button was clicked
+                    
+                   
+                    } catch (Exception ex){
+                        System.out.println("Something went wrong with loading the file");
+                    }
+                    pauseLoop.stop();
+                    gamePage.getChildren().remove(playButtonHBox);
+                    gamePage.getChildren().remove(gamePausedPane);
+
+                    // committed out code below causes this to be thrown for me:
+                    // a java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "InvokeLaterDispatcher" java.lang.OutOfMemoryError: Java heap space
+
+                    // for ( int i = 0; i < gamePage.getChildren().size(); i++){
+                    //     if (gamePage.getChildren().get(i) instanceof Node){
+                    //         Node node = (Node) gamePage.getChildren().get(i);
+                    //         if ( node.getUserData() instanceof Enemy){
+                    //             gamePage.getChildren().remove(node);
+                    //         }
+                    //     }
+                    // }
+                    // window.getScene().getRoot().requestFocus();
+                    // for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
+                    //     if (Game.instance().getCurrentLevel().getEntites().get(i) instanceof Enemy){
+                    //         Enemy enemy = Game.instance().getCurrentLevel().getEntites().get(i);
+                    //         spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType());
+                    //     }
+                    // }
+
+                update();
+                gameLoop.play();
                 });
 
                 saveButton.setOnAction(ev -> {
-                    // TODO: Save game state here
+                    final Game game = Game.instance();
+                    try{
+                    game.save("saveFile.dat");
+                    } catch (Exception ex){
+                        System.out.println(ex);
+                        System.out.println("Something went wrong with saving the file");
+                    }
+                    /**You should just be able to save from and load into the runTimeProperty and the maxTimeProperty. 
+                     * You also need to set the startTimeProperty to the current time minus runTimeProperty
+                     *  when you load the level. The rest of the values are calculated based on those */
                 });
 
                 break;
@@ -383,25 +428,117 @@ public class MainWindow implements GameObserver {
 
         // Create/load level
 
-        Level level = new Level();
-        level.setSpawnPoint(new Point(100, 540));
-        Game.instance().startLevel(level);
-        switch (Game.instance().getDifficulty()) {
-        case EASY:
-            Game.instance().getPlayer().setHealth(20);
-            Game.instance().getCurrentLevel().setMaxTime(500);
-            break;
-        case MEDIUM:
-            Game.instance().getPlayer().setHealth(15);
-            Game.instance().getCurrentLevel().setMaxTime(400);
-            break;
-        case HARD:
-            Game.instance().getPlayer().setHealth(10);
-            Game.instance().getCurrentLevel().setMaxTime(300);
-            break;
-        default:
-            break;
+        Level level;
+
+        // Generate some testing dummy terrain
+        // Please leave here for now so I can test with it
+        // Enable dummy terrain if you want to demo the gameplay
+        boolean dummyTerrain = true;
+        if (dummyTerrain) {
+
+
+            level = new Level();
+            level.setSpawnPoint(new Point(100, 540));
+
+            // Set level as the current level
+            Game.instance().startLevel(level);
+
+            for (int i = 0; i < 10; i++) {
+                ImageView blockImage = new ImageView(
+                        new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
+                Block block = new Block();
+                block.centerPoint().setXY(100 + (i * 128), 600);
+                block.setWidth(128);
+                block.setHeight(128);
+                level.getBlocks().add(block);
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                gamePage.getChildren().add(blockImage);
+            }
+
+            for (int i = 0; i < 3; i++) {
+                ImageView blockImage = new ImageView(
+                        new Image("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
+                Block block = new Block();
+                block.centerPoint().setXY(500 + (i * 128), 418);
+                block.setWidth(128);
+                block.setHeight(93);
+                level.getBlocks().add(block);
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                gamePage.getChildren().add(blockImage);
+            }
+
+            spawnEnemy(500, 456, EnemyState.WANDERING);
+            spawnEnemy(550, 200, EnemyState.WANDERING);
+            spawnEnemy(1200, 456, EnemyState.FOLLOWING);
+            spawnEnemy(800, 456, EnemyState.FLEEING);
+            spawnEnemy(1100, 456, EnemyState.JUMPING);
+
+        } else {
+
+
+            // TODO: Load level here instead of making a dummy level
+            level = new Level();
+            level.setSpawnPoint(new Point(100, 540));
+
+        
+            try {
+                level.load("lvl1.dat");
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+
+            // Set level as the current level
+            Game.instance().startLevel(level);
+
+            // Generate real terrain
+            Game.instance().getCurrentLevel().getBlocks().stream().forEach(block -> {
+                ImageView blockImage = new ImageView(new Image(block.getTexture()));
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                gamePage.getChildren().add(blockImage);
+            });
+            // Generate enemies from the level
+            Game.instance().getCurrentLevel().getEntites().stream().forEach(enemy -> {
+                ImageView enemyImage = new ImageView(
+                new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
+                enemyImage.xProperty().bind(enemy.minXProperty());
+                enemyImage.yProperty().bind(enemy.minYProperty());
+                enemyImage.setUserData(enemy);
+                gamePage.getChildren().add(enemyImage);
+                enemyImages.add(enemyImage);
+                // spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(), EnemyState.WANDERING);
+
+            });
+            // Generate Collectables from the level
+            Game.instance().getCurrentLevel().getCollectables().stream().forEach(enemy -> {
+                //TODO: create logic to load in collectables
+            });
         }
+
+
+        // Set difficulty
+        switch (Game.instance().getDifficulty()) {
+            case EASY:
+                Game.instance().getPlayer().setHealth(20);
+                Game.instance().getCurrentLevel().setMaxTime(500);
+                break;
+            case MEDIUM:
+                Game.instance().getPlayer().setHealth(15);
+                Game.instance().getCurrentLevel().setMaxTime(400);
+                break;
+            case HARD:
+                Game.instance().getPlayer().setHealth(10);
+                Game.instance().getCurrentLevel().setMaxTime(300);
+                break;
+            default:
+                break;
+        }
+
+
 
         // Show player stats
 
@@ -457,6 +594,8 @@ public class MainWindow implements GameObserver {
 
         gamePage.getChildren().add(dataVBox);
 
+
+
         // Show pause button
 
         Button pauseButton = new Button();
@@ -470,84 +609,27 @@ public class MainWindow implements GameObserver {
 
         gamePage.setVisible(true);
 
+
+
+        // Create player image in world
+
         playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
         playerImage.xProperty().bind(Game.instance().getPlayer().minXProperty());
         playerImage.yProperty().bind(Game.instance().getPlayer().minYProperty());
         gamePage.getChildren().add(playerImage);
 
-        // Generate some testing dummy terrain
-        // Please leave here for now so I can test with it
-        // Enable dummy terrain if you want to demo the gameplay
-        boolean dummyTerrain = true;
-        if (dummyTerrain) {
-
-            for (int i = 0; i < 10; i++) {
-                ImageView blockImage = new ImageView(
-                        new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(100 + (i * 128), 600);
-                block.setWidth(128);
-                block.setHeight(128);
-                Game.instance().getCurrentLevel().getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                gamePage.getChildren().add(blockImage);
-            }
-
-            for (int i = 0; i < 3; i++) {
-                ImageView blockImage = new ImageView(
-                        new Image("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(500 + (i * 128), 418);
-                block.setWidth(128);
-                block.setHeight(93);
-                Game.instance().getCurrentLevel().getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                gamePage.getChildren().add(blockImage);
-            }
-
-            spawnEnemy(500, 456, EnemyState.WANDERING);
-            spawnEnemy(550, 200, EnemyState.WANDERING);
-            spawnEnemy(1200, 456, EnemyState.FOLLOWING);
-            spawnEnemy(800, 456, EnemyState.FLEEING);
-
-        } else {
-            // Game.instance().setCurrentLevel(new Level());
-            try { Game.instance().getCurrentLevel().load("lvl1.dat");} catch (Exception er) {}
-            // Generate real terrain from file
-            Game.instance().getCurrentLevel().getBlocks().stream().forEach(block -> {
-                ImageView blockImage = new ImageView(new Image(block.getTexture()));
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                gamePage.getChildren().add(blockImage);
-            });
-            // Generate enemies from the level
-            Game.instance().getCurrentLevel().getEntites().stream().forEach(enemy -> {
-                ImageView enemyImage = new ImageView(
-                new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
-                enemyImage.xProperty().bind(enemy.minXProperty());
-                enemyImage.yProperty().bind(enemy.minYProperty());
-                enemyImage.setUserData(enemy);
-                gamePage.getChildren().add(enemyImage);
-                enemyImages.add(enemyImage);
-                // spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(), EnemyState.WANDERING);
-
-            });
-            // Generate Collectables from the level
-            Game.instance().getCurrentLevel().getCollectables().stream().forEach(enemy -> {
-                //TODO: create logic to load in collectables
-            });
-        }
-
-        Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
-        Game.instance().getPlayer().setWidth(50);
-        Game.instance().getPlayer().setHeight(54);
-        Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
-        // Game.instance().getPlayer().setXVelocity(1);
+        spawnPlayer(Game.instance().getCurrentLevel().getSpawnPoint().getX(), Game.instance().getCurrentLevel().getSpawnPoint().getY());
 
         Game.instance().getCurrentLevel().idleTimeProperty().set(0);
 
+    }
+
+    public void spawnPlayer(double x, double y) {
+        Game.instance().getPlayer().setWidth(50);
+        Game.instance().getPlayer().setHeight(54);
+        Game.instance().getPlayer().centerPoint().setX(x);
+        Game.instance().getPlayer().centerPoint().setY(y);
+        Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
     }
 
     public void spawnEnemy(double x, double y, EnemyState type) {
