@@ -18,7 +18,6 @@
     -fx-background-color: #25ac3b;
 }
 
-
 /* Game styles */
 
 .gamePage {
@@ -59,7 +58,7 @@
 }
 
 .playPauseButton {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: #EEEEEE;
     -fx-padding: 10px;
     -fx-font-size: 24px;
     -fx-border-radius: 100px;
@@ -74,47 +73,9 @@
 }
 
 .playPauseButton:hover {
-    -fx-background-color: #CCCCCC;
+    -fx-background-color: #FFFFFF;
 }
 
 .playPauseLabel {
-    -fx-text-fill: #CCCCCC;
-}
-
-.pausedButton {
-    -fx-background-color: #FFFFFF;
-    -fx-padding: 10px;
-    -fx-font-size: 20px;
-    -fx-border-radius: 100px;
-    -fx-background-radius: 100px;
-    -fx-border: none;
-    -fx-min-width: 256px;
-    -fx-max-width: 256px;
-    -fx-background-insets: 0px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 0);
-}
-
-.pausedButton:hover {
-    -fx-background-color: #CCCCCC;
-}
-
-.pausedButton2 {
-    -fx-background-color: #FFFFFF;
-    -fx-padding: 10px;
-    -fx-font-size: 20px;
-    -fx-border-radius: 100px;
-    -fx-background-radius: 100px;
-    -fx-border: none;
-    -fx-background-insets: 0px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 0);
-    -fx-pref-width: 128px;
-}
-
-.pausedButton2:hover {
-    -fx-background-color: #CCCCCC;
-}
-
-.load-save {
-    -fx-min-width: 256px;
-    -fx-max-width: 256px;
+    -fx-text-fill: #EEEEEE;
 }
