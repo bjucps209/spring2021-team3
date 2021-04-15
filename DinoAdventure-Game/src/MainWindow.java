@@ -1,23 +1,26 @@
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
+import javafx.geometry.Side;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.Node;
 import model.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.util.Duration;
 
@@ -36,7 +39,11 @@ public class MainWindow implements GameObserver {
     @FXML
     AnchorPane gamePage;
     @FXML
+    AnchorPane levelPane;
+    @FXML
     ImageView playerImage;
+    @FXML Pane background;
+    @FXML Image backgroundImage;
 
     // GUI controls for Title Screen
     @FXML
@@ -48,14 +55,20 @@ public class MainWindow implements GameObserver {
     @FXML
     ChoiceBox<String> difficultyLevels; // dropdown for difficulty levels
 
+    @FXML
+    ChoiceBox<String> levelsChoice; //dropdown for level selection TODO-update this list to show the levels in src/levels/
+
     private Timeline gameLoop;
 
     private boolean keysBound;
     private boolean upKeyPressed;
     private boolean leftKeyPressed;
     private boolean rightKeyPressed;
-    private boolean downKeyPressed;
     private boolean escapeKeyPressed;
+
+    private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
+
+    private String levelToLoad = "level1";
 
     @FXML
     public void initialize() {
@@ -68,142 +81,217 @@ public class MainWindow implements GameObserver {
         title.setFont(font);
         mainMenu.setFont(font);
 
+
+        //find the levels and add them to level choice
+        levelsChoice.setValue("Demo");
+        File[] files = new File("src/levels").listFiles();
+        for (File file : files) {
+                if (file.isFile()) {
+                    levelsChoice.getItems().add(file.getName());
+                }
+        }
+
+
         name.requestFocus();
 
         Game.instance().observers().add(this);
 
         gameLoop = new Timeline(new KeyFrame(Duration.millis(1000 / Game.FPS), e -> {
 
-            switch(Game.instance().getState()) {
+            switch (Game.instance().getState()) {
 
-                case LEVEL_PLAYING:
-                    handleInput();
-                    Game.instance().getCurrentLevel().tick();
-                    Game.instance().observers().forEach(o -> o.update());
-                    break;
+            case LEVEL_PLAYING:
+                handleInput();
+                Game.instance().getCurrentLevel().tick();
+                Game.instance().observers().forEach(o -> o.update());
+                break;
 
-                case GAME_OVER:
-                    gameLoop.stop();
-                    VBox gameOverPane = new VBox();
-                    gameOverPane.setAlignment(Pos.CENTER);
-                    gameOverPane.getStyleClass().add("gameOverPane");
-                    AnchorPane.setTopAnchor(gameOverPane, 0.0);
-                    AnchorPane.setLeftAnchor(gameOverPane, 0.0);
-                    AnchorPane.setRightAnchor(gameOverPane, 0.0);
-                    gameOverPane.setPrefHeight(window.getHeight());
-                    gameOverPane.setSpacing(10);
-                    gamePage.getChildren().add(gameOverPane);
-                    Label gameOverHeader = new Label();
-                    gameOverHeader.setText("GAME OVER");
-                    gameOverHeader.getStyleClass().add("gameOverHeader");
-                    gameOverPane.getChildren().add(gameOverHeader);
-                    Label gameOverMessage = new Label();
-                    gameOverMessage.setText(Game.instance().getGameOverMessage());
-                    gameOverMessage.getStyleClass().add("gameOverMessage");
-                    gameOverPane.getChildren().add(gameOverMessage);
-                    HBox buttons = new HBox();
-                    buttons.setAlignment(Pos.CENTER);
-                    buttons.setSpacing(10);
-                    gameOverPane.getChildren().add(buttons);
-                    Button menuButton = new Button();
-                    menuButton.setText("Menu");
-                    buttons.getChildren().add(menuButton);
-                    Button restartButton = new Button();
-                    restartButton.setText("Try Again");
-                    buttons.getChildren().add(restartButton);
-                    menuButton.setOnAction(ev -> {
-                        Game.instance().setState(GameState.MENU);
-                        gamePage.setVisible(false);
-                        titlePage.setVisible(true);
-                    });
-                    restartButton.setOnAction(ev -> {
-                        play(new ActionEvent());
-                    });
-                    break;
+            case GAME_OVER:
+                gameLoop.stop();
+                VBox gameOverPane = new VBox();
+                gameOverPane.setAlignment(Pos.CENTER);
+                gameOverPane.getStyleClass().add("gameOverPane");
+                AnchorPane.setTopAnchor(gameOverPane, 0.0);
+                AnchorPane.setLeftAnchor(gameOverPane, 0.0);
+                AnchorPane.setRightAnchor(gameOverPane, 0.0);
+                gameOverPane.setPrefHeight(window.getHeight());
+                gameOverPane.setSpacing(10);
+                gamePage.getChildren().add(gameOverPane);
+                Label gameOverHeader = new Label();
+                gameOverHeader.setText("GAME OVER");
+                gameOverHeader.getStyleClass().add("gameOverHeader");
+                gameOverPane.getChildren().add(gameOverHeader);
+                Label gameOverMessage = new Label();
+                gameOverMessage.setText(Game.instance().getGameOverMessage());
+                gameOverMessage.getStyleClass().add("gameOverMessage");
+                gameOverPane.getChildren().add(gameOverMessage);
+                HBox buttons = new HBox();
+                buttons.setAlignment(Pos.CENTER);
+                buttons.setSpacing(10);
+                gameOverPane.getChildren().add(buttons);
+                Button menuButton = new Button();
+                menuButton.setText("Menu");
+                buttons.getChildren().add(menuButton);
+                Button restartButton = new Button();
+                restartButton.setText("Try Again");
+                buttons.getChildren().add(restartButton);
+                menuButton.setOnAction(ev -> {
+                    Game.instance().setState(GameState.MENU);
+                    gamePage.setVisible(false);
+                    titlePage.setVisible(true);
+                });
+                restartButton.setOnAction(ev -> {
+                    play(new ActionEvent());
+                });
+                break;
 
-                case LEVEL_PAUSED:
+            case LEVEL_PAUSED:
 
-                    gameLoop.stop();
+                gameLoop.stop();
 
-                    long gamePausedAt = System.currentTimeMillis();
+                long gamePausedAt = System.currentTimeMillis();
 
-                    VBox gamePausedPane = new VBox();
-                    gamePausedPane.setAlignment(Pos.CENTER);
-                    gamePausedPane.getStyleClass().add("gamePausedPane");
-                    AnchorPane.setTopAnchor(gamePausedPane, 0.0);
-                    AnchorPane.setLeftAnchor(gamePausedPane, 0.0);
-                    AnchorPane.setRightAnchor(gamePausedPane, 0.0);
-                    gamePausedPane.setPrefHeight(window.getHeight());
-                    gamePausedPane.setSpacing(10);
-                    gamePage.getChildren().add(gamePausedPane);
-                    Label gamePausedHeader = new Label();
-                    gamePausedHeader.setText("GAME PAUSED");
-                    gamePausedHeader.getStyleClass().add("gamePausedHeader");
-                    gamePausedPane.getChildren().add(gamePausedHeader);
-                    HBox buttonsPaused = new HBox();
-                    buttonsPaused.setAlignment(Pos.CENTER);
-                    buttonsPaused.setSpacing(10);
-                    gamePausedPane.getChildren().add(buttonsPaused);
-                    Button menuButtonPaused = new Button();
-                    menuButtonPaused.setText("Menu");
-                    buttonsPaused.getChildren().add(menuButtonPaused);
-                    Button restartButtonPaused = new Button();
-                    restartButtonPaused.setText("Restart");
-                    buttonsPaused.getChildren().add(restartButtonPaused);
-                    Button resumeButton = new Button();
-                    resumeButton.setText("Resume");
-                    buttonsPaused.getChildren().add(resumeButton);
+                VBox gamePausedPane = new VBox();
+                gamePausedPane.setAlignment(Pos.CENTER);
+                gamePausedPane.getStyleClass().add("gamePausedPane");
+                AnchorPane.setTopAnchor(gamePausedPane, 0.0);
+                AnchorPane.setLeftAnchor(gamePausedPane, 0.0);
+                AnchorPane.setRightAnchor(gamePausedPane, 0.0);
+                gamePausedPane.setPrefHeight(window.getHeight());
+                gamePausedPane.setSpacing(10);
+                gamePage.getChildren().add(gamePausedPane);
+                Label gamePausedHeader = new Label();
+                gamePausedHeader.setText("GAME PAUSED");
+                gamePausedHeader.getStyleClass().add("gamePausedHeader");
+                gamePausedPane.getChildren().add(gamePausedHeader);
 
-                    HBox playButtonHBox = new HBox();
-                    playButtonHBox.setAlignment(Pos.CENTER_LEFT);
-                    playButtonHBox.setSpacing(10);
-                    AnchorPane.setTopAnchor(playButtonHBox, 10.0);
-                    AnchorPane.setLeftAnchor(playButtonHBox, 10.0);
-                    gamePage.getChildren().add(playButtonHBox);
+                VBox buttonsPaused = new VBox();
+                buttonsPaused.setAlignment(Pos.CENTER);
+                buttonsPaused.setSpacing(10);
+                gamePausedPane.getChildren().add(buttonsPaused);
+                HBox buttonsPaused2 = new HBox();
+                buttonsPaused2.getStyleClass().add("load-save");
+                buttonsPaused2.setAlignment(Pos.CENTER);
+                buttonsPaused2.setSpacing(10);
+                gamePausedPane.getChildren().add(buttonsPaused2);
 
-                    Button playButton = new Button();
-                    playButton.getStyleClass().add("material-icons");
-                    playButton.getStyleClass().add("playPauseButton");
-                    playButton.setText("\ue037");
-                    playButton.setOnAction(ev -> resumeButton.fire());
-                    playButtonHBox.getChildren().add(playButton);
+                Button resumeButton = new Button();
+                resumeButton.getStyleClass().add("pausedButton");
+                resumeButton.setText("RESUME");
+                buttonsPaused.getChildren().add(resumeButton);
+                Button restartButtonPaused = new Button();
+                restartButtonPaused.getStyleClass().add("pausedButton");
+                restartButtonPaused.setText("RESTART");
+                buttonsPaused.getChildren().add(restartButtonPaused);
+                Button menuButtonPaused = new Button();
+                menuButtonPaused.getStyleClass().add("pausedButton");
+                menuButtonPaused.setText("MENU");
+                buttonsPaused.getChildren().add(menuButtonPaused);
+                Button loadButton = new Button();
+                loadButton.getStyleClass().add("pausedButton2");
+                loadButton.setText("LOAD");
+                buttonsPaused2.getChildren().add(loadButton);
+                Button saveButton = new Button();
+                saveButton.getStyleClass().add("pausedButton2");
+                saveButton.setText("SAVE");
+                buttonsPaused2.getChildren().add(saveButton);
 
-                    Label playLabel = new Label();
-                    playLabel.setText("Press Esc to pause/resume");
-                    playLabel.getStyleClass().add("playPauseLabel");
-                    playButtonHBox.getChildren().add(playLabel);
+                HBox playButtonHBox = new HBox();
+                playButtonHBox.setAlignment(Pos.CENTER_LEFT);
+                playButtonHBox.setSpacing(10);
+                AnchorPane.setTopAnchor(playButtonHBox, 10.0);
+                AnchorPane.setLeftAnchor(playButtonHBox, 10.0);
+                gamePage.getChildren().add(playButtonHBox);
 
-                    escapeKeyPressed = false;
+                Button playButton = new Button();
+                playButton.getStyleClass().add("material-icons");
+                playButton.getStyleClass().add("playPauseButton");
+                playButton.setText("\ue037");
+                playButton.setOnAction(ev -> resumeButton.fire());
+                playButtonHBox.getChildren().add(playButton);
 
-                    Timeline pauseLoop = new Timeline(new KeyFrame(Duration.millis(1000 / Game.FPS), ev -> {
-                        if(escapeKeyPressed) {
-                            escapeKeyPressed = false;
-                            resumeButton.fire();
+                Label playLabel = new Label();
+                playLabel.setText("Press Esc to pause/resume");
+                playLabel.getStyleClass().add("playPauseLabel");
+                playButtonHBox.getChildren().add(playLabel);
+
+                escapeKeyPressed = false;
+
+                Timeline pauseLoop = new Timeline(new KeyFrame(Duration.millis(1000 / Game.FPS), ev -> {
+                    if (escapeKeyPressed) {
+                        escapeKeyPressed = false;
+                        resumeButton.fire();
+                    }
+                }));
+                pauseLoop.setCycleCount(Timeline.INDEFINITE);
+                pauseLoop.play();
+
+                menuButtonPaused.setOnAction(ev -> {
+                    pauseLoop.stop();
+                    Game.instance().setState(GameState.MENU);
+                    gamePage.setVisible(false);
+                    titlePage.setVisible(true);
+                });
+
+                resumeButton.setOnAction(ev -> {
+                    Game.instance().getCurrentLevel().idleTimeProperty()
+                            .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
+                                    - gamePausedAt);
+                    pauseLoop.stop();
+                    gamePage.getChildren().remove(playButtonHBox);
+                    gamePage.getChildren().remove(gamePausedPane);
+                    Game.instance().setState(GameState.LEVEL_PLAYING);
+                    window.getScene().getRoot().requestFocus();
+                    gameLoop.play();
+                });
+
+                restartButtonPaused.setOnAction(ev -> {
+                    pauseLoop.stop();
+                    play(new ActionEvent());
+                });
+
+                //bugs: timer doesn't load the right time and doesn't load enemies properly
+                loadButton.setOnAction(ev -> {
+                    Game.instance().getCurrentLevel().getEntites().clear();
+                    try{
+                    final Game game = Game.instance();
+                    game.load("saveFile.dat");
+        
+                    } catch (Exception ex){
+                        System.out.println(ex);
+                        System.out.println("Something went wrong with loading the file");
+                    }
+                    
+                    window.getScene().getRoot().requestFocus();
+
+                    for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
+                        Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
+                        Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
                         }
-                    }));
-                    pauseLoop.setCycleCount(Timeline.INDEFINITE);
-                    pauseLoop.play();
 
-                    menuButtonPaused.setOnAction(ev -> {
-                        Game.instance().setState(GameState.MENU);
-                        gamePage.setVisible(false);
-                        titlePage.setVisible(true);
-                    });
-
-                    resumeButton.setOnAction(ev -> {
-                        Game.instance().getCurrentLevel().idleTimeProperty().set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis() - gamePausedAt);
+                        Game.instance().observers().forEach(o ->  o.update());
                         pauseLoop.stop();
-                        gamePage.getChildren().remove(playButtonHBox);
-                        gamePage.getChildren().remove(gamePausedPane);
-                        Game.instance().setState(GameState.LEVEL_PLAYING);
                         window.getScene().getRoot().requestFocus();
                         gameLoop.play();
-                    });
+                        gamePage.getChildren().remove(playButtonHBox);
+                        gamePage.getChildren().remove(gamePausedPane);
+                        update();
+                        });
 
-                    restartButtonPaused.setOnAction(ev -> {
-                        play(new ActionEvent());
-                    });
-                    break;
+                saveButton.setOnAction(ev -> {
+                    final Game game = Game.instance();
+                    try{
+                    game.save("saveFile.dat");
+                    } catch (Exception ex){
+                        System.out.println(ex);
+                        System.out.println("Something went wrong with saving the file");
+                    }
+                });
+
+                break;
+
+            default:
+                break;
 
             }
         }));
@@ -240,13 +328,13 @@ public class MainWindow implements GameObserver {
             Game.instance().setState(GameState.LEVEL_PAUSED);
         }
 
-        if(Game.instance().getPlayer().getMaxY() > window.getHeight()) {
+        if (Game.instance().getPlayer().getMinY() > window.getHeight()) {
 
             // If the player falls off the screen, deduct 10 HP
             Game.instance().getPlayer().setHealth(Game.instance().getPlayer().getHealth() - 10);
 
             // If the player isn't out of health, respawn them
-            if(Game.instance().getPlayer().getHealth() > 0) {
+            if (Game.instance().getPlayer().getHealth() > 0) {
                 Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
                 Game.instance().getPlayer().centerPoint().subtract(0, 50);
                 Game.instance().getPlayer().setXVelocity(0);
@@ -258,11 +346,69 @@ public class MainWindow implements GameObserver {
     }
 
     public void update() {
+
+        ArrayList<Node> toRemove = new ArrayList<Node>();
+
         if (Game.instance().getPlayer().getDirection() == EntityDirection.LEFT) {
             playerImage.setImage(new Image("assets/images/player/player-standing-left-1.png"));
         } else {
             playerImage.setImage(new Image("assets/images/player/player-standing-right-1.png"));
         }
+
+
+        // Background parallax
+        AnchorPane.setRightAnchor(background, 0.0);
+
+        // Side-scrolling logic
+        if(Game.instance().getPlayer().centerPoint().getX() > (gamePage.getWidth() / 2) && Game.instance().getPlayer().centerPoint().getX() < Game.instance().getCurrentLevel().getWidth() - (gamePage.getWidth() / 2)) {
+            // Scrolling
+            AnchorPane.setLeftAnchor(levelPane, ((gamePage.getWidth() / 2) - Game.instance().getPlayer().centerPoint().getX()));
+            AnchorPane.setLeftAnchor(background, -(Game.instance().getPlayer().centerPoint().getX() / 2));
+        } else if(Game.instance().getPlayer().centerPoint().getX() <= (gamePage.getWidth() / 2)) {
+            // Left
+            AnchorPane.setLeftAnchor(levelPane, 0.0);
+            AnchorPane.setLeftAnchor(background, -(gamePage.getWidth() / 4));
+        } else {
+            // Right
+            AnchorPane.setLeftAnchor(levelPane, (double) (gamePage.getWidth() - Game.instance().getCurrentLevel().getWidth()));
+            AnchorPane.setLeftAnchor(background, -(Math.min(Game.instance().getPlayer().centerPoint().getX(), Game.instance().getCurrentLevel().getWidth() - (gamePage.getWidth() / 2)) / 2));
+        }
+
+        
+
+        for (ImageView e : enemyImages) {
+
+            if (Game.instance().getCurrentLevel().getEntites().contains((Enemy) e.getUserData())) {
+                if (((Enemy) e.getUserData()).getDirection() == EntityDirection.LEFT) {
+                    e.setImage(new Image("assets/images/enemies/"
+                            + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-left-1.png"));
+                } else {
+                    e.setImage(new Image("assets/images/enemies/"
+                            + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-right-1.png"));
+                }
+            } else {
+                e.setImage(new Image("assets/images/enemies/"
+                        + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-dying-right-14.png"));
+                toRemove.add(e);
+                new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
+                    levelPane.getChildren().remove(e);
+                })).play();
+            }
+
+            // Remove the enemy if it's falling off the screen
+            if (((Enemy) e.getUserData()).getMinY() > window.getHeight()) {
+    
+                Game.instance().getCurrentLevel().getEntites().remove((Enemy) e.getUserData());
+
+                toRemove.add(e);
+                levelPane.getChildren().remove(e);
+
+            }
+        }
+
+        for (Node n : toRemove)
+            enemyImages.remove(n);
+
     }
 
     @FXML
@@ -301,36 +447,166 @@ public class MainWindow implements GameObserver {
         titlePage.setVisible(false);
         gamePage.getChildren().removeAll();
 
+        gamePage.setMinWidth(window.getWidth());
+        gamePage.setMinHeight(window.getHeight());
+        gamePage.setMaxWidth(window.getWidth());
+        gamePage.setMaxHeight(window.getHeight());
+
+        
         // Set background
 
-        ImageView background = new ImageView(new Image("assets/images/world/background.png"));
+        background = new Pane();
+        backgroundImage = new Image("assets/images/world/background.png");
+        background.setBackground(new Background(new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0, false, Side.TOP, 0, false), new BackgroundSize(window.getWidth(), window.getHeight(), false, false, false, false))));
         AnchorPane.setTopAnchor(background, 0.0);
         AnchorPane.setLeftAnchor(background, 0.0);
         AnchorPane.setRightAnchor(background, 0.0);
         AnchorPane.setBottomAnchor(background, 0.0);
-        background.fitWidthProperty().bind(window.widthProperty());
-        background.setPreserveRatio(true);
         gamePage.getChildren().add(background);
+
+
+        
+        levelPane = new AnchorPane();
+        gamePage.getChildren().add(levelPane);
+        AnchorPane.setTopAnchor(levelPane, 0.0);
+        AnchorPane.setLeftAnchor(levelPane, 0.0);
+        AnchorPane.setBottomAnchor(levelPane, 0.0);
 
         // Create/load level
 
-        Level level = new Level();
-        level.setSpawnPoint(new Point(100, 540));
-        Game.instance().startLevel(level);
-        switch (Game.instance().getDifficulty()) {
-        case EASY:
-            Game.instance().getPlayer().setHealth(20);
-            Game.instance().getCurrentLevel().setMaxTime(500);
-            break;
-        case MEDIUM:
-            Game.instance().getPlayer().setHealth(15);
-            Game.instance().getCurrentLevel().setMaxTime(400);
-            break;
-        case HARD:
-            Game.instance().getPlayer().setHealth(10);
-            Game.instance().getCurrentLevel().setMaxTime(300);
-            break;
+        Level level;
+
+        // Generate some testing dummy terrain
+        // Please leave here for now so I can test with it
+        // Enable dummy terrain if you want to demo the gameplay
+
+        
+        // boolean dummyTerrain = false;
+        if (levelsChoice.getValue().equals("Demo")) {
+
+
+            level = new Level();
+            level.setSpawnPoint(new Point(100, 540));
+            level.setWidth(4000);
+            level.setHeight(1080);
+
+            // Set level as the current level
+            Game.instance().startLevel(level);
+
+            for (int i = 0; i < 10; i++) {
+                ImageView blockImage = new ImageView(
+                        new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
+                Block block = new Block();
+                block.centerPoint().setXY(100 + (i * 128), 600);
+                block.setWidth(128);
+                block.setHeight(128);
+                level.getBlocks().add(block);
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                levelPane.getChildren().add(blockImage);
+            }
+
+            for (int i = 0; i < 3; i++) {
+                ImageView blockImage = new ImageView(
+                        new Image("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
+                Block block = new Block();
+                block.centerPoint().setXY(500 + (i * 128), 418);
+                block.setWidth(128);
+                block.setHeight(93);
+                level.getBlocks().add(block);
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                levelPane.getChildren().add(blockImage);
+            }
+
+            for (int i = 11; i < 30; i++) {
+                ImageView blockImage = new ImageView(
+                        new Image("assets/images/world/ground-" + (i == 11 ? "1" : (i == 29 ? "3" : "2")) + ".png"));
+                Block block = new Block();
+                block.centerPoint().setXY(100 + (i * 128), 600);
+                block.setWidth(128);
+                block.setHeight(128);
+                level.getBlocks().add(block);
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                levelPane.getChildren().add(blockImage);
+            }
+
+            spawnEnemy(500, 456, EnemyState.WANDERING);
+            spawnEnemy(550, 200, EnemyState.WANDERING);
+            spawnEnemy(1200, 456, EnemyState.FOLLOWING);
+            spawnEnemy(800, 456, EnemyState.FLEEING);
+            spawnEnemy(1100, 456, EnemyState.JUMPING);
+
+        } else {
+
+
+            // TODO: Load level here instead of making a dummy level
+            level = new Level();
+            level.setSpawnPoint(new Point(100, 540));
+
+            // Set level as the current level
+            Game.instance().startLevel(level);
+
+        
+            try {
+                level.load("src/levels/" + levelsChoice.getSelectionModel().getSelectedItem());
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+
+            // Generate real terrain
+            level.getBlocks().stream().forEach(block -> {
+                ImageView blockImage = new ImageView(new Image(block.getTexture()));
+                blockImage.xProperty().bind(block.minXProperty());
+                blockImage.yProperty().bind(block.minYProperty());
+                levelPane.getChildren().add(blockImage);
+            });
+            // Generate enemies from the level
+            level.getEntites().stream().forEach(enemy -> {
+                ImageView enemyImage = new ImageView(
+                new Image("assets/images/enemies/" + enemy.getTypeString().toLowerCase() + "-standing-left-1.png"));
+                enemyImage.xProperty().bind(enemy.minXProperty());
+                enemyImage.yProperty().bind(enemy.minYProperty());
+                enemyImage.setUserData(enemy);
+                levelPane.getChildren().add(enemyImage);
+                enemyImages.add(enemyImage);
+                // spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(), EnemyState.WANDERING);
+
+            });
+            // Generate Collectables from the level
+            level.getCollectables().stream().forEach(enemy -> {
+                //TODO: create logic to load in collectables
+            });
         }
+
+        levelPane.setMinWidth(level.getWidth());
+        levelPane.setMinHeight(level.getHeight());
+        levelPane.setMaxWidth(level.getWidth());
+        levelPane.setMaxHeight(level.getHeight());
+
+
+        // Set difficulty
+        switch (Game.instance().getDifficulty()) {
+            case EASY:
+                Game.instance().getPlayer().setHealth(20);
+                Game.instance().getCurrentLevel().setMaxTime(500);
+                break;
+            case MEDIUM:
+                Game.instance().getPlayer().setHealth(15);
+                Game.instance().getCurrentLevel().setMaxTime(400);
+                break;
+            case HARD:
+                Game.instance().getPlayer().setHealth(10);
+                Game.instance().getCurrentLevel().setMaxTime(300);
+                break;
+            default:
+                break;
+        }
+
+
 
         // Show player stats
 
@@ -387,6 +663,7 @@ public class MainWindow implements GameObserver {
         gamePage.getChildren().add(dataVBox);
 
 
+
         // Show pause button
 
         Button pauseButton = new Button();
@@ -398,85 +675,67 @@ public class MainWindow implements GameObserver {
         pauseButton.setOnAction(ev -> Game.instance().setState(GameState.LEVEL_PAUSED));
         gamePage.getChildren().add(pauseButton);
 
-
-
         gamePage.setVisible(true);
+
+
+
+        // Create player image in world
 
         playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
         playerImage.xProperty().bind(Game.instance().getPlayer().minXProperty());
         playerImage.yProperty().bind(Game.instance().getPlayer().minYProperty());
-        gamePage.getChildren().add(playerImage);
+        levelPane.getChildren().add(playerImage);
 
-        // Generate some testing dummy terrain
-        // Please leave here for now so I can test with it
-        // Enable dummy terrain if you want to demo the gameplay
-        boolean dummyTerrain = true;
-        if(dummyTerrain) {
+        spawnPlayer(Game.instance().getCurrentLevel().getSpawnPoint().getX(), Game.instance().getCurrentLevel().getSpawnPoint().getY());
 
-            for (int i = 0; i < 10; i++) {
-                ImageView blockImage = new ImageView(
-                        new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(100 + (i * 128), 600);
-                block.setWidth(128);
-                block.setHeight(128);
-                Game.instance().getCurrentLevel().getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                gamePage.getChildren().add(blockImage);
-            }
+        Game.instance().getCurrentLevel().idleTimeProperty().set(0);
 
-            for (int i = 0; i < 3; i++) {
-                ImageView blockImage = new ImageView(
-                        new Image("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(500 + (i * 128), 418);
-                block.setWidth(128);
-                block.setHeight(93);
-                Game.instance().getCurrentLevel().getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                gamePage.getChildren().add(blockImage);
-            }
-
-        } else {
-
-            // Generate real terrain
-            Game.instance().getCurrentLevel().getBlocks().stream().forEach(block -> {
-                ImageView blockImage = new ImageView(new Image("assets/images/world/ground-2.png"));
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                gamePage.getChildren().add(blockImage);
-            });
-        }
-
-        Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
-        Game.instance().getPlayer().setWidth(50);
-        Game.instance().getPlayer().setHeight(54);
-        Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
-        //Game.instance().getPlayer().setXVelocity(1);
+        Game.instance().setState(GameState.LEVEL_PLAYING);
 
     }
 
-        // Event Handlers for Title Screen
-        @FXML
-        void onAboutClicked(ActionEvent event) throws IOException {
-    
-        }
-    
-        @FXML
-        void onHelpClicked(ActionEvent event) throws IOException {
-    
-        }
-    
-        @FXML
-        void onLoadClicked(ActionEvent event) throws IOException {
-    
-        }
-    
-        @FXML
-        void onHighScoreClicked(ActionEvent event) throws IOException {
-            
-        }
+    public void spawnPlayer(double x, double y) {
+        Game.instance().getPlayer().setWidth(50);
+        Game.instance().getPlayer().setHeight(54);
+        Game.instance().getPlayer().centerPoint().setX(x);
+        Game.instance().getPlayer().centerPoint().setY(y);
+        Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
+    }
+
+    public void spawnEnemy(double x, double y, EnemyState type) {
+        Enemy enemy = new Enemy(x, y, type);
+        enemy.setWidth(59);
+        enemy.setHeight(50);
+        enemy.setDirection(EntityDirection.LEFT);
+        Game.instance().getCurrentLevel().addEntity(enemy);
+        ImageView enemyImage = new ImageView(
+                new Image("assets/images/enemies/" + type.toString().toLowerCase() + "-standing-left-1.png"));
+        enemyImage.xProperty().bind(enemy.minXProperty());
+        enemyImage.yProperty().bind(enemy.minYProperty());
+        enemyImage.setUserData(enemy);
+        levelPane.getChildren().add(enemyImage);
+        enemyImages.add(enemyImage);
+    }
+
+    // Event Handlers for Title Screen
+    @FXML
+    void onAboutClicked(ActionEvent event) throws IOException {
+
+    }
+
+    @FXML
+    void onHelpClicked(ActionEvent event) throws IOException {
+
+    }
+
+    @FXML
+    void onLoadClicked(ActionEvent event) throws IOException {
+        
+    }
+
+    @FXML
+    void onHighScoreClicked(ActionEvent event) throws IOException {
+
+    }
 
 }

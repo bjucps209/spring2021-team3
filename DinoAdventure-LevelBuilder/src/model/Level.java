@@ -5,48 +5,39 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.*;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 
 public class Level {
-    
-    private ArrayList<Entity> entities = new ArrayList<Entity>();
+
+    private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     private ArrayList<Block> blocks = new ArrayList<Block>();
-    private int width;
-    private int height;
+    private ArrayList<Collectable> collectables = new ArrayList<Collectable>();
+    private Player player;
+    private int width = 0;
+    private int height = 0;
     private String levelName;
     private LongProperty startTimeProperty = new SimpleLongProperty();
     private LongProperty runTimeProperty = new SimpleLongProperty();
     private LongProperty currentTimeProperty = new SimpleLongProperty();
     private LongProperty maxTimeProperty = new SimpleLongProperty();
     private LongProperty remainingTimeProperty = new SimpleLongProperty();
+    private LongProperty idleTimeProperty = new SimpleLongProperty();
     private Point spawnPoint = new Point();
 
     public Level() {
 
-        entities.add(Game.instance().getPlayer());
-        // TODO: Generate enemies
-        Block block = new Block();
-        block.centerPoint().setXY(100, 600);
-        block.setWidth(128);
-        block.setHeight(128);
-        this.addBlock(block);
 
-        Block block2 = new Block();
-        block2.centerPoint().setXY(200, 600);
-        block2.setWidth(128);
-        block2.setHeight(128);
-        this.addBlock(block2);
+        player = Game.instance().getPlayer();
+
+        // Setup timer bindings
 
         runTimeProperty.bind(Bindings.createLongBinding(() -> {
-            return currentTimeProperty.get() - startTimeProperty.get();
-        }, currentTimeProperty, startTimeProperty));
+            return currentTimeProperty.get() - (startTimeProperty.get() + idleTimeProperty.get());
+        }, currentTimeProperty, startTimeProperty, idleTimeProperty));
 
         remainingTimeProperty.bind(Bindings.createLongBinding(() -> {
             return maxTimeProperty.get() - runTimeProperty.get();
@@ -74,6 +65,10 @@ public class Level {
         return maxTimeProperty;
     }
 
+    public LongProperty idleTimeProperty() {
+        return idleTimeProperty;
+    }
+
     public LongProperty remainingTimeProperty() {
         return remainingTimeProperty;
     }
@@ -81,7 +76,9 @@ public class Level {
     public void tick() {
 
         currentTimeProperty.set(System.currentTimeMillis());
-        for(Entity e : entities) e.tick();
+        for (Entity e : enemies)
+            e.tick();
+        player.tick();
 
     }
 
@@ -110,21 +107,6 @@ public class Level {
     }
 
     /**
-     * find the Entity with the given id
-     * 
-     * @param id
-     * @return Entity
-     */
-    public Entity findEntity(int id) {
-        for (Entity entity : entities) {
-            if (entity.getId() == id) {
-                return entity;
-            }
-        }
-        return null;
-    }
-
-    /**
      * get the name of the level
      * 
      * @return - levelName
@@ -143,11 +125,27 @@ public class Level {
     }
 
     /**
+     * find the Entity with the given id
+     * 
+     * @param id
+     * @return Entity
+     */
+    public Enemy findEntity(int id) {
+        for (Enemy entity : enemies) {
+            if (entity.getId() == id) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    /**
      * remove the Entity with the id from entities
      * 
      * @param id
      */
-    public void removeEntity(int id) {
+    public void removeEntity(Enemy entity) {
+        enemies.remove(entity); 
     }
 
     /**
@@ -165,12 +163,37 @@ public class Level {
         return null;
     }
 
+    // /**
+    //  * find the surface with the given id
+    //  * 
+    //  * @param id
+    //  * @return Block
+    //  */
+    // public Collectable findCollectable(int id) {
+    //     for (Collectable item : collectables) {
+    //         if (item.getId() == id) {
+    //             return item;
+    //         }
+    //     }
+    //     return null;
+    // }
+
     /**
-     * remove the surface with the given surface from surfaces
+     * remove the surface with the given surface id from surfaces
      * 
      * @param id
      */
-    public void removeBlock(int id) {
+    public void removeBlock(Block block) {
+        blocks.remove(block);
+    }
+
+    /**
+     * remove the given item from collectables
+     * 
+     * @param id
+     */
+    public void removeCollectable(Collectable item) {
+        collectables.remove(item);
     }
 
     /**
@@ -178,8 +201,8 @@ public class Level {
      * 
      * @param object
      */
-    public void addEntity(Entity entity) {
-        entities.add(entity);
+    public void addEntity(Enemy entity) {
+        enemies.add(entity);
     }
 
     /**
@@ -189,6 +212,15 @@ public class Level {
      */
     public void addBlock(Block block) {
         blocks.add(block);
+    }
+
+    /**
+     * adds item to collectables
+     * 
+     * @param object
+     */
+    public void addCollectable(Collectable item) {
+        collectables.add(item);
     }
 
     /**
@@ -205,8 +237,17 @@ public class Level {
      * 
      * @return surfaces
      */
-    public ArrayList<Entity> getEntites() {
-        return entities;
+    public ArrayList<Enemy> getEntites() {
+        return enemies;
+    }
+
+    /**
+     * Gets the items in the level
+     * 
+     * @return surfaces
+     */
+    public ArrayList<Collectable> getCollectables() {
+        return collectables;
     }
 
     /**
@@ -244,7 +285,7 @@ public class Level {
     public void setHeight(int height) {
         this.height = height;
     }
-    
+
     /**
      * Save the file
      */
@@ -254,13 +295,13 @@ public class Level {
             writer.writeInt(width);
             writer.writeInt(height);
             // write how many entities their are
-            writer.writeInt(entities.size());
+            writer.writeInt(enemies.size());
             // Iterate through the entities saving each's data
-            for (int i = 0; i < entities.size(); ++i) {
-                writer.writeInt(entities.get(i).getId());
-                // writer.writeUTF(entities.get(i).getType());
-                writer.writeInt(entities.get(i).centerPoint().getIntX());
-                writer.writeInt(entities.get(i).centerPoint().getIntY());
+            for (int i = 0; i < enemies.size(); ++i) {
+                writer.writeInt(enemies.get(i).getId());
+                writer.writeUTF(enemies.get(i).getType().toString());
+                writer.writeInt(enemies.get(i).centerPoint().getIntX());
+                writer.writeInt(enemies.get(i).centerPoint().getIntY());
                 // writer.writeInt(entities.get(i).getHeight());
                 // writer.writeInt(entities.get(i).getWidth());
             }
@@ -269,12 +310,20 @@ public class Level {
             // Iterate through the blocks saving each's data
             for (int i = 0; i < blocks.size(); ++i) {
                 writer.writeInt(blocks.get(i).getId());
-                // writer.writeUTF(blocks.get(i).getType());
+                writer.writeUTF(blocks.get(i).getTexture());
                 writer.writeInt(blocks.get(i).centerPoint().getIntX());
                 writer.writeInt(blocks.get(i).centerPoint().getIntY());
                 writer.writeInt(blocks.get(i).getWidth());
                 writer.writeInt(blocks.get(i).getHeight());
             }
+            // writer.writeInt(collectables.size());
+            // // Iterate through the collectables saving each's data
+            // for (int i = 0; i < collectables.size(); ++i) {
+            //     // writer.writeInt(collectables.get(i).getId());
+            //     writer.writeUTF(collectables.get(i).getType());
+            //     writer.writeInt(collectables.get(i).centerPoint().getIntX());
+            //     writer.writeInt(collectables.get(i).centerPoint().getIntY());
+            // }
         }
     }
 
@@ -284,6 +333,9 @@ public class Level {
      */
     public void load(String fileName) throws IOException {
         setLevelName(fileName);
+        enemies.clear();
+        blocks.clear();
+        collectables.clear();
         // Load Playermanager instance from itmes.dat binary file
         var reader = new DataInputStream(new FileInputStream(fileName)); // Create loader
         // read the size of the level
@@ -293,22 +345,22 @@ public class Level {
         int sizeOfEntities = reader.readInt();
         // get how many players there are
         for (int i = 0; i < sizeOfEntities; ++i) { // iterate over each playing gathering their values
-            Entity entity = new Enemy() {
-            };
+            Enemy entity = new Enemy();
             entity.setId(reader.readInt());
-            // reader.readUTF();
-            entity.centerPoint().setX(reader.readInt());
-            entity.centerPoint().setY(reader.readInt());
-            entities.add(entity);
+            entity.setType(reader.readUTF());
+            entity.setWidth(59);
+            entity.setHeight(50);
+            entity.centerPoint().setXY(reader.readInt(), reader.readInt());
+            enemies.add(entity);
         }
+
         // get blocks
         int sizeOfBlocks = reader.readInt();
         for (int i = 0; i < sizeOfBlocks; ++i) { // iterate over each playing gathering their values
             Block box = new Block();
             box.setId(reader.readInt());
-            // box.setType(reader.readUTF());
-            box.centerPoint().setX(reader.readInt());
-            box.centerPoint().setY(reader.readInt());
+            box.setTexture(reader.readUTF());
+            box.centerPoint().setXY(reader.readInt(), reader.readInt());
             box.setWidth(reader.readInt());
             box.setHeight(reader.readInt());
             blocks.add(box);
@@ -320,4 +372,78 @@ public class Level {
         reader.close();
     }
 
+    // this was made for serialization the Game model. This method does not save the play in the Player. 
+    // THe writer passed by the parameter is the one used in the save method in the game class
+    public void serialize(DataOutputStream writer)throws IOException{
+        writer.writeInt(width); 
+        writer.writeInt(height);
+        int size = enemies.size();
+        writer.writeInt(size);
+         for (int i = 0; i < size; i++) {
+            if (enemies.get(i) instanceof Enemy){
+                Enemy enemy = (Enemy) enemies.get(i);
+                writer.writeInt( enemies.get(i).getId());
+                enemy.serialize(writer); //This method needs more to be added when there are going to be multiple types of enemies in the game.
+            }
+         }
+        
+        //  
+        writer.writeInt(blocks.size());
+        for (int i = 0; i < blocks.size(); ++i) {
+            writer.writeInt( blocks.get(i).getId());
+            //writer.writeUTF(surfaces.get(i).getType());
+            writer.writeInt( blocks.get(i).centerPoint().getIntX());
+            writer.writeInt( blocks.get(i).centerPoint().getIntY());
+            writer.writeInt( blocks.get(i).getWidth());
+            writer.writeInt( blocks.get(i).getHeight());
+        }
+        if (levelName != null) {       
+            writer.writeUTF(levelName);
+        } 
+        else{
+            writer.writeUTF("None");
+        }
+    }
+            
+    // this was made for serialization the Game model. This method loads everything that was saved in the serialize method. 
+    // The reader passed by the parameter is the one used in the load method in the game class.
+    public void deserialize(DataInputStream reader)throws IOException{
+        width = reader.readInt(); 
+        height = reader.readInt();
+        int entitiesSize = reader.readInt();
+         for (int i = 0; i < entitiesSize; i++){   
+            int id = reader.readInt();
+            if (this.findEntity(id) != null){
+               Enemy enemy = (Enemy) this.findEntity(id);
+                enemy.deserialize(reader);
+           }else{
+               Enemy enemy = new Enemy();
+               this.addEntity(enemy);
+                enemy.deserialize(reader);
+                enemies.add(enemy);
+               }
+            }
+
+        int surfaceSize = reader.readInt();
+
+        for (int i = 0; i < surfaceSize; i++) {
+            int id = reader.readInt();
+            if (this.findBlock(id) != null){
+                Block block = this.findBlock(id);
+                //String Type = reader.readUTF();
+                block.centerPoint().setXY(reader.readInt(), reader.readInt());
+                block.setWidth(reader.readInt());
+                block.setHeight(reader.readInt());
+            }else{
+                Block block = new Block();
+                block.setId(id);
+                //String type = reader.readUTF(); //I do really know what or where this would be set for
+                block.centerPoint().setXY(reader.readInt(), reader.readInt());
+                block.setWidth(reader.readInt());
+                block.setHeight(reader.readInt());
+                blocks.add(block);
+            }
+        }
+    levelName = reader.readUTF();  
+    }
 }

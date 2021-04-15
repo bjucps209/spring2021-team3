@@ -32,20 +32,28 @@ public class Level {
 
 
         player = Game.instance().getPlayer();
-        // TODO: Generate enemies
-        
-        Block block = new Block();
-        block.centerPoint().setXY(100, 600);
-        block.setWidth(128);
-        block.setHeight(128);
-        this.addBlock(block);
 
-        Block block2 = new Block();
-        block2.centerPoint().setXY(200, 600);
-        block2.setWidth(128);
-        block2.setHeight(128);
-        this.addBlock(block2);
 
+
+        // for (int i = 0; i < 10; i++) {
+        //     Block block = new Block();
+        //     block.setTexture("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png");
+        //     block.centerPoint().setXY(100 + (i * 128), 600);
+        //     block.setWidth(128);
+        //     block.setHeight(128);
+        //     addBlock(block);
+        // }
+
+        // for (int i = 0; i < 3; i++) {
+        //     Block block = new Block();
+        //     block.setTexture(("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
+        //     block.centerPoint().setXY(500 + (i * 128), 418);
+        //     block.setWidth(128);
+        //     block.setHeight(93);
+        //     addBlock(block);
+        // }
+
+    
 
         // Setup timer bindings
 
@@ -145,6 +153,7 @@ public class Level {
      * @return Entity
      */
     public Entity findEntity(int id) {
+        
         for (Entity entity : enemies) {
             if (entity.getId() == id) {
                 return entity;
@@ -313,7 +322,7 @@ public class Level {
             // Iterate through the entities saving each's data
             for (int i = 0; i < enemies.size(); ++i) {
                 writer.writeInt(enemies.get(i).getId());
-                // writer.writeUTF(entities.get(i).getType());
+                writer.writeUTF(enemies.get(i).getTypeString());
                 writer.writeInt(enemies.get(i).centerPoint().getIntX());
                 writer.writeInt(enemies.get(i).centerPoint().getIntY());
                 // writer.writeInt(entities.get(i).getHeight());
@@ -324,20 +333,31 @@ public class Level {
             // Iterate through the blocks saving each's data
             for (int i = 0; i < blocks.size(); ++i) {
                 writer.writeInt(blocks.get(i).getId());
-                // writer.writeUTF(blocks.get(i).getType());
+                writer.writeUTF(blocks.get(i).getTexture());
                 writer.writeInt(blocks.get(i).centerPoint().getIntX());
                 writer.writeInt(blocks.get(i).centerPoint().getIntY());
                 writer.writeInt(blocks.get(i).getWidth());
                 writer.writeInt(blocks.get(i).getHeight());
             }
+            // writer.writeInt(collectables.size());
+            // // Iterate through the collectables saving each's data
+            // for (int i = 0; i < collectables.size(); ++i) {
+            //     // writer.writeInt(collectables.get(i).getId());
+            //     writer.writeUTF(collectables.get(i).getType());
+            //     writer.writeInt(collectables.get(i).centerPoint().getIntX());
+            //     writer.writeInt(collectables.get(i).centerPoint().getIntY());
+            // }
         }
     }
 
     /**
      * 
-     * @return
+     * 
      */
     public void load(String fileName) throws IOException {
+        enemies.clear();
+        blocks.clear();
+        collectables.clear();
         setLevelName(fileName);
         // Load Playermanager instance from itmes.dat binary file
         var reader = new DataInputStream(new FileInputStream(fileName)); // Create loader
@@ -348,12 +368,21 @@ public class Level {
         int sizeOfEntities = reader.readInt();
         // get how many players there are
         for (int i = 0; i < sizeOfEntities; ++i) { // iterate over each playing gathering their values
-            Enemy entity = new Enemy() {
-            };
+            Enemy entity = new Enemy();
             entity.setId(reader.readInt());
-            // reader.readUTF();
+            entity.setType(reader.readUTF());
             entity.centerPoint().setX(reader.readInt());
             entity.centerPoint().setY(reader.readInt());
+            entity.setHeight(50);
+            entity.setWidth(59);
+            enemies.add(entity);
+
+            // int id = reader.readInt();
+            // String type = reader.readUTF();
+            // int x = reader.readInt();
+            // int y = reader.readInt();
+
+            // Enemy entity = new Enemy(x, y, EnemyState.STANDING);
             enemies.add(entity);
         }
 
@@ -362,9 +391,8 @@ public class Level {
         for (int i = 0; i < sizeOfBlocks; ++i) { // iterate over each playing gathering their values
             Block box = new Block();
             box.setId(reader.readInt());
-            // box.setType(reader.readUTF());
-            box.centerPoint().setX(reader.readInt());
-            box.centerPoint().setY(reader.readInt());
+            box.setTexture(reader.readUTF());
+            box.centerPoint().setXY(reader.readInt(), reader.readInt());
             box.setWidth(reader.readInt());
             box.setHeight(reader.readInt());
             blocks.add(box);
@@ -391,7 +419,7 @@ public class Level {
             }
          }
         
-        //  
+    
         writer.writeInt(blocks.size());
         for (int i = 0; i < blocks.size(); ++i) {
             writer.writeInt( blocks.get(i).getId());
@@ -407,6 +435,11 @@ public class Level {
         else{
             writer.writeUTF("None");
         }
+        writer.writeLong(currentTimeProperty.longValue());
+        //writer.writeLong(runTimeProperty.longValue());
+        writer.writeLong(maxTimeProperty.longValue());
+        //writer.writeLong(remainingTimeProperty.longValue());
+        writer.writeLong(idleTimeProperty.longValue());
     }
             
     // this was made for serialization the Game model. This method loads everything that was saved in the serialize method. 
@@ -415,17 +448,13 @@ public class Level {
         width = reader.readInt(); 
         height = reader.readInt();
         int entitiesSize = reader.readInt();
+        enemies.clear();
          for (int i = 0; i < entitiesSize; i++){   
             int id = reader.readInt();
-            if (this.findEntity(id) != null){
-               Enemy enemy = (Enemy) this.findEntity(id);
-                enemy.deserialize(reader);
-           }else{
-               Enemy enemy = new WanderingEnemy();
-               this.addEntity(enemy);
-                enemy.deserialize(reader);
-                enemies.add(enemy);
-               }
+            Enemy enemy = new Enemy();
+            this.addEntity(enemy);
+            enemy.deserialize(reader);
+            enemy.setId(id);
             }
 
         int surfaceSize = reader.readInt();
@@ -449,5 +478,10 @@ public class Level {
             }
         }
     levelName = reader.readUTF();  
+    currentTimeProperty.setValue(reader.readLong());
+    //runTimeProperty.setValue(reader.readLong());
+    maxTimeProperty.setValue(reader.readLong());
+    //remainingTimeProperty.setValue(reader.readLong());
+    idleTimeProperty.setValue(reader.readLong());
     }
 }

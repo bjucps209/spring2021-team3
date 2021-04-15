@@ -13,6 +13,8 @@ public class Game {
     private DifficultyType difficulty = DifficultyType.EASY;
     private String gameOverMessage;
 
+    public static Random random = new Random();
+
     public static final double FPS = 60;
     public static final double FRICTION = 0.75;
 
@@ -43,7 +45,6 @@ public class Game {
         player.scoreProperty().set(0);
 
         level.recordStartTime();
-        state = GameState.LEVEL_PLAYING;
     }
 
     public ArrayList<GameObserver> observers() {
@@ -115,5 +116,4 @@ public class Game {
             throw new IOException("Something went wrong when reading the file in the load message. :(");
         }
     }
-
 }

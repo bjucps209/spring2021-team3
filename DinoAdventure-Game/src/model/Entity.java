@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Entity extends Box {
 
     protected double weight;
@@ -10,6 +12,8 @@ public class Entity extends Box {
     protected boolean onSurface;
     
     public void tick() {
+
+        ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
 
         // Apply gravity
         yVelocity += Game.GRAVITY / Game.FPS;
@@ -55,6 +59,34 @@ public class Entity extends Box {
             }
         }
 
+        // Handle Player colliding with Enemy
+        if(this instanceof Player) {
+            for(Enemy e : Game.instance().getCurrentLevel().getEntites()) {
+                if(e.overlaps(xCheck) || e.overlaps(yCheck)) {
+
+                    if(e.overlaps(xCheck)) {
+                        if(centerPoint.getX() < e.centerPoint().getX()) {
+                            xVelocity -= 5;
+                        } else {
+                            xVelocity += 5;
+                        }
+                        yVelocity -= 5;
+                    }
+
+                    if(getMaxY() < e.getMinY()) {
+                        if(yVelocity > 0) {
+                            yVelocity = -15;
+                        }
+                        enemiesToRemove.add(e);
+                        ((Player) this).scoreProperty().set(((Player) this).scoreProperty().get() + 25);
+                    } else {
+                        ((Player) this).setHealth(((Player) this).getHealth() - 1);
+                    }
+
+                }
+            }
+        }
+
         if(onSurface && !(this instanceof Player && ((Player) this).isMoving())) {
             // Apply friction unless this Entity is a Player and the user is moving the Player
             xVelocity = xVelocity * Game.FRICTION;
@@ -62,10 +94,8 @@ public class Entity extends Box {
 
         centerPoint.add(xVelocity, yVelocity);
 
-    }
+        for(Enemy e : enemiesToRemove) Game.instance().getCurrentLevel().getEntites().remove(e);
 
-    public String getType() {
-        return null;
     }
 
     public boolean isOnSurface() {

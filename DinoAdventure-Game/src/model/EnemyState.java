@@ -1,10 +1,9 @@
 package model;
 
-enum EnemyState {
-    IDLE,
+public enum EnemyState {
+    STANDING,
     WANDERING,
-    CHASING,
-    AVOIDING,
-    DYING,
-    DEAD
+    JUMPING,
+    FOLLOWING,
+    FLEEING
 }
