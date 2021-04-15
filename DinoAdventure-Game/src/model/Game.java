@@ -107,13 +107,14 @@ public class Game {
 
     //read through the filename passed in the parameters to load the game back to previous state.
     public void load(String filename)throws IOException{
-        try (DataInputStream reader = new DataInputStream(new FileInputStream(filename))){
+       // try (
+           DataInputStream reader = new DataInputStream(new FileInputStream(filename));//){
             state = GameState.LEVEL_PLAYING;
             difficulty = DifficultyType.values()[reader.readInt()];
             player.deserialize(reader);
             currentLevel.deserialize(reader);
-        }catch (IOException e) {
-            throw new IOException("Something went wrong when reading the file in the load message. :(");
-        }
+        //}catch (IOException e) {
+        //    throw new IOException("Something went wrong when reading the file in the load message. :(");
+        //}
     }
 }
