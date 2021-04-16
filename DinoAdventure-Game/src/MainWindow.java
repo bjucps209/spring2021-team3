@@ -1,9 +1,11 @@
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -11,12 +13,15 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import model.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -31,7 +36,7 @@ public class MainWindow implements GameObserver {
     @FXML
     VBox titlePage;
     @FXML
-    VBox highScorePage;
+    VBox highScoresPage;
     @FXML
     VBox helpPage;
     @FXML
@@ -58,6 +63,17 @@ public class MainWindow implements GameObserver {
     @FXML
     ChoiceBox<String> levelsChoice; //dropdown for level selection TODO-update this list to show the levels in src/levels/
 
+    // GUI controls for Highscores screen
+
+    @FXML
+    VBox ranks; // Ranks of the player in the list of highscores   
+    @FXML
+    VBox names; // Names of the player
+    @FXML
+    VBox scores; // Scores of the player
+    @FXML
+    VBox levels; // difficulty levels of the game
+
     private Timeline gameLoop;
 
     private boolean keysBound;
@@ -71,7 +87,7 @@ public class MainWindow implements GameObserver {
     private String levelToLoad = "level1";
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException{
 
         // Title screen initialization
         title.setTextFill(Color.DARKBLUE);
@@ -80,6 +96,42 @@ public class MainWindow implements GameObserver {
         // set font of title and main menu
         title.setFont(font);
         mainMenu.setFont(font);
+
+        // High Scores screen initialization
+        HighScore highScores = HighScore.getInstance();
+
+        /**
+        1.Load Scores from file
+        2.get scores list from getScoresList
+        3.Loop through scores list
+        4.Display rank, name and scores as labels from scores list
+         */
+        highScores.loadScores("HighScoreFiles/SaveScoresData.txt");
+        List<Score> slist = highScores.getScoresList(); // list of highscores obtained from the scoresList
+           
+        for (int i = 0; i < slist.size(); i++) {
+
+            Label rank = new Label();
+            Label name = new Label();
+            Label scoreLabel = new Label();
+            Label difficultyLabel = new Label();
+
+            rank.setText("" + (i + 1));
+            rank.setTextFill(Color.WHITE);
+            ranks.getChildren().add(rank);
+
+            name.setText(slist.get(i).getName());
+            name.setTextFill(Color.WHITE);
+            names.getChildren().add(name);
+
+            scoreLabel.setText(String.valueOf(slist.get(i).getScore()));
+            scoreLabel.setTextFill(Color.WHITE);
+            scores.getChildren().add(scoreLabel);
+
+            difficultyLabel.setText(String.valueOf(slist.get(i).getDifficultyType()));
+            difficultyLabel.setTextFill(Color.WHITE);
+            levels.getChildren().add(difficultyLabel);
+        }
 
 
         //find the levels and add them to level choice
@@ -715,6 +767,7 @@ public class MainWindow implements GameObserver {
         enemyImages.add(enemyImage);
     }
 
+
     // Event Handlers for Title Screen
     @FXML
     void onAboutClicked(ActionEvent event) throws IOException {
@@ -755,6 +808,22 @@ public class MainWindow implements GameObserver {
     @FXML
     void onHighScoreClicked(ActionEvent event) throws IOException {
 
+        File fileObj = new File("HighScoreFiles/SaveScoresData.txt");
+        if (fileObj.exists()){ 
+            titlePage.setVisible(false);
+            highScoresPage.setVisible(true);
+        } else {
+            var alert = new Alert(AlertType.INFORMATION, "There are no high scores yet.");
+            alert.setHeaderText(null);
+            alert.show();
+        }
+
+    }
+
+    @FXML
+    void onMainMenuClicked(ActionEvent event) throws IOException {
+        highScoresPage.setVisible(false);
+        titlePage.setVisible(true);
     }
 
 }
