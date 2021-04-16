@@ -317,12 +317,15 @@ public class Level {
             // write the size of the level
             writer.writeInt(width);
             writer.writeInt(height);
+            // write the spawn point
+            writer.writeInt(spawnPoint.getIntX());
+            writer.writeInt(spawnPoint.getIntY());
             // write how many entities their are
             writer.writeInt(enemies.size());
             // Iterate through the entities saving each's data
             for (int i = 0; i < enemies.size(); ++i) {
                 writer.writeInt(enemies.get(i).getId());
-                writer.writeUTF(enemies.get(i).getTypeString());
+                writer.writeUTF(enemies.get(i).getType().toString());
                 writer.writeInt(enemies.get(i).centerPoint().getIntX());
                 writer.writeInt(enemies.get(i).centerPoint().getIntY());
                 // writer.writeInt(entities.get(i).getHeight());
@@ -342,53 +345,51 @@ public class Level {
             // writer.writeInt(collectables.size());
             // // Iterate through the collectables saving each's data
             // for (int i = 0; i < collectables.size(); ++i) {
-            //     // writer.writeInt(collectables.get(i).getId());
-            //     writer.writeUTF(collectables.get(i).getType());
-            //     writer.writeInt(collectables.get(i).centerPoint().getIntX());
-            //     writer.writeInt(collectables.get(i).centerPoint().getIntY());
+            // // writer.writeInt(collectables.get(i).getId());
+            // writer.writeUTF(collectables.get(i).getType());
+            // writer.writeInt(collectables.get(i).centerPoint().getIntX());
+            // writer.writeInt(collectables.get(i).centerPoint().getIntY());
             // }
         }
     }
 
     /**
      * 
-     * 
+     * Load the level
      */
     public void load(String fileName) throws IOException {
+        // Set the name of the level
+        setLevelName(fileName);
+        // clear the level of old items/enemies/blocks
         enemies.clear();
         blocks.clear();
         collectables.clear();
-        setLevelName(fileName);
-        // Load Playermanager instance from itmes.dat binary file
+        // Load Playermanager instance from filename.dat binary file
         var reader = new DataInputStream(new FileInputStream(fileName)); // Create loader
         // read the size of the level
         int width = reader.readInt();
         int height = reader.readInt();
+        // read and update the spawn point
+        int spawnX = reader.readInt();
+        int spawnY = reader.readInt();
         // read the number of entities
         int sizeOfEntities = reader.readInt();
         // get how many players there are
-        for (int i = 0; i < sizeOfEntities; ++i) { // iterate over each playing gathering their values
+        for (int i = 0; i < sizeOfEntities; ++i) {
+            // iterate over each playing gathering their values
             Enemy entity = new Enemy();
             entity.setId(reader.readInt());
             entity.setType(reader.readUTF());
-            entity.centerPoint().setX(reader.readInt());
-            entity.centerPoint().setY(reader.readInt());
-            entity.setHeight(50);
+            entity.centerPoint().setXY(reader.readInt(), reader.readInt());
             entity.setWidth(59);
-            enemies.add(entity);
-
-            // int id = reader.readInt();
-            // String type = reader.readUTF();
-            // int x = reader.readInt();
-            // int y = reader.readInt();
-
-            // Enemy entity = new Enemy(x, y, EnemyState.STANDING);
+            entity.setHeight(50);
             enemies.add(entity);
         }
 
         // get blocks
         int sizeOfBlocks = reader.readInt();
-        for (int i = 0; i < sizeOfBlocks; ++i) { // iterate over each playing gathering their values
+        for (int i = 0; i < sizeOfBlocks; ++i) {
+            // iterate over each playing gathering their values
             Block box = new Block();
             box.setId(reader.readInt());
             box.setTexture(reader.readUTF());
@@ -397,7 +398,9 @@ public class Level {
             box.setHeight(reader.readInt());
             blocks.add(box);
         }
-
+        //set the spawn point
+        setSpawnPoint(new Point(spawnX, spawnY));
+        //set the size of the level
         setWidth(width);
         setHeight(height);
 

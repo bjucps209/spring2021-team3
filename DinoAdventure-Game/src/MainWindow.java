@@ -542,7 +542,7 @@ public class MainWindow implements GameObserver {
 
             // TODO: Load level here instead of making a dummy level
             level = new Level();
-            level.setSpawnPoint(new Point(100, 540));
+            
 
             // Set level as the current level
             Game.instance().startLevel(level);
@@ -554,7 +554,6 @@ public class MainWindow implements GameObserver {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-
 
             // Generate real terrain
             level.getBlocks().stream().forEach(block -> {
