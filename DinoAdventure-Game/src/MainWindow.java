@@ -302,7 +302,6 @@ public class MainWindow implements GameObserver {
                     play(new ActionEvent());
                 });
 
-                //bugs: timer doesn't load the right time and doesn't load enemies properly
                 loadButton.setOnAction(ev -> {
                     Game.instance().getCurrentLevel().getEntites().clear();
                     try{
@@ -315,12 +314,12 @@ public class MainWindow implements GameObserver {
                     }
                     
                     window.getScene().getRoot().requestFocus();
-
-                    for (int i = 0; i < Game.instance().getCurrentLevel().getEntites().size(); i++){
+                    int size = Game.instance().getCurrentLevel().getEntites().size();
+                    for (int i = 0; i < size; i++){
                         Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
                         Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
                         }
-
+                        
                         Game.instance().observers().forEach(o ->  o.update());
                         pauseLoop.stop();
                         window.getScene().getRoot().requestFocus();
@@ -783,9 +782,30 @@ public class MainWindow implements GameObserver {
 
     @FXML
     void onLoadClicked(ActionEvent event) throws IOException {
-        
-    }
+        play(event);
+        Game.instance().getCurrentLevel().getEntites().clear();
+        try{
+        final Game game = Game.instance();
+        game.load("saveFile.dat");
 
+        } catch (Exception ex){
+            System.out.println(ex);
+            System.out.println("Something went wrong with loading the file");
+        }
+        
+        window.getScene().getRoot().requestFocus();
+        int size = Game.instance().getCurrentLevel().getEntites().size();
+        for (int i = 0; i < size; i++){
+            Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
+            Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
+            }
+            
+            Game.instance().observers().forEach(o ->  o.update());
+            window.getScene().getRoot().requestFocus();
+            gameLoop.play();
+            update();
+    }
+    
     @FXML
     void onHighScoreClicked(ActionEvent event) throws IOException {
 

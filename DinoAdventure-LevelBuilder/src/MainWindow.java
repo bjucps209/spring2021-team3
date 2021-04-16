@@ -92,13 +92,9 @@ public class MainWindow {
 
 
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
-
-   
-    //TODO-Make New Level button, make delete button.
     
     // TODO: Make a button to add a (single) player to the level (but all it really does is set the spawn point)
             
-    // TODO: add slidable functionality to accomidate larger levels
 
     // TODO: add ability to add collectables
 
@@ -113,6 +109,15 @@ public class MainWindow {
         btnCreate.setFont(font);
         lblLvlWidth.setFont(font);
         lblLvlHeight.setFont(font);
+
+
+        //TODO-
+        //add Dino to the default spawn points (non deletable)
+        //bind the levels spawn point to Dino's location
+        //make him dragable
+        
+    
+        
 
 
         btnSave.setOnAction(e -> {
@@ -141,6 +146,7 @@ public class MainWindow {
         btnNewRightFullBlock.setOnAction(e -> onNewRightFullBlockClicked());
         btnCreate.setOnAction(e -> onCreateClicked());
 
+        spawnDino(150, 300);
         
 
     }
@@ -204,6 +210,8 @@ public class MainWindow {
     private void onSaveClicked() throws IOException {
         LevelDesigner.instance().getLevel().setWidth((int)pane.getPrefWidth());
         LevelDesigner.instance().getLevel().setHeight((int)pane.getPrefHeight());
+        LevelDesigner.instance().getLevel().getSpawnPoint().setX(pane.getChildren().get(0).getLayoutX());
+        LevelDesigner.instance().getLevel().getSpawnPoint().setY(pane.getChildren().get(0).getLayoutY());
         LevelDesigner.instance().getLevel().save("../DinoAdventure-Game/src/levels/" + txtLevelName.getText() + ".dat");
 
     }
@@ -213,6 +221,9 @@ public class MainWindow {
         LevelDesigner.instance().getLevel().load("../DinoAdventure-Game/src/levels/" + txtLevelName.getText() + ".dat");
         txtWidth.setText(String.valueOf(LevelDesigner.instance().getLevel().getWidth()));
         txtHeight.setText(String.valueOf(LevelDesigner.instance().getLevel().getHeight()));
+        spawnDino(LevelDesigner.instance().getLevel().getSpawnPoint().getIntX(), 
+            LevelDesigner.instance().getLevel().getSpawnPoint().getIntY());
+        //TODO-Bind Dino to the levels location
         pane.setPrefWidth(Integer.parseInt(txtWidth.getText()));
         pane.setPrefHeight(Integer.parseInt(txtHeight.getText()));
         LevelDesigner.instance().getLevel().getBlocks().stream().forEach(block -> {
@@ -227,8 +238,6 @@ public class MainWindow {
         });
         // Generate enemies from the level
         LevelDesigner.instance().getLevel().getEntites().stream().forEach(enemy -> {
-            // spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(),
-            // enemy.getType());
             ImageView enemyImage = new ImageView(
                     new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
             enemyImage.layoutXProperty().set(enemy.centerPoint().xProperty().get());
@@ -346,6 +355,16 @@ public class MainWindow {
         makeDraggable(blockImage);
         makeBlockDeletable(blockImage);
     }
+
+    
+    public void spawnDino(int x, int y) {
+        ImageView Dino = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
+        Dino.layoutXProperty().set(x);
+        Dino.layoutYProperty().set(y);
+        makeDraggable(Dino);
+        pane.getChildren().add(Dino);
+    }
+ 
 
     // From
     // https://stackoverflow.com/questions/18407634/rounding-up-to-the-nearest-hundred,
