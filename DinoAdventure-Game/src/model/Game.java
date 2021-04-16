@@ -10,6 +10,9 @@ public class Game {
     private GameState state;
     private static Game instance = new Game();
     private ArrayList<GameObserver> observers = new ArrayList<GameObserver>();
+    private String userName;
+    private int id;
+    private int score;
     private DifficultyType difficulty = DifficultyType.EASY;
     private String gameOverMessage;
 
@@ -61,6 +64,31 @@ public class Game {
 
     public Player getPlayer() {
         return player;
+    }
+
+    // Gets the Player's name
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     /**

@@ -116,7 +116,7 @@ public class HighScore {
             DifficultyType diffType = DifficultyType.valueOf(allFields[2]);
             // 7. Populate the High Scores List with the data from each line
             scoresList.add(new Score(name, score, diffType));
-            Score scr = new Score(name,score,diffType);
+            //Score scr = new Score(name,score,diffType);
             //System.out.println(scr.toString());
             line = buffObj.readLine();
         }
