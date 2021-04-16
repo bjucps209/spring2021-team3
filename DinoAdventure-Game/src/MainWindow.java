@@ -16,6 +16,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.media.AudioClip;
 import model.*;
 
 import java.io.File;
@@ -89,6 +90,8 @@ public class MainWindow implements GameObserver {
 
     private String levelToLoad = "level1";
 
+    final AudioClip HOME_PAGE_MUSIC = new AudioClip(getClass().getResource("assets/sounds/megaepic.mp3").toString());
+
     @FXML
     public void initialize() throws IOException {
 
@@ -99,6 +102,8 @@ public class MainWindow implements GameObserver {
         // set font of title and main menu
         title.setFont(font);
         mainMenu.setFont(font);
+
+        HOME_PAGE_MUSIC.play();
 
         // High Scores screen initialization
         HighScore highScores = HighScore.getInstance();
@@ -296,6 +301,7 @@ public class MainWindow implements GameObserver {
                 pauseLoop.play();
 
                 menuButtonPaused.setOnAction(ev -> {
+                    HOME_PAGE_MUSIC.play();
                     pauseLoop.stop();
                     Game.instance().setState(GameState.MENU);
                     gamePage.setVisible(false);
@@ -482,6 +488,8 @@ public class MainWindow implements GameObserver {
 
     @FXML
     public void play(ActionEvent e) {
+
+        HOME_PAGE_MUSIC.stop();
 
         window.getScene().getRoot().requestFocus();
 
