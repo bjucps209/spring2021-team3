@@ -192,6 +192,7 @@ public class MainWindow implements GameObserver {
                 restartButton.setText("Try Again");
                 buttons.getChildren().add(restartButton);
                 menuButton.setOnAction(ev -> {
+                    HOME_PAGE_MUSIC.play();
                     Game.instance().setState(GameState.MENU);
                     gamePage.setVisible(false);
                     titlePage.setVisible(true);
@@ -795,6 +796,7 @@ public class MainWindow implements GameObserver {
 
     @FXML
     void onLoadClicked(ActionEvent event) throws IOException {
+        HOME_PAGE_MUSIC.stop();
         play(event);
         Game.instance().getCurrentLevel().getEntites().clear();
         try {
