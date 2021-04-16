@@ -331,7 +331,7 @@ public class Level {
 
     /**
      * 
-     * @return
+     * Load the level
      */
     public void load(String fileName) throws IOException {
         // Set the name of the level
@@ -356,9 +356,9 @@ public class Level {
             Enemy entity = new Enemy();
             entity.setId(reader.readInt());
             entity.setType(reader.readUTF());
+            entity.centerPoint().setXY(reader.readInt(), reader.readInt());
             entity.setWidth(59);
             entity.setHeight(50);
-            entity.centerPoint().setXY(reader.readInt(), reader.readInt());
             enemies.add(entity);
         }
 

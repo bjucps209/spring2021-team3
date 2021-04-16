@@ -115,6 +115,9 @@ public class MainWindow {
         //add Dino to the default spawn points (non deletable)
         //bind the levels spawn point to Dino's location
         //make him dragable
+        
+    
+        
 
 
         btnSave.setOnAction(e -> {
@@ -143,6 +146,7 @@ public class MainWindow {
         btnNewRightFullBlock.setOnAction(e -> onNewRightFullBlockClicked());
         btnCreate.setOnAction(e -> onCreateClicked());
 
+        spawnDino(150, 300);
         
 
     }
@@ -206,6 +210,8 @@ public class MainWindow {
     private void onSaveClicked() throws IOException {
         LevelDesigner.instance().getLevel().setWidth((int)pane.getPrefWidth());
         LevelDesigner.instance().getLevel().setHeight((int)pane.getPrefHeight());
+        LevelDesigner.instance().getLevel().getSpawnPoint().setX(pane.getChildren().get(0).getLayoutX());
+        LevelDesigner.instance().getLevel().getSpawnPoint().setY(pane.getChildren().get(0).getLayoutY());
         LevelDesigner.instance().getLevel().save("../DinoAdventure-Game/src/levels/" + txtLevelName.getText() + ".dat");
 
     }
@@ -215,6 +221,8 @@ public class MainWindow {
         LevelDesigner.instance().getLevel().load("../DinoAdventure-Game/src/levels/" + txtLevelName.getText() + ".dat");
         txtWidth.setText(String.valueOf(LevelDesigner.instance().getLevel().getWidth()));
         txtHeight.setText(String.valueOf(LevelDesigner.instance().getLevel().getHeight()));
+        spawnDino(LevelDesigner.instance().getLevel().getSpawnPoint().getIntX(), 
+            LevelDesigner.instance().getLevel().getSpawnPoint().getIntY());
         //TODO-Bind Dino to the levels location
         pane.setPrefWidth(Integer.parseInt(txtWidth.getText()));
         pane.setPrefHeight(Integer.parseInt(txtHeight.getText()));
@@ -347,6 +355,16 @@ public class MainWindow {
         makeDraggable(blockImage);
         makeBlockDeletable(blockImage);
     }
+
+    
+    public void spawnDino(int x, int y) {
+        ImageView Dino = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
+        Dino.layoutXProperty().set(x);
+        Dino.layoutYProperty().set(y);
+        makeDraggable(Dino);
+        pane.getChildren().add(Dino);
+    }
+ 
 
     // From
     // https://stackoverflow.com/questions/18407634/rounding-up-to-the-nearest-hundred,
