@@ -1,4 +1,3 @@
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,6 +38,8 @@ public class MainWindow implements GameObserver {
     @FXML
     VBox highScoresPage;
     @FXML
+    VBox newHighscorePage;
+    @FXML
     VBox helpPage;
     @FXML
     VBox aboutPage;
@@ -68,7 +69,6 @@ public class MainWindow implements GameObserver {
                                     // src/levels/
 
     // GUI controls for Highscores screen
-
     @FXML
     VBox ranks; // Ranks of the player in the list of highscores
     @FXML
@@ -77,6 +77,10 @@ public class MainWindow implements GameObserver {
     VBox scores; // Scores of the player
     @FXML
     VBox levels; // difficulty levels of the game
+
+    // GUI controls for New High score screen
+    @FXML Label newScore; // new highscore of the player
+    @FXML Label playerName; // name of the player
 
     private Timeline gameLoop;
 
@@ -138,6 +142,10 @@ public class MainWindow implements GameObserver {
             difficultyLabel.setTextFill(Color.WHITE);
             levels.getChildren().add(difficultyLabel);
         }
+
+        // New High score screen initialization
+        playerName.setText(Game.instance().getUserName());
+        newScore.setText(String.valueOf(Game.instance().getScore()));
 
         // find the levels and add them to level choice
         levelsChoice.setValue("Demo");
@@ -201,7 +209,7 @@ public class MainWindow implements GameObserver {
                     play(new ActionEvent());
                 });
 
-                // Higscores implementation
+                // Highscores implementation
                 Score score = new Score(Game.instance().getUserName(), Game.instance().getScore(),
                         Game.instance().getDifficulty());
                 // System.out.println(score.toString());
@@ -210,7 +218,7 @@ public class MainWindow implements GameObserver {
                     if (HighScore.getInstance().findIfScoreQualifiesAsHigh(score)) {
                         // System.out.println("It is a high Score");
                         // Show the new Score Screen
-                        //displayNewHighScore();
+                        displayNewHighScore();
 
                         HighScore.getInstance().processScore(score);
                     }
@@ -840,6 +848,15 @@ public class MainWindow implements GameObserver {
     void onMainMenuClicked(ActionEvent event) throws IOException {
         highScoresPage.setVisible(false);
         titlePage.setVisible(true);
+    }
+
+    // Event handler to show the NewHighscore screen when the user makes a new
+    // highscore.
+    @FXML
+    public void displayNewHighScore() throws IOException {
+        // Show the new Score Screen
+        titlePage.setVisible(false);
+        newHighscorePage.setVisible(true);
     }
 
 }
