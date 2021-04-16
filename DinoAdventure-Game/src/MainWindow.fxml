@@ -90,6 +90,28 @@
 
     </VBox>
 
+    <VBox fx:id="newHighscorePage" styleClass="newHighscorePage" managed="${newHighscorePage.visible}" visible="false" prefHeight="800" alignment="CENTER" spacing="30">
+        <HBox alignment="CENTER" style="-fx-font-size: 20px">
+            <Label text="New HighScore!" alignment="CENTER"/>
+        </HBox>
+
+        <HBox alignment="CENTER" style="-fx-font-size: 13px;">
+            <Label text="Congratulations! You made a new High score!!" wrapText="true"/>
+        </HBox>
+
+        <HBox alignment="CENTER" style="-fx-font-size: 13px;">
+            <Label text="Hi " wrapText="true"/>
+            <Label fx:id="playerName" text="Joe Brown" />
+        </HBox>
+
+        <HBox alignment="CENTER" style="-fx-font-size: 14px;-fx-spacing:2px;">
+            <Label text="Your HighScore:"/>
+            <Label fx:id="newScore" text="50,000"/>
+        </HBox>
+
+        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="highscorePageButton"/>
+    </VBox>
+
     <VBox fx:id="helpPage" styleClass="helpPage" managed="${helpPage.visible}" visible="false">
 
         <!-- TODO: Build help page here -->

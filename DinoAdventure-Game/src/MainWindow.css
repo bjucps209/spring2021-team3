@@ -33,6 +33,11 @@
     -fx-text-fill: WHITE
 }
 
+.newHighscorePage{
+    -fx-background-color: #25ac3b;
+    -fx-text-fill: DARKBLUE;  
+}
+
 .highscorePageButton {
     -fx-font-size: 20px; 
     -fx-background-color: #25ac3b;
