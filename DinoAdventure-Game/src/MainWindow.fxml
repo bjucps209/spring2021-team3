@@ -29,11 +29,11 @@
 
         <Label text="MAIN MENU" fx:id="mainMenu" prefHeight="100" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE"/>
         <HBox spacing="20" alignment="CENTER" >
-            <Button text="ABOUT" onAction="#onAboutClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE" />
+            <Button text="ABOUT" onAction="#onAboutClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE"/>
             <Button text="HELP" onAction="#onHelpClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE"/>
-            <Button text="LOAD" onAction="#onLoadClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE" />
-            <Button text="HIGHSCORE" onAction="#onHighScoreClicked" style="-fx-background-color: DARKBLUE; -fx-font-size: 20px; -fx-text-fill: WHITE" />
-            <Button text="PLAY" onAction="#play" style="-fx-background-color: DARKBLUE; -fx-font-size: 20px; -fx-text-fill: WHITE" /> 
+            <Button text="LOAD" onAction="#onLoadClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE"/>
+            <Button text="HIGHSCORE" onAction="#onHighScoreClicked" style="-fx-background-color: DARKBLUE; -fx-font-size: 20px; -fx-text-fill: WHITE"/>
+            <Button text="PLAY" onAction="#play" style="-fx-background-color: DARKBLUE; -fx-font-size: 20px; -fx-text-fill: WHITE"/> 
         </HBox>
 
         <HBox spacing="20" alignment="CENTER" prefHeight="100">

@@ -415,7 +415,7 @@ public class Level {
             if (enemies.get(i) instanceof Enemy){
                 Enemy enemy = (Enemy) enemies.get(i);
                 writer.writeInt( enemies.get(i).getId());
-                enemy.serialize(writer); //This method needs more to be added when there are going to be multiple types of enemies in the game.
+                enemy.serialize(writer); 
             }
          }
         
@@ -436,10 +436,24 @@ public class Level {
             writer.writeUTF("None");
         }
         writer.writeLong(currentTimeProperty.longValue());
-        //writer.writeLong(runTimeProperty.longValue());
+        writer.writeLong(runTimeProperty.longValue());
         writer.writeLong(maxTimeProperty.longValue());
-        //writer.writeLong(remainingTimeProperty.longValue());
+        writer.writeLong(remainingTimeProperty.longValue());
         writer.writeLong(idleTimeProperty.longValue());
+
+        // if (collectables.size() > 0){
+        //     writer.writeBoolean(true);
+        //     writer.writeInt(collectables.size());
+        //     for (Collectable idem : collectables){
+        //         writer.writeInt(idem.getId());
+        //         writer.writeUTF(idem.getType());
+        //         writer.writeInt(idem.centerPoint().getIntX());
+        //         writer.writeInt(idem.centerPoint().getIntY());
+        //     }
+        // }else{
+        //     writer.writeBoolean(false);
+        // }
+         
     }
             
     // this was made for serialization the Game model. This method loads everything that was saved in the serialize method. 
@@ -477,11 +491,24 @@ public class Level {
                 blocks.add(block);
             }
         }
-    levelName = reader.readUTF();  
-    currentTimeProperty.setValue(reader.readLong());
-    //runTimeProperty.setValue(reader.readLong());
-    maxTimeProperty.setValue(reader.readLong());
-    //remainingTimeProperty.setValue(reader.readLong());
-    idleTimeProperty.setValue(reader.readLong());
+
+        levelName = reader.readUTF();  
+        currentTimeProperty.setValue(reader.readLong());
+        runTimeProperty = new SimpleLongProperty(reader.readLong());
+        maxTimeProperty.setValue(reader.readLong());
+        remainingTimeProperty = new SimpleLongProperty(reader.readLong());
+        idleTimeProperty.setValue(reader.readLong());
+
+    // if (reader.readBoolean() == true){
+    //     int size = reader.readInt();
+    //     for (int i = 0; i < size; i++){
+    //         Collectable idem = collectables.get(i);
+    //         idem.setId(reader.readInt());
+    //         idem.setType(reader.readUTF());
+    //         idem.centerPoint().setIntX(reader.readInt());
+    //         idem.centerPoint().setIntY(reader.readInt());
+    //     }
+    // }
+
     }
 }
