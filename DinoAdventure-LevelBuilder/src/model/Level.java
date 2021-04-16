@@ -346,8 +346,10 @@ public class Level {
         int width = reader.readInt();
         int height = reader.readInt();
         // read and update the spawn point
+
         int spawnX = reader.readInt();
         int spawnY = reader.readInt();
+        
         // read the number of entities
         int sizeOfEntities = reader.readInt();
         // get how many players there are
@@ -376,6 +378,7 @@ public class Level {
         }
         //set the spawn point
         setSpawnPoint(new Point(spawnX, spawnY));
+
         //set the size of the level
         setWidth(width);
         setHeight(height);
