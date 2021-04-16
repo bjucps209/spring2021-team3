@@ -92,13 +92,9 @@ public class MainWindow {
 
 
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
-
-   
-    //TODO-Make New Level button, make delete button.
     
     // TODO: Make a button to add a (single) player to the level (but all it really does is set the spawn point)
             
-    // TODO: add slidable functionality to accomidate larger levels
 
     // TODO: add ability to add collectables
 
@@ -113,6 +109,12 @@ public class MainWindow {
         btnCreate.setFont(font);
         lblLvlWidth.setFont(font);
         lblLvlHeight.setFont(font);
+
+
+        //TODO-
+        //add Dino to the default spawn points (non deletable)
+        //bind the levels spawn point to Dino's location
+        //make him dragable
 
 
         btnSave.setOnAction(e -> {
@@ -213,6 +215,7 @@ public class MainWindow {
         LevelDesigner.instance().getLevel().load("../DinoAdventure-Game/src/levels/" + txtLevelName.getText() + ".dat");
         txtWidth.setText(String.valueOf(LevelDesigner.instance().getLevel().getWidth()));
         txtHeight.setText(String.valueOf(LevelDesigner.instance().getLevel().getHeight()));
+        //TODO-Bind Dino to the levels location
         pane.setPrefWidth(Integer.parseInt(txtWidth.getText()));
         pane.setPrefHeight(Integer.parseInt(txtHeight.getText()));
         LevelDesigner.instance().getLevel().getBlocks().stream().forEach(block -> {
@@ -227,8 +230,6 @@ public class MainWindow {
         });
         // Generate enemies from the level
         LevelDesigner.instance().getLevel().getEntites().stream().forEach(enemy -> {
-            // spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(),
-            // enemy.getType());
             ImageView enemyImage = new ImageView(
                     new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
             enemyImage.layoutXProperty().set(enemy.centerPoint().xProperty().get());
