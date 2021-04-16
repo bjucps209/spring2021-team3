@@ -18,6 +18,26 @@
     -fx-background-color: #25ac3b;
 }
 
+.titlePageButton {
+    -fx-font-size: 20px; 
+    -fx-background-color: DARKBLUE; 
+    -fx-text-fill: WHITE
+}
+
+.titlePageButton:hover {
+    -fx-background-color: #6c64b3;
+}
+
+.highScoresPage {
+    -fx-background-color: DARKBLUE; 
+    -fx-text-fill: WHITE
+}
+
+.highscorePageButton {
+    -fx-font-size: 20px; 
+    -fx-background-color: #25ac3b;
+    -fx-text-fill: DARKBLUE; 
+}
 
 /* Game styles */
 

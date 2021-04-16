@@ -29,11 +29,11 @@
 
         <Label text="MAIN MENU" fx:id="mainMenu" prefHeight="100" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE"/>
         <HBox spacing="20" alignment="CENTER" >
-            <Button text="ABOUT" onAction="#onAboutClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE"/>
-            <Button text="HELP" onAction="#onHelpClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE"/>
-            <Button text="LOAD" onAction="#onLoadClicked" style="-fx-font-size: 20px; -fx-background-color: DARKBLUE; -fx-text-fill: WHITE"/>
-            <Button text="HIGHSCORE" onAction="#onHighScoreClicked" style="-fx-background-color: DARKBLUE; -fx-font-size: 20px; -fx-text-fill: WHITE"/>
-            <Button text="PLAY" onAction="#play" style="-fx-background-color: DARKBLUE; -fx-font-size: 20px; -fx-text-fill: WHITE"/> 
+            <Button text="ABOUT" onAction="#onAboutClicked" styleClass="titlePageButton"/>
+            <Button text="HELP" onAction="#onHelpClicked" styleClass="titlePageButton"/>
+            <Button text="LOAD" onAction="#onLoadClicked" styleClass="titlePageButton"/>
+            <Button text="HIGHSCORES" onAction="#onHighScoreClicked" styleClass="titlePageButton"/>
+            <Button text="PLAY" onAction="#play" styleClass="titlePageButton"/> 
         </HBox>
 
         <HBox spacing="20" alignment="CENTER" prefHeight="100">
@@ -68,9 +68,25 @@
 
     </VBox>
 
-    <VBox fx:id="highScorePage" styleClass="highScorePage" managed="${highScorePage.visible}" visible="false">
+    <VBox fx:id="highScoresPage" styleClass="highScoresPage" managed="${highScoresPage.visible}" visible="false" prefHeight="800" alignment="CENTER" spacing="30">
+        <HBox alignment="CENTER">
+        <Label text="High Scores" style="-fx-font-size: 50px; -fx-text-fill: WHITE" alignment="CENTER"/>
+        </HBox>
 
-        <!-- TODO: Build high score page here -->
+        <HBox style="-fx-font-size: 30px;" spacing="30" alignment="CENTER">
+            <Label text="Rank" style="-fx-text-fill: WHITE"/>
+            <Label text="Name" style="-fx-text-fill: WHITE"/>
+            <Label text="Score" style="-fx-text-fill: WHITE"/>
+            <Label text="Difficulty" style="-fx-text-fill: WHITE"/>
+        </HBox>
+        <HBox style="-fx-font-size: 20px;" spacing="30" alignment="CENTER"> 
+            <VBox fx:id="ranks" > </VBox>
+            <VBox fx:id="names" ></VBox>
+            <VBox fx:id="scores" ></VBox>
+            <VBox fx:id="levels" ></VBox>
+        </HBox>
+
+        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="highscorePageButton"/>
 
     </VBox>
 
