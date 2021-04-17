@@ -23,11 +23,11 @@ public class Player extends Entity implements Living {
         this.moving = moving;
     }
 
-    public int getScoreProperty() {
+    public int getScore() {
         return scoreProperty.get();
     }
 
-    public void setScoreProperty(int score) {
+    public void setScore(int score) {
         scoreProperty.set(score);
     }
 

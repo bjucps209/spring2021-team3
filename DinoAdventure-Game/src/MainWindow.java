@@ -442,7 +442,7 @@ public class MainWindow implements GameObserver {
         if (upKeyPressed) {
             Game.instance().getPlayer().setMoving(true);
             if (Game.instance().getPlayer().isOnSurface()) {
-                Game.instance().getPlayer().setYVelocity(Game.instance().getPlayer().getYVelocity() - 8);
+                Game.instance().getPlayer().setYVelocity(Game.instance().getPlayer().getYVelocity() - Game.instance().getPlayer().getMaxJumpHeight());
             }
         }
 
@@ -771,6 +771,11 @@ public class MainWindow implements GameObserver {
             Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1100, 456, EnemyState.JUMPING));
 
             Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1000, 400, CollectableType.Coin));
+
+            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1600, 400, CollectableType.FeatherPowerup));
+            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1800, 400, CollectableType.SpeedPowerup));
+            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(2000, 400, CollectableType.HealthPowerup));
+            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(2200, 400, CollectableType.CoinPowerup));
 
             Game.instance().getCurrentLevel().getGoals().add(new Goal(3800, 500));
 

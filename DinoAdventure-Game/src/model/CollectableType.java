@@ -3,5 +3,7 @@ package model;
 public enum CollectableType {
     Coin,
     FeatherPowerup,
-    SpeedPowerup
+    SpeedPowerup,
+    CoinPowerup,
+    HealthPowerup
 }
