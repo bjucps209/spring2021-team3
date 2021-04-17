@@ -78,7 +78,11 @@ public class Entity extends Box {
                             yVelocity = -15;
                         }
                         enemiesToRemove.add(e);
-                        ((Player) this).scoreProperty().set(((Player) this).scoreProperty().get() + 25);
+                        //((Player) this).scoreProperty().set(((Player) this).scoreProperty().get() + 25);
+                        Collectable coin = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), CollectableType.Coin);
+                        coin.xVelocity = Game.random.nextInt(2) - 0.5;
+                        coin.yVelocity = -1;
+                        Game.instance().getCurrentLevel().getCollectables().add(coin);
                     } else {
                         ((Player) this).setHealth(((Player) this).getHealth() - 1);
                     }
