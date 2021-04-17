@@ -94,7 +94,9 @@ public class MainWindow implements GameObserver {
 
     private String levelToLoad = "level1";
 
-    final AudioClip HOME_PAGE_MUSIC = new AudioClip(getClass().getResource("assets/sounds/megaepic.mp3").toString());
+    final AudioClip HOME_PAGE_MUSIC = new AudioClip(getClass().getResource("assets/sounds/titleScreenMusic.mp3").toString());
+    final AudioClip ENEMY_ATTACK = new AudioClip(getClass().getResource("assets/sounds/EnemyHitPlayer.mp3").toString());
+    final AudioClip ENEMY_KILLED = new AudioClip(getClass().getResource("assets/sounds/PlayerKillsEnemy.mp3").toString());
 
     @FXML
     public void initialize() throws IOException {
@@ -327,6 +329,7 @@ public class MainWindow implements GameObserver {
                     Game.instance().setState(GameState.LEVEL_PLAYING);
                     window.getScene().getRoot().requestFocus();
                     gameLoop.play();
+                    
                 });
 
                 restartButtonPaused.setOnAction(ev -> {
@@ -341,10 +344,14 @@ public class MainWindow implements GameObserver {
                         game.load("saveFile.dat");
 
                     } catch (Exception ex) {
-                        System.out.println(ex);
-                        System.out.println("Something went wrong with loading the file");
+                        var alert = new Alert(AlertType.ERROR, "Sorry, something went wrong with loading the file\n error message: \n" + ex);
+                        alert.setHeaderText(null);
+                        alert.show();
                     }
-
+                    Game.instance().getCurrentLevel().idleTimeProperty()
+                            .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
+                                    - gamePausedAt);
+                    
                     window.getScene().getRoot().requestFocus();
                     int size = Game.instance().getCurrentLevel().getEntites().size();
                     for (int i = 0; i < size; i++) {
@@ -359,6 +366,7 @@ public class MainWindow implements GameObserver {
                     gamePage.getChildren().remove(playButtonHBox);
                     gamePage.getChildren().remove(gamePausedPane);
                     update();
+                    //Game.instance().getCurrentLevel().tick();
                 });
 
                 saveButton.setOnAction(ev -> {
@@ -366,8 +374,9 @@ public class MainWindow implements GameObserver {
                     try {
                         game.save("saveFile.dat");
                     } catch (Exception ex) {
-                        System.out.println(ex);
-                        System.out.println("Something went wrong with saving the file");
+                        var alert = new Alert(AlertType.ERROR, "Sorry, something went wrong with saving the file\n error message: \n" + ex);
+                        alert.setHeaderText(null);
+                        alert.show();
                     }
                 });
 

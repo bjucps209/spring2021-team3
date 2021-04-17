@@ -64,7 +64,7 @@ public class Level {
         remainingTimeProperty.bind(Bindings.createLongBinding(() -> {
             return maxTimeProperty.get() - runTimeProperty.get();
         }, maxTimeProperty, runTimeProperty));
-
+        
     }
 
     public Point getSpawnPoint() {
@@ -439,9 +439,9 @@ public class Level {
             writer.writeUTF("None");
         }
         writer.writeLong(currentTimeProperty.longValue());
-        writer.writeLong(runTimeProperty.longValue());
+        //writer.writeLong(runTimeProperty.longValue());
         writer.writeLong(maxTimeProperty.longValue());
-        writer.writeLong(remainingTimeProperty.longValue());
+        //writer.writeLong(remainingTimeProperty.longValue());
         writer.writeLong(idleTimeProperty.longValue());
 
         // if (collectables.size() > 0){
@@ -497,10 +497,18 @@ public class Level {
 
         levelName = reader.readUTF();  
         currentTimeProperty.setValue(reader.readLong());
-        runTimeProperty = new SimpleLongProperty(reader.readLong());
+        //runTimeProperty = new SimpleLongProperty(reader.readLong());
         maxTimeProperty.setValue(reader.readLong());
-        remainingTimeProperty = new SimpleLongProperty(reader.readLong());
+        //remainingTimeProperty = new SimpleLongProperty(reader.readLong());
         idleTimeProperty.setValue(reader.readLong());
+
+        runTimeProperty.bind(Bindings.createLongBinding(() -> {
+            return currentTimeProperty.get() - (startTimeProperty.get() + idleTimeProperty.get());
+        }, currentTimeProperty, startTimeProperty, idleTimeProperty));
+
+        remainingTimeProperty.bind(Bindings.createLongBinding(() -> {
+            return maxTimeProperty.get() - runTimeProperty.get();
+        }, maxTimeProperty, runTimeProperty));
 
     // if (reader.readBoolean() == true){
     //     int size = reader.readInt();
