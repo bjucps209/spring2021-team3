@@ -61,7 +61,7 @@ public class Entity extends Box {
 
         // Handle Player colliding with Enemy
         if(this instanceof Player) {
-            for(Enemy e : Game.instance().getCurrentLevel().getEntites()) {
+            for(Enemy e : Game.instance().getCurrentLevel().getEnemies()) {
                 if(e.overlaps(xCheck) || e.overlaps(yCheck)) {
 
                     if(e.overlaps(xCheck)) {
@@ -78,7 +78,11 @@ public class Entity extends Box {
                             yVelocity = -15;
                         }
                         enemiesToRemove.add(e);
-                        ((Player) this).scoreProperty().set(((Player) this).scoreProperty().get() + 25);
+                        //((Player) this).scoreProperty().set(((Player) this).scoreProperty().get() + 25);
+                        Collectable coin = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), CollectableType.Coin);
+                        coin.xVelocity = Game.random.nextInt(2) - 0.5;
+                        coin.yVelocity = -1;
+                        Game.instance().getCurrentLevel().getCollectables().add(coin);
                     } else {
                         ((Player) this).setHealth(((Player) this).getHealth() - 1);
                     }
@@ -94,7 +98,7 @@ public class Entity extends Box {
 
         centerPoint.add(xVelocity, yVelocity);
 
-        for(Enemy e : enemiesToRemove) Game.instance().getCurrentLevel().getEntites().remove(e);
+        for(Enemy e : enemiesToRemove) Game.instance().getCurrentLevel().getEnemies().remove(e);
 
     }
 

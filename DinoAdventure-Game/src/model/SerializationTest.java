@@ -36,7 +36,8 @@ public class SerializationTest {
         enemy2.setDirection(EntityDirection.LEFT);
         assertEquals(EntityDirection.LEFT, enemy2.getDirection());
 
-        level.addEntity(enemy); level.addEntity(enemy2);
+        level.getEnemies().add(enemy);
+        level.getEnemies().add(enemy2);
         level.setLevelName("Beginner");
         level.setHeight(1500);
         level.setWidth(2000);
@@ -46,7 +47,7 @@ public class SerializationTest {
         block.setHeight(100);
         block.setWidth(500);
         block.setId(5);
-        level.addBlock(block);
+        level.getBlocks().add(block);
         player.setState(PlayerState.RUNNING);
         world.save(filename);
 
@@ -80,8 +81,8 @@ public class SerializationTest {
         assertEquals("Beginner", level.getLevelName());
         
         // check enemies
-        Enemy enemy0 = (Enemy) level.findEntity(10);
-        Enemy enemyTwo = (Enemy) level.findEntity(2);
+        Enemy enemy0 = (Enemy) level.findEnemy(10);
+        Enemy enemyTwo = (Enemy) level.findEnemy(2);
         assertEquals(2, enemyTwo.getId());
         assertEquals(enemy0.centerPoint.getX(), 300, 0);
         assertEquals(enemy0.centerPoint.getY(), 250, 0);

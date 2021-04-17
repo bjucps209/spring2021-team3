@@ -13,3 +13,7 @@ build
 
 # Don't ignore .vscode folder
 !.vscode
+
+# Ignore local save data
+saveFile.dat
+src/levels

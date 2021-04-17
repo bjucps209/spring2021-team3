@@ -1,6 +1,5 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
@@ -12,10 +11,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import model.*;
@@ -93,6 +89,8 @@ public class MainWindow implements GameObserver {
     private boolean escapeKeyPressed;
 
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
+    private ArrayList<ImageView> collectableImages = new ArrayList<ImageView>();
+    private ArrayList<ImageView> goalImages = new ArrayList<ImageView>();
 
     private String levelToLoad = "level1";
 
@@ -193,16 +191,18 @@ public class MainWindow implements GameObserver {
                 gameOverMessage.setText(Game.instance().getGameOverMessage());
                 gameOverMessage.getStyleClass().add("gameOverMessage");
                 gameOverPane.getChildren().add(gameOverMessage);
-                HBox buttons = new HBox();
+                VBox buttons = new VBox();
                 buttons.setAlignment(Pos.CENTER);
                 buttons.setSpacing(10);
                 gameOverPane.getChildren().add(buttons);
-                Button menuButton = new Button();
-                menuButton.setText("Menu");
-                buttons.getChildren().add(menuButton);
                 Button restartButton = new Button();
-                restartButton.setText("Try Again");
+                restartButton.setText("TRY AGAIN");
+                restartButton.getStyleClass().add("menuButton");
                 buttons.getChildren().add(restartButton);
+                Button menuButton = new Button();
+                menuButton.setText("MENU");
+                menuButton.getStyleClass().add("menuButton");
+                buttons.getChildren().add(menuButton);
                 menuButton.setOnAction(ev -> {
                     HOME_PAGE_MUSIC.play();
                     Game.instance().setState(GameState.MENU);
@@ -263,23 +263,23 @@ public class MainWindow implements GameObserver {
                 gamePausedPane.getChildren().add(buttonsPaused2);
 
                 Button resumeButton = new Button();
-                resumeButton.getStyleClass().add("pausedButton");
+                resumeButton.getStyleClass().add("menuButton");
                 resumeButton.setText("RESUME");
                 buttonsPaused.getChildren().add(resumeButton);
                 Button restartButtonPaused = new Button();
-                restartButtonPaused.getStyleClass().add("pausedButton");
+                restartButtonPaused.getStyleClass().add("menuButton");
                 restartButtonPaused.setText("RESTART");
                 buttonsPaused.getChildren().add(restartButtonPaused);
                 Button menuButtonPaused = new Button();
-                menuButtonPaused.getStyleClass().add("pausedButton");
+                menuButtonPaused.getStyleClass().add("menuButton");
                 menuButtonPaused.setText("MENU");
                 buttonsPaused.getChildren().add(menuButtonPaused);
                 Button loadButton = new Button();
-                loadButton.getStyleClass().add("pausedButton2");
+                loadButton.getStyleClass().add("halfMenuButton");
                 loadButton.setText("LOAD");
                 buttonsPaused2.getChildren().add(loadButton);
                 Button saveButton = new Button();
-                saveButton.getStyleClass().add("pausedButton2");
+                saveButton.getStyleClass().add("halfMenuButton");
                 saveButton.setText("SAVE");
                 buttonsPaused2.getChildren().add(saveButton);
 
@@ -340,7 +340,7 @@ public class MainWindow implements GameObserver {
                 });
 
                 loadButton.setOnAction(ev -> {
-                    Game.instance().getCurrentLevel().getEntites().clear();
+                    Game.instance().getCurrentLevel().getEnemies().clear();
                     try {
                         final Game game = Game.instance();
                         game.load("saveFile.dat");
@@ -353,11 +353,6 @@ public class MainWindow implements GameObserver {
                    
                     
                     window.getScene().getRoot().requestFocus();
-                    int size = Game.instance().getCurrentLevel().getEntites().size();
-                    for (int i = 0; i < size; i++) {
-                        Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
-                        Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
-                    }
 
                     Game.instance().observers().forEach(o -> o.update());
                     pauseLoop.stop();
@@ -381,6 +376,52 @@ public class MainWindow implements GameObserver {
                         alert.setHeaderText(null);
                         alert.show();
                     }
+                });
+
+                break;
+
+            case LEVEL_WON:
+                gameLoop.stop();
+                VBox levelWonPane = new VBox();
+                levelWonPane.setAlignment(Pos.CENTER);
+                levelWonPane.getStyleClass().add("levelWonPane");
+                AnchorPane.setTopAnchor(levelWonPane, 0.0);
+                AnchorPane.setLeftAnchor(levelWonPane, 0.0);
+                AnchorPane.setRightAnchor(levelWonPane, 0.0);
+                levelWonPane.setPrefHeight(window.getHeight());
+                levelWonPane.setSpacing(10);
+                gamePage.getChildren().add(levelWonPane);
+                Label levelWonHeader = new Label();
+                levelWonHeader.setText("LEVEL COMPLETE");
+                levelWonHeader.getStyleClass().add("levelWonHeader");
+                levelWonPane.getChildren().add(levelWonHeader);
+                VBox levelWonButtons = new VBox();
+                levelWonButtons.setAlignment(Pos.CENTER);
+                levelWonButtons.setSpacing(10);
+                levelWonPane.getChildren().add(levelWonButtons);
+                Button levelWonNextButton = new Button();
+                levelWonNextButton.setText("NEXT LEVEL");
+                levelWonNextButton.getStyleClass().add("menuButton");
+                levelWonButtons.getChildren().add(levelWonNextButton);
+                Button levelWonRestartButton = new Button();
+                levelWonRestartButton.setText("PLAY AGAIN");
+                levelWonRestartButton.getStyleClass().add("menuButton");
+                levelWonButtons.getChildren().add(levelWonRestartButton);
+                Button levelWonMenuButton = new Button();
+                levelWonMenuButton.setText("MENU");
+                levelWonMenuButton.getStyleClass().add("menuButton");
+                levelWonButtons.getChildren().add(levelWonMenuButton);
+                levelWonMenuButton.setOnAction(ev -> {
+                    HOME_PAGE_MUSIC.play();
+                    Game.instance().setState(GameState.MENU);
+                    gamePage.setVisible(false);
+                    titlePage.setVisible(true);
+                });
+                levelWonRestartButton.setOnAction(ev -> {
+                    play(new ActionEvent());
+                });
+                levelWonNextButton.setOnAction(ev -> {
+                    // TODO: Implement next level functionality
                 });
 
                 break;
@@ -444,6 +485,7 @@ public class MainWindow implements GameObserver {
 
         ArrayList<Node> toRemove = new ArrayList<Node>();
 
+        // Update Player direction
         if (Game.instance().getPlayer().getDirection() == EntityDirection.LEFT) {
             playerImage.setImage(new Image("assets/images/player/player-standing-left-1.png"));
         } else {
@@ -472,9 +514,33 @@ public class MainWindow implements GameObserver {
                     Game.instance().getCurrentLevel().getWidth() - (gamePage.getWidth() / 2)) / 2));
         }
 
+        // Add enemy images
+        if(Game.instance().getCurrentLevel().getEnemies().size() != enemyImages.size()) {
+            for (Enemy e : Game.instance().getCurrentLevel().getEnemies()) {
+                boolean exists = false;
+                for (ImageView i : enemyImages) {
+                    if((Enemy) i.getUserData() == e) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if(!exists) {
+                    ImageView enemyImage = new ImageView(new Image("assets/images/enemies/" + e.getType().toString().toLowerCase() + "-standing-left-1.png"));
+                    enemyImage.xProperty().bind(e.minXProperty());
+                    enemyImage.yProperty().bind(e.minYProperty());
+                    enemyImage.setUserData(e);
+                    levelPane.getChildren().add(enemyImage);
+                    enemyImages.add(enemyImage);
+                }
+            }
+        }
+
+
+        // Remove/update enemy images
         for (ImageView e : enemyImages) {
 
-            if (Game.instance().getCurrentLevel().getEntites().contains((Enemy) e.getUserData())) {
+            if (Game.instance().getCurrentLevel().getEnemies().contains((Enemy) e.getUserData())) {
+                // Enemy still exists
                 if (((Enemy) e.getUserData()).getDirection() == EntityDirection.LEFT) {
                     e.setImage(new Image("assets/images/enemies/"
                             + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-left-1.png"));
@@ -483,6 +549,7 @@ public class MainWindow implements GameObserver {
                             + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-right-1.png"));
                 }
             } else {
+                // Enemy no longer exists
                 e.setImage(new Image("assets/images/enemies/"
                         + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-dying-right-14.png"));
                 toRemove.add(e);
@@ -494,7 +561,7 @@ public class MainWindow implements GameObserver {
             // Remove the enemy if it's falling off the screen
             if (((Enemy) e.getUserData()).getMinY() > window.getHeight()) {
 
-                Game.instance().getCurrentLevel().getEntites().remove((Enemy) e.getUserData());
+                Game.instance().getCurrentLevel().getEnemies().remove((Enemy) e.getUserData());
 
                 toRemove.add(e);
                 levelPane.getChildren().remove(e);
@@ -502,8 +569,73 @@ public class MainWindow implements GameObserver {
             }
         }
 
-        for (Node n : toRemove)
+        // Add collectable images
+        if(Game.instance().getCurrentLevel().getCollectables().size() != collectableImages.size()) {
+            for (Collectable c : Game.instance().getCurrentLevel().getCollectables()) {
+                boolean exists = false;
+                for (ImageView i : collectableImages) {
+                    if((Collectable) i.getUserData() == c) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if(!exists) {
+                    ImageView collectableImage = new ImageView(new Image("assets/images/collectables/" + c.getType().toString().toLowerCase() + ".png"));
+                    collectableImage.xProperty().bind(c.minXProperty());
+                    collectableImage.yProperty().bind(c.minYProperty());
+                    collectableImage.setUserData(c);
+                    levelPane.getChildren().add(collectableImage);
+                    collectableImages.add(collectableImage);
+                }
+            }
+        }
+
+        // Remove collectable images
+        for (ImageView e : collectableImages) {
+
+            if (!Game.instance().getCurrentLevel().getCollectables().contains((Collectable) e.getUserData())) {
+                // Collectable no longer exists
+                toRemove.add(e);
+                levelPane.getChildren().remove(e);
+            }
+
+            // Remove the collectable if it's falling off the screen
+            if (((Collectable) e.getUserData()).getMinY() > window.getHeight()) {
+
+                Game.instance().getCurrentLevel().getCollectables().remove((Collectable) e.getUserData());
+
+                toRemove.add(e);
+                levelPane.getChildren().remove(e);
+
+            }
+        }
+
+        // Add goal images
+        if(Game.instance().getCurrentLevel().getGoals().size() != goalImages.size()) {
+            for (Goal g : Game.instance().getCurrentLevel().getGoals()) {
+                boolean exists = false;
+                for (ImageView i : goalImages) {
+                    if((Goal) i.getUserData() == g) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if(!exists) {
+                    ImageView goalImage = new ImageView(new Image("assets/images/world/finish-flag.png"));
+                    goalImage.xProperty().bind(g.minXProperty());
+                    goalImage.yProperty().bind(g.minYProperty());
+                    goalImage.setUserData(g);
+                    levelPane.getChildren().add(goalImage);
+                    goalImages.add(goalImage);
+                }
+            }
+        }
+
+        for(Node n : toRemove) {
             enemyImages.remove(n);
+            collectableImages.remove(n);
+            goalImages.remove(n);
+        }
 
     }
 
@@ -511,6 +643,8 @@ public class MainWindow implements GameObserver {
     public void play(ActionEvent e) {
 
         HOME_PAGE_MUSIC.stop();
+
+        Game.instance().setDifficulty(DifficultyType.valueOf(difficultyLevels.getValue()));
 
         window.getScene().getRoot().requestFocus();
 
@@ -544,6 +678,9 @@ public class MainWindow implements GameObserver {
 
         titlePage.setVisible(false);
         gamePage.getChildren().removeAll();
+        enemyImages.clear();
+        collectableImages.clear();
+        goalImages.clear();
 
         gamePage.setMinWidth(window.getWidth());
         gamePage.setMinHeight(window.getHeight());
@@ -627,11 +764,15 @@ public class MainWindow implements GameObserver {
                 levelPane.getChildren().add(blockImage);
             }
 
-            spawnEnemy(500, 456, EnemyState.WANDERING);
-            spawnEnemy(550, 200, EnemyState.WANDERING);
-            spawnEnemy(1200, 456, EnemyState.FOLLOWING);
-            spawnEnemy(800, 456, EnemyState.FLEEING);
-            spawnEnemy(1100, 456, EnemyState.JUMPING);
+            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(500, 456, EnemyState.WANDERING));
+            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(550, 200, EnemyState.WANDERING));
+            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1200, 456, EnemyState.FOLLOWING));
+            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(800, 456, EnemyState.FLEEING));
+            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1100, 456, EnemyState.JUMPING));
+
+            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1000, 400, CollectableType.Coin));
+
+            Game.instance().getCurrentLevel().getGoals().add(new Goal(3800, 500));
 
         } else {
 
@@ -656,7 +797,7 @@ public class MainWindow implements GameObserver {
                 levelPane.getChildren().add(blockImage);
             });
             // Generate enemies from the level
-            level.getEntites().stream().forEach(enemy -> {
+            level.getEnemies().stream().forEach(enemy -> {
                 ImageView enemyImage = new ImageView(new Image(
                         "assets/images/enemies/" + enemy.getTypeString().toLowerCase() + "-standing-left-1.png"));
                 enemyImage.xProperty().bind(enemy.minXProperty());
@@ -683,15 +824,15 @@ public class MainWindow implements GameObserver {
         switch (Game.instance().getDifficulty()) {
         case EASY:
             Game.instance().getPlayer().setHealth(20);
-            Game.instance().getCurrentLevel().setMaxTime(500);
+            Game.instance().getCurrentLevel().maxTimeProperty().set(500 * 1000);
             break;
         case MEDIUM:
             Game.instance().getPlayer().setHealth(15);
-            Game.instance().getCurrentLevel().setMaxTime(400);
+            Game.instance().getCurrentLevel().maxTimeProperty().set(400 * 1000);
             break;
         case HARD:
             Game.instance().getPlayer().setHealth(10);
-            Game.instance().getCurrentLevel().setMaxTime(300);
+            Game.instance().getCurrentLevel().maxTimeProperty().set(300 * 1000);
             break;
         default:
             break;
@@ -768,39 +909,17 @@ public class MainWindow implements GameObserver {
 
         playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
         playerImage.xProperty().bind(Game.instance().getPlayer().minXProperty());
-        playerImage.yProperty().bind(Game.instance().getPlayer().minYProperty());
+        playerImage.yProperty().bind(Bindings.createIntegerBinding(() -> {
+            return Game.instance().getPlayer().minYProperty().get() + 2;
+        }, Game.instance().getPlayer().minYProperty()));
         levelPane.getChildren().add(playerImage);
 
-        spawnPlayer(Game.instance().getCurrentLevel().getSpawnPoint().getX(),
-                Game.instance().getCurrentLevel().getSpawnPoint().getY());
+        Game.instance().getCurrentLevel().spawnPlayer();
 
         Game.instance().getCurrentLevel().idleTimeProperty().set(0);
 
         Game.instance().setState(GameState.LEVEL_PLAYING);
 
-    }
-
-    public void spawnPlayer(double x, double y) {
-        Game.instance().getPlayer().setWidth(50);
-        Game.instance().getPlayer().setHeight(54);
-        Game.instance().getPlayer().centerPoint().setX(x);
-        Game.instance().getPlayer().centerPoint().setY(y);
-        Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
-    }
-
-    public void spawnEnemy(double x, double y, EnemyState type) {
-        Enemy enemy = new Enemy(x, y, type);
-        enemy.setWidth(59);
-        enemy.setHeight(50);
-        enemy.setDirection(EntityDirection.LEFT);
-        Game.instance().getCurrentLevel().addEntity(enemy);
-        ImageView enemyImage = new ImageView(
-                new Image("assets/images/enemies/" + type.toString().toLowerCase() + "-standing-left-1.png"));
-        enemyImage.xProperty().bind(enemy.minXProperty());
-        enemyImage.yProperty().bind(enemy.minYProperty());
-        enemyImage.setUserData(enemy);
-        levelPane.getChildren().add(enemyImage);
-        enemyImages.add(enemyImage);
     }
 
     // Event Handlers for Title Screen
@@ -818,7 +937,7 @@ public class MainWindow implements GameObserver {
     void onLoadClicked(ActionEvent event) throws IOException {
         HOME_PAGE_MUSIC.stop();
         play(event);
-        Game.instance().getCurrentLevel().getEntites().clear();
+        Game.instance().getCurrentLevel().getEnemies().clear();
         try {
             final Game game = Game.instance();
             game.load("saveFile.dat");
@@ -829,11 +948,6 @@ public class MainWindow implements GameObserver {
         }
 
         window.getScene().getRoot().requestFocus();
-        int size = Game.instance().getCurrentLevel().getEntites().size();
-        for (int i = 0; i < size; i++) {
-            Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
-            Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
-        }
 
         Game.instance().observers().forEach(o -> o.update());
         window.getScene().getRoot().requestFocus();

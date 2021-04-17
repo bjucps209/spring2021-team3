@@ -106,7 +106,7 @@
     -fx-text-fill: #CCCCCC;
 }
 
-.pausedButton {
+.menuButton {
     -fx-background-color: #FFFFFF;
     -fx-padding: 10px;
     -fx-font-size: 20px;
@@ -119,11 +119,11 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.25), 10, 0, 0, 0);
 }
 
-.pausedButton:hover {
+.menuButton:hover {
     -fx-background-color: #CCCCCC;
 }
 
-.pausedButton2 {
+.halfMenuButton {
     -fx-background-color: #FFFFFF;
     -fx-padding: 10px;
     -fx-font-size: 20px;
@@ -135,11 +135,20 @@
     -fx-pref-width: 128px;
 }
 
-.pausedButton2:hover {
+.halfMenuButton:hover {
     -fx-background-color: #CCCCCC;
 }
 
 .load-save {
     -fx-min-width: 256px;
     -fx-max-width: 256px;
+}
+
+.levelWonPane {
+    -fx-background-color: rgba(0, 0, 0, 0.9);
+}
+
+.levelWonHeader {
+    -fx-font-size: 48px;
+    -fx-text-fill: #FFFFFF;
 }
