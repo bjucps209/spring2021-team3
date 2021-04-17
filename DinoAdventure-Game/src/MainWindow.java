@@ -218,7 +218,7 @@ public class MainWindow implements GameObserver {
                         Game.instance().getDifficulty());
                 // System.out.println(score.toString());
                 try {
-                    HighScore.getInstance().loadScores("src/main/resources/SaveScoresData.txt");
+                    HighScore.getInstance().loadScores("HighScoreFiles/SaveScoresData.txt");
                     if (HighScore.getInstance().findIfScoreQualifiesAsHigh(score)) {
                         // System.out.println("It is a high Score");
                         // Show the new Score Screen
