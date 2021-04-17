@@ -789,6 +789,12 @@ public class MainWindow implements GameObserver {
                 e1.printStackTrace();
             }
 
+            level.getGoals().stream().forEach(goal -> {
+                ImageView flagImage = new ImageView(new Image("assets/images/world/finish-flag.png"));
+                flagImage.xProperty().bind(goal.minXProperty());
+                flagImage.yProperty().bind(goal.minYProperty());
+                levelPane.getChildren().add(flagImage);
+            });
             // Generate real terrain
             level.getBlocks().stream().forEach(block -> {
                 ImageView blockImage = new ImageView(new Image(block.getTexture()));

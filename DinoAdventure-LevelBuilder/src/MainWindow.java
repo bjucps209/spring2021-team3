@@ -243,6 +243,8 @@ public class MainWindow {
             ImageView flagImage = new ImageView(new Image("assets/images/world/finish-flag.png"));
             flagImage.layoutXProperty().set(goal.centerPoint().getIntX());
             flagImage.layoutYProperty().set(goal.centerPoint().getIntY());
+            goal.setWidth(40);
+            goal.setHeight(46);
             goal.centerPoint().xProperty().bind(flagImage.layoutXProperty());
             goal.centerPoint().yProperty().bind(flagImage.layoutYProperty());
             makeDraggable(flagImage);
@@ -425,6 +427,8 @@ public class MainWindow {
         flag.layoutXProperty().set(x);
         flag.layoutYProperty().set(y);
         var goal = new Goal(x, y);
+        goal.setWidth(40);
+        goal.setHeight(46);
         goal.centerPoint().xProperty().bind(flag.layoutXProperty());
         goal.centerPoint().yProperty().bind(flag.layoutYProperty());
         makeDraggable(flag);

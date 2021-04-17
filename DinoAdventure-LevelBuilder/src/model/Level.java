@@ -368,6 +368,8 @@ public class Level {
         int sizeOfGoals = reader.readInt();
         for (int i = 0; i < sizeOfGoals; ++i) {
             Goal flag = new Goal(reader.readInt(), reader.readInt());
+            flag.setWidth(40);
+            flag.setHeight(46);
             goals.add(flag);
         }
         
