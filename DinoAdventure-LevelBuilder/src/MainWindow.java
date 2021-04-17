@@ -326,7 +326,7 @@ public class MainWindow {
         enemy.setDirection(EntityDirection.LEFT);
         LevelDesigner.instance().getLevel().addEntity(enemy);
         ImageView enemyImage = new ImageView(
-                new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
+                new Image("assets/images/enemies/" + enemy.getTypeString().toLowerCase() + "-standing-left-1.png"));
         enemyImage.layoutXProperty().set(enemy.centerPoint().xProperty().get());
         enemyImage.layoutYProperty().set(enemy.centerPoint().yProperty().get());
         enemy.centerPoint().xProperty().bind(enemyImage.layoutXProperty());
