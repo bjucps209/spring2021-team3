@@ -512,6 +512,8 @@ public class MainWindow implements GameObserver {
 
         HOME_PAGE_MUSIC.stop();
 
+        Game.instance().setDifficulty(DifficultyType.valueOf(difficultyLevels.getValue()));
+
         window.getScene().getRoot().requestFocus();
 
         gameLoop.play();
