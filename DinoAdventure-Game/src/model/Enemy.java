@@ -75,7 +75,7 @@ public class Enemy extends Entity implements Living {
                     }
                 }
 
-                if(state == EnemyState.WANDERING) {
+                if(state == EnemyState.WANDERING && onSurface) {
                     if(direction == EntityDirection.LEFT) {
                         xVelocity = Math.max(-maxSpeed, xVelocity - (8 / Game.FPS));
                     } else {
@@ -87,10 +87,10 @@ public class Enemy extends Entity implements Living {
                 case FOLLOWING:
                 if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 1000) {
                     state = EnemyState.FOLLOWING;
-                    if(centerPoint.getX() - 15 > Game.instance().getPlayer().centerPoint().getX()) {
+                    if(centerPoint.getX() - 15 > Game.instance().getPlayer().centerPoint().getX() && onSurface) {
                         xVelocity = Math.max(-maxSpeed, xVelocity - (10 / Game.FPS));
                         direction = EntityDirection.LEFT;
-                    } else if(centerPoint.getX() + 15 < Game.instance().getPlayer().centerPoint().getX()) {
+                    } else if(centerPoint.getX() + 15 < Game.instance().getPlayer().centerPoint().getX() && onSurface) {
                         xVelocity = Math.min(maxSpeed, xVelocity + (10 / Game.FPS));
                         direction = EntityDirection.RIGHT;
                     }
@@ -102,10 +102,10 @@ public class Enemy extends Entity implements Living {
                 case FLEEING:
                     if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 500) {
                         state = EnemyState.FOLLOWING;
-                        if(centerPoint.getX() > Game.instance().getPlayer().centerPoint().getX()) {
+                        if(centerPoint.getX() > Game.instance().getPlayer().centerPoint().getX() && onSurface) {
                             xVelocity = Math.min(maxSpeed, xVelocity + (10 / Game.FPS));
                             direction = EntityDirection.RIGHT;
-                        } else {
+                        } else if(centerPoint.getX() <= Game.instance().getPlayer().centerPoint().getX() && onSurface) {
                             xVelocity = Math.max(-maxSpeed, xVelocity - (10 / Game.FPS));
                             direction = EntityDirection.LEFT;
                         }
