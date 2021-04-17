@@ -438,11 +438,13 @@ public class Level {
         else{
             writer.writeUTF("None");
         }
+        writer.writeLong(startTimeProperty.longValue());
         writer.writeLong(currentTimeProperty.longValue());
-        //writer.writeLong(runTimeProperty.longValue());
         writer.writeLong(maxTimeProperty.longValue());
-        //writer.writeLong(remainingTimeProperty.longValue());
         writer.writeLong(idleTimeProperty.longValue());
+        //writer.writeLong(remainingTimeProperty.longValue());
+
+
 
         // if (collectables.size() > 0){
         //     writer.writeBoolean(true);
@@ -496,19 +498,13 @@ public class Level {
         }
 
         levelName = reader.readUTF();  
+        startTimeProperty.setValue(reader.readLong());
         currentTimeProperty.setValue(reader.readLong());
         //runTimeProperty = new SimpleLongProperty(reader.readLong());
         maxTimeProperty.setValue(reader.readLong());
         //remainingTimeProperty = new SimpleLongProperty(reader.readLong());
         idleTimeProperty.setValue(reader.readLong());
 
-        runTimeProperty.bind(Bindings.createLongBinding(() -> {
-            return currentTimeProperty.get() - (startTimeProperty.get() + idleTimeProperty.get());
-        }, currentTimeProperty, startTimeProperty, idleTimeProperty));
-
-        remainingTimeProperty.bind(Bindings.createLongBinding(() -> {
-            return maxTimeProperty.get() - runTimeProperty.get();
-        }, maxTimeProperty, runTimeProperty));
 
     // if (reader.readBoolean() == true){
     //     int size = reader.readInt();

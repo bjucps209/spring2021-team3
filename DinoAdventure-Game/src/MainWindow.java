@@ -348,9 +348,7 @@ public class MainWindow implements GameObserver {
                         alert.setHeaderText(null);
                         alert.show();
                     }
-                    Game.instance().getCurrentLevel().idleTimeProperty()
-                            .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
-                                    - gamePausedAt);
+                   
                     
                     window.getScene().getRoot().requestFocus();
                     int size = Game.instance().getCurrentLevel().getEntites().size();
@@ -365,6 +363,9 @@ public class MainWindow implements GameObserver {
                     gameLoop.play();
                     gamePage.getChildren().remove(playButtonHBox);
                     gamePage.getChildren().remove(gamePausedPane);
+                    Game.instance().getCurrentLevel().idleTimeProperty()
+                    .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
+                            - gamePausedAt);
                     update();
                     //Game.instance().getCurrentLevel().tick();
                 });
