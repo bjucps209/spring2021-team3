@@ -46,6 +46,13 @@ public class Level {
         
     }
 
+    public void spawnPlayer() {
+        Game.instance().getPlayer().setWidth(50);
+        Game.instance().getPlayer().setHeight(54);
+        Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
+        Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
+    }
+
     public ArrayList<Goal> getGoals() {
         return goals;
     }

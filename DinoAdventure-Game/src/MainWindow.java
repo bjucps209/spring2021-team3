@@ -639,14 +639,6 @@ public class MainWindow implements GameObserver {
 
     }
 
-    public void spawnPlayer(double x, double y) {
-        Game.instance().getPlayer().setWidth(50);
-        Game.instance().getPlayer().setHeight(54);
-        Game.instance().getPlayer().centerPoint().setX(x);
-        Game.instance().getPlayer().centerPoint().setY(y);
-        Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
-    }
-
     @FXML
     public void play(ActionEvent e) {
 
@@ -780,7 +772,7 @@ public class MainWindow implements GameObserver {
 
             Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1000, 400, CollectableType.Coin));
 
-            Game.instance().getCurrentLevel().getGoals().add(new Goal(3850, 515));
+            Game.instance().getCurrentLevel().getGoals().add(new Goal(3800, 500));
 
         } else {
 
@@ -922,8 +914,7 @@ public class MainWindow implements GameObserver {
         }, Game.instance().getPlayer().minYProperty()));
         levelPane.getChildren().add(playerImage);
 
-        spawnPlayer(Game.instance().getCurrentLevel().getSpawnPoint().getX(),
-                Game.instance().getCurrentLevel().getSpawnPoint().getY());
+        Game.instance().getCurrentLevel().spawnPlayer();
 
         Game.instance().getCurrentLevel().idleTimeProperty().set(0);
 
