@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import model.*;
 
 import java.io.File;
@@ -94,9 +96,9 @@ public class MainWindow implements GameObserver {
 
     private String levelToLoad = "level1";
 
-    final AudioClip HOME_PAGE_MUSIC = new AudioClip(getClass().getResource("assets/sounds/titleScreenMusic.mp3").toString());
-    final AudioClip ENEMY_ATTACK = new AudioClip(getClass().getResource("assets/sounds/EnemyHitPlayer.mp3").toString());
-    final AudioClip ENEMY_KILLED = new AudioClip(getClass().getResource("assets/sounds/PlayerKillsEnemy.mp3").toString());
+    final MediaPlayer HOME_PAGE_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/titleScreenMusic.wav").toString()));
+    final MediaPlayer ENEMY_ATTACK = new MediaPlayer(new Media(getClass().getResource("assets/sounds/EnemyHitPlayer.wav").toString()));
+    final MediaPlayer ENEMY_KILLED = new MediaPlayer(new Media(getClass().getResource("assets/sounds/PlayerKillsEnemy.wav").toString()));
 
     @FXML
     public void initialize() throws IOException {
