@@ -43,6 +43,9 @@
                             <Button fx:id="btnNewJumpingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/jumping-standing-left-1.png" /></image></ImageView></graphic></Button>
                             <Button fx:id="btnNewWanderingEnemy"><graphic><ImageView><image><Image url="@/assets/images/enemies/wandering-standing-left-1.png" /></image></ImageView></graphic></Button>
                         </HBox>
+                        <HBox>
+                             <Button fx:id="btnNewGoal"><graphic><ImageView><image><Image url="@/assets/images/world/finish-flag.png" /></image></ImageView></graphic></Button>
+                        </HBox>
                     </VBox>
                 </ScrollPane>
             </VBox>

@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleLongProperty;
 public class Level {
 
     private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    private ArrayList<Goal> goals = new ArrayList<Goal>();
     private ArrayList<Block> blocks = new ArrayList<Block>();
     private ArrayList<Collectable> collectables = new ArrayList<Collectable>();
     private Player player;
@@ -42,6 +43,9 @@ public class Level {
             return maxTimeProperty.get() - runTimeProperty.get();
         }, maxTimeProperty, runTimeProperty));
 
+    }
+    public ArrayList<Goal> getGoals() {
+        return goals;
     }
 
     public Point getSpawnPoint() {
@@ -195,6 +199,10 @@ public class Level {
         collectables.remove(item);
     }
 
+    public void removeGoal(Goal flag) {
+        goals.remove(flag);
+    }
+
     /**
      * adds entity to entities
      * 
@@ -296,6 +304,13 @@ public class Level {
             // write the spawn point
             writer.writeInt(spawnPoint.getIntX());
             writer.writeInt(spawnPoint.getIntY());
+            //write the number of goals
+            writer.writeInt(goals.size());
+            //write the coardinates for each Goal
+            for (int i = 0; i < goals.size(); ++i) {
+                writer.writeInt(goals.get(i).centerPoint().getIntX());
+                writer.writeInt(goals.get(i).centerPoint().getIntY());
+            }
             // write how many entities their are
             writer.writeInt(enemies.size());
             // Iterate through the entities saving each's data
@@ -349,12 +364,18 @@ public class Level {
 
         int spawnX = reader.readInt();
         int spawnY = reader.readInt();
+        //read the bumber of goals
+        int sizeOfGoals = reader.readInt();
+        for (int i = 0; i < sizeOfGoals; ++i) {
+            Goal flag = new Goal(reader.readInt(), reader.readInt());
+            goals.add(flag);
+        }
         
         // read the number of entities
         int sizeOfEntities = reader.readInt();
-        // get how many players there are
+        // iterate over each playing gathering their values
         for (int i = 0; i < sizeOfEntities; ++i) {
-            // iterate over each playing gathering their values
+            
             Enemy entity = new Enemy();
             entity.setId(reader.readInt());
             entity.setType(reader.readUTF());
@@ -466,4 +487,5 @@ public class Level {
         }
         levelName = reader.readUTF();
     }
+    
 }
