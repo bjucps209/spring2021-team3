@@ -16,12 +16,18 @@ public class Enemy extends Entity implements Living {
     public Enemy(double x, double y) {
         centerPoint.xProperty().set(x);
         centerPoint.yProperty().set(y);
+        setWidth(59);
+        setHeight(50);
+        setDirection(EntityDirection.LEFT);
     }
 
     public Enemy(double x, double y, EnemyState type) {
         centerPoint.xProperty().set(x);
         centerPoint.yProperty().set(y);
         this.type = type;
+        setWidth(59);
+        setHeight(50);
+        setDirection(EntityDirection.LEFT);
     }
 
     public int getHealth() {
