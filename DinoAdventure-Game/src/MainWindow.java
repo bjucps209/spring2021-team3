@@ -93,6 +93,7 @@ public class MainWindow implements GameObserver {
     private boolean escapeKeyPressed;
 
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
+    private ArrayList<ImageView> goalImages = new ArrayList<ImageView>();
 
     private String levelToLoad = "level1";
 
@@ -193,16 +194,18 @@ public class MainWindow implements GameObserver {
                 gameOverMessage.setText(Game.instance().getGameOverMessage());
                 gameOverMessage.getStyleClass().add("gameOverMessage");
                 gameOverPane.getChildren().add(gameOverMessage);
-                HBox buttons = new HBox();
+                VBox buttons = new VBox();
                 buttons.setAlignment(Pos.CENTER);
                 buttons.setSpacing(10);
                 gameOverPane.getChildren().add(buttons);
-                Button menuButton = new Button();
-                menuButton.setText("Menu");
-                buttons.getChildren().add(menuButton);
                 Button restartButton = new Button();
                 restartButton.setText("Try Again");
+                restartButton.getStyleClass().add("menuButton");
                 buttons.getChildren().add(restartButton);
+                Button menuButton = new Button();
+                menuButton.setText("Menu");
+                menuButton.getStyleClass().add("menuButton");
+                buttons.getChildren().add(menuButton);
                 menuButton.setOnAction(ev -> {
                     HOME_PAGE_MUSIC.play();
                     Game.instance().setState(GameState.MENU);
@@ -263,23 +266,23 @@ public class MainWindow implements GameObserver {
                 gamePausedPane.getChildren().add(buttonsPaused2);
 
                 Button resumeButton = new Button();
-                resumeButton.getStyleClass().add("pausedButton");
+                resumeButton.getStyleClass().add("menuButton");
                 resumeButton.setText("RESUME");
                 buttonsPaused.getChildren().add(resumeButton);
                 Button restartButtonPaused = new Button();
-                restartButtonPaused.getStyleClass().add("pausedButton");
+                restartButtonPaused.getStyleClass().add("menuButton");
                 restartButtonPaused.setText("RESTART");
                 buttonsPaused.getChildren().add(restartButtonPaused);
                 Button menuButtonPaused = new Button();
-                menuButtonPaused.getStyleClass().add("pausedButton");
+                menuButtonPaused.getStyleClass().add("menuButton");
                 menuButtonPaused.setText("MENU");
                 buttonsPaused.getChildren().add(menuButtonPaused);
                 Button loadButton = new Button();
-                loadButton.getStyleClass().add("pausedButton2");
+                loadButton.getStyleClass().add("halfMenuButton");
                 loadButton.setText("LOAD");
                 buttonsPaused2.getChildren().add(loadButton);
                 Button saveButton = new Button();
-                saveButton.getStyleClass().add("pausedButton2");
+                saveButton.getStyleClass().add("halfMenuButton");
                 saveButton.setText("SAVE");
                 buttonsPaused2.getChildren().add(saveButton);
 
@@ -340,7 +343,7 @@ public class MainWindow implements GameObserver {
                 });
 
                 loadButton.setOnAction(ev -> {
-                    Game.instance().getCurrentLevel().getEntites().clear();
+                    Game.instance().getCurrentLevel().getEnemies().clear();
                     try {
                         final Game game = Game.instance();
                         game.load("saveFile.dat");
@@ -353,9 +356,9 @@ public class MainWindow implements GameObserver {
                    
                     
                     window.getScene().getRoot().requestFocus();
-                    int size = Game.instance().getCurrentLevel().getEntites().size();
+                    int size = Game.instance().getCurrentLevel().getEnemies().size();
                     for (int i = 0; i < size; i++) {
-                        Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
+                        Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEnemies().get(i);
                         Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
                     }
 
@@ -381,6 +384,52 @@ public class MainWindow implements GameObserver {
                         alert.setHeaderText(null);
                         alert.show();
                     }
+                });
+
+                break;
+
+            case LEVEL_WON:
+                gameLoop.stop();
+                VBox levelWonPane = new VBox();
+                levelWonPane.setAlignment(Pos.CENTER);
+                levelWonPane.getStyleClass().add("levelWonPane");
+                AnchorPane.setTopAnchor(levelWonPane, 0.0);
+                AnchorPane.setLeftAnchor(levelWonPane, 0.0);
+                AnchorPane.setRightAnchor(levelWonPane, 0.0);
+                levelWonPane.setPrefHeight(window.getHeight());
+                levelWonPane.setSpacing(10);
+                gamePage.getChildren().add(levelWonPane);
+                Label levelWonHeader = new Label();
+                levelWonHeader.setText("LEVEL COMPLETE");
+                levelWonHeader.getStyleClass().add("levelWonHeader");
+                levelWonPane.getChildren().add(levelWonHeader);
+                VBox levelWonButtons = new VBox();
+                levelWonButtons.setAlignment(Pos.CENTER);
+                levelWonButtons.setSpacing(10);
+                levelWonPane.getChildren().add(levelWonButtons);
+                Button levelWonNextButton = new Button();
+                levelWonNextButton.setText("Next Level");
+                levelWonNextButton.getStyleClass().add("menuButton");
+                levelWonButtons.getChildren().add(levelWonNextButton);
+                Button levelWonRestartButton = new Button();
+                levelWonRestartButton.setText("Play Again");
+                levelWonRestartButton.getStyleClass().add("menuButton");
+                levelWonButtons.getChildren().add(levelWonRestartButton);
+                Button levelWonMenuButton = new Button();
+                levelWonMenuButton.setText("Menu");
+                levelWonMenuButton.getStyleClass().add("menuButton");
+                levelWonButtons.getChildren().add(levelWonMenuButton);
+                levelWonMenuButton.setOnAction(ev -> {
+                    HOME_PAGE_MUSIC.play();
+                    Game.instance().setState(GameState.MENU);
+                    gamePage.setVisible(false);
+                    titlePage.setVisible(true);
+                });
+                levelWonRestartButton.setOnAction(ev -> {
+                    play(new ActionEvent());
+                });
+                levelWonNextButton.setOnAction(ev -> {
+                    // TODO: Implement next level functionality
                 });
 
                 break;
@@ -474,7 +523,7 @@ public class MainWindow implements GameObserver {
 
         for (ImageView e : enemyImages) {
 
-            if (Game.instance().getCurrentLevel().getEntites().contains((Enemy) e.getUserData())) {
+            if (Game.instance().getCurrentLevel().getEnemies().contains((Enemy) e.getUserData())) {
                 if (((Enemy) e.getUserData()).getDirection() == EntityDirection.LEFT) {
                     e.setImage(new Image("assets/images/enemies/"
                             + ((Enemy) e.getUserData()).getType().toString().toLowerCase() + "-standing-left-1.png"));
@@ -494,7 +543,7 @@ public class MainWindow implements GameObserver {
             // Remove the enemy if it's falling off the screen
             if (((Enemy) e.getUserData()).getMinY() > window.getHeight()) {
 
-                Game.instance().getCurrentLevel().getEntites().remove((Enemy) e.getUserData());
+                Game.instance().getCurrentLevel().getEnemies().remove((Enemy) e.getUserData());
 
                 toRemove.add(e);
                 levelPane.getChildren().remove(e);
@@ -635,6 +684,8 @@ public class MainWindow implements GameObserver {
             spawnEnemy(800, 456, EnemyState.FLEEING);
             spawnEnemy(1100, 456, EnemyState.JUMPING);
 
+            spawnGoal(3850, 515);
+
         } else {
 
             // TODO: Load level here instead of making a dummy level
@@ -658,7 +709,7 @@ public class MainWindow implements GameObserver {
                 levelPane.getChildren().add(blockImage);
             });
             // Generate enemies from the level
-            level.getEntites().stream().forEach(enemy -> {
+            level.getEnemies().stream().forEach(enemy -> {
                 ImageView enemyImage = new ImageView(new Image(
                         "assets/images/enemies/" + enemy.getTypeString().toLowerCase() + "-standing-left-1.png"));
                 enemyImage.xProperty().bind(enemy.minXProperty());
@@ -681,19 +732,21 @@ public class MainWindow implements GameObserver {
         levelPane.setMaxWidth(level.getWidth());
         levelPane.setMaxHeight(level.getHeight());
 
+        Game.instance().getCurrentLevel().currentTimeProperty().set(System.currentTimeMillis());
+
         // Set difficulty
         switch (Game.instance().getDifficulty()) {
         case EASY:
             Game.instance().getPlayer().setHealth(20);
-            Game.instance().getCurrentLevel().setMaxTime(500);
+            Game.instance().getCurrentLevel().maxTimeProperty().set(500 * 1000);
             break;
         case MEDIUM:
             Game.instance().getPlayer().setHealth(15);
-            Game.instance().getCurrentLevel().setMaxTime(400);
+            Game.instance().getCurrentLevel().maxTimeProperty().set(400 * 1000);
             break;
         case HARD:
             Game.instance().getPlayer().setHealth(10);
-            Game.instance().getCurrentLevel().setMaxTime(300);
+            Game.instance().getCurrentLevel().maxTimeProperty().set(300 * 1000);
             break;
         default:
             break;
@@ -770,7 +823,9 @@ public class MainWindow implements GameObserver {
 
         playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
         playerImage.xProperty().bind(Game.instance().getPlayer().minXProperty());
-        playerImage.yProperty().bind(Game.instance().getPlayer().minYProperty());
+        playerImage.yProperty().bind(Bindings.createIntegerBinding(() -> {
+            return Game.instance().getPlayer().minYProperty().get() + 2;
+        }, Game.instance().getPlayer().minYProperty()));
         levelPane.getChildren().add(playerImage);
 
         spawnPlayer(Game.instance().getCurrentLevel().getSpawnPoint().getX(),
@@ -795,7 +850,7 @@ public class MainWindow implements GameObserver {
         enemy.setWidth(59);
         enemy.setHeight(50);
         enemy.setDirection(EntityDirection.LEFT);
-        Game.instance().getCurrentLevel().addEntity(enemy);
+        Game.instance().getCurrentLevel().getEnemies().add(enemy);
         ImageView enemyImage = new ImageView(
                 new Image("assets/images/enemies/" + type.toString().toLowerCase() + "-standing-left-1.png"));
         enemyImage.xProperty().bind(enemy.minXProperty());
@@ -803,6 +858,19 @@ public class MainWindow implements GameObserver {
         enemyImage.setUserData(enemy);
         levelPane.getChildren().add(enemyImage);
         enemyImages.add(enemyImage);
+    }
+
+    public void spawnGoal(double x, double y) {
+        Goal goal = new Goal(x, y);
+        goal.setWidth(40);
+        goal.setHeight(46);
+        Game.instance().getCurrentLevel().getGoals().add(goal);
+        ImageView goalImage = new ImageView(new Image("assets/images/world/finish-flag.png"));
+        goalImage.xProperty().bind(goal.minXProperty());
+        goalImage.yProperty().bind(goal.minYProperty());
+        goalImage.setUserData(goal);
+        levelPane.getChildren().add(goalImage);
+        goalImages.add(goalImage);
     }
 
     // Event Handlers for Title Screen
@@ -820,7 +888,7 @@ public class MainWindow implements GameObserver {
     void onLoadClicked(ActionEvent event) throws IOException {
         HOME_PAGE_MUSIC.stop();
         play(event);
-        Game.instance().getCurrentLevel().getEntites().clear();
+        Game.instance().getCurrentLevel().getEnemies().clear();
         try {
             final Game game = Game.instance();
             game.load("saveFile.dat");
@@ -831,9 +899,9 @@ public class MainWindow implements GameObserver {
         }
 
         window.getScene().getRoot().requestFocus();
-        int size = Game.instance().getCurrentLevel().getEntites().size();
+        int size = Game.instance().getCurrentLevel().getEnemies().size();
         for (int i = 0; i < size; i++) {
-            Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEntites().get(i);
+            Enemy enemy = (Enemy) Game.instance().getCurrentLevel().getEnemies().get(i);
             Platform.runLater(() -> spawnEnemy(enemy.getMaxX(), enemy.getMaxY(), enemy.getType()));
         }
 

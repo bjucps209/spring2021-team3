@@ -14,6 +14,7 @@ import javafx.beans.property.SimpleLongProperty;
 public class Level {
 
     private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    private ArrayList<Goal> goals = new ArrayList<Goal>();
     private ArrayList<Block> blocks = new ArrayList<Block>();
     private ArrayList<Collectable> collectables = new ArrayList<Collectable>();
     private Player player;
@@ -33,28 +34,6 @@ public class Level {
 
         player = Game.instance().getPlayer();
 
-
-
-        // for (int i = 0; i < 10; i++) {
-        //     Block block = new Block();
-        //     block.setTexture("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png");
-        //     block.centerPoint().setXY(100 + (i * 128), 600);
-        //     block.setWidth(128);
-        //     block.setHeight(128);
-        //     addBlock(block);
-        // }
-
-        // for (int i = 0; i < 3; i++) {
-        //     Block block = new Block();
-        //     block.setTexture(("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
-        //     block.centerPoint().setXY(500 + (i * 128), 418);
-        //     block.setWidth(128);
-        //     block.setHeight(93);
-        //     addBlock(block);
-        // }
-
-    
-
         // Setup timer bindings
 
         runTimeProperty.bind(Bindings.createLongBinding(() -> {
@@ -67,20 +46,16 @@ public class Level {
         
     }
 
+    public ArrayList<Goal> getGoals() {
+        return goals;
+    }
+
     public Point getSpawnPoint() {
         return spawnPoint;
     }
 
     public void setSpawnPoint(Point spawnPoint) {
         this.spawnPoint.copyFrom(spawnPoint);
-    }
-
-    public long getMaxTime() {
-        return maxTimeProperty.get() / 1000;
-    }
-
-    public void setMaxTime(long seconds) {
-        maxTimeProperty.set(seconds * 1000);
     }
 
     public LongProperty maxTimeProperty() {
@@ -95,15 +70,6 @@ public class Level {
         return remainingTimeProperty;
     }
 
-    public void tick() {
-
-        currentTimeProperty.set(System.currentTimeMillis());
-        for (Entity e : enemies)
-            e.tick();
-        player.tick();
-
-    }
-
     public LongProperty startTimeProperty() {
         return startTimeProperty;
     }
@@ -112,20 +78,21 @@ public class Level {
         return runTimeProperty;
     }
 
-    public void recordStartTime() {
-        startTimeProperty.set(System.currentTimeMillis());
+    public LongProperty currentTimeProperty() {
+        return currentTimeProperty;
     }
 
-    public void setStartTime(long time) {
-        startTimeProperty.set(time);
-    }
+    public void tick() {
 
-    public long getStartTime() {
-        return startTimeProperty.get();
-    }
+        currentTimeProperty.set(System.currentTimeMillis());
+        player.tick();
+        for (Enemy e : enemies)
+            e.tick();
+        for (Collectable c : collectables)
+            c.tick();
+        for (Goal g : goals)
+            g.tick();
 
-    public long getRunTime() {
-        return runTimeProperty.get();
     }
 
     /**
@@ -152,23 +119,14 @@ public class Level {
      * @param id
      * @return Entity
      */
-    public Entity findEntity(int id) {
+    public Entity findEnemy(int id) {
         
-        for (Entity entity : enemies) {
-            if (entity.getId() == id) {
-                return entity;
+        for (Enemy enemy : enemies) {
+            if (enemy.getId() == id) {
+                return enemy;
             }
         }
         return null;
-    }
-
-    /**
-     * remove the Entity with the id from entities
-     * 
-     * @param id
-     */
-    public void removeEntity(Entity entity) {
-        enemies.remove(entity); 
     }
 
     /**
@@ -181,6 +139,14 @@ public class Level {
         for (Block block : blocks) {
             if (block.getId() == id) {
                 return block;
+            }
+        }
+        return null;
+    }
+    public Collectable findCollectable(int id) {
+        for (Collectable c : collectables) {
+            if (c.getId() == id) {
+                return c;
             }
         }
         return null;
@@ -202,51 +168,6 @@ public class Level {
     // }
 
     /**
-     * remove the surface with the given surface id from surfaces
-     * 
-     * @param id
-     */
-    public void removeBlock(int id) {
-        blocks.remove(findBlock(id));
-    }
-
-    /**
-     * remove the given item from collectables
-     * 
-     * @param id
-     */
-    public void removeCollectable(Collectable item) {
-        collectables.remove(item);
-    }
-
-    /**
-     * adds entity to entities
-     * 
-     * @param object
-     */
-    public void addEntity(Enemy entity) {
-        enemies.add(entity);
-    }
-
-    /**
-     * adds surface to surfaces
-     * 
-     * @param object
-     */
-    public void addBlock(Block block) {
-        blocks.add(block);
-    }
-
-    /**
-     * adds item to collectables
-     * 
-     * @param object
-     */
-    public void addCollectable(Collectable item) {
-        collectables.add(item);
-    }
-
-    /**
      * Gets the surfaces in the level
      * 
      * @return surfaces
@@ -260,7 +181,7 @@ public class Level {
      * 
      * @return surfaces
      */
-    public ArrayList<Enemy> getEntites() {
+    public ArrayList<Enemy> getEnemies() {
         return enemies;
     }
 
@@ -471,7 +392,7 @@ public class Level {
          for (int i = 0; i < entitiesSize; i++){   
             int id = reader.readInt();
             Enemy enemy = new Enemy();
-            this.addEntity(enemy);
+            enemies.add(enemy);
             enemy.deserialize(reader);
             enemy.setId(id);
             }

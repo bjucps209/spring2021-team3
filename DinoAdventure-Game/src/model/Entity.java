@@ -61,7 +61,7 @@ public class Entity extends Box {
 
         // Handle Player colliding with Enemy
         if(this instanceof Player) {
-            for(Enemy e : Game.instance().getCurrentLevel().getEntites()) {
+            for(Enemy e : Game.instance().getCurrentLevel().getEnemies()) {
                 if(e.overlaps(xCheck) || e.overlaps(yCheck)) {
 
                     if(e.overlaps(xCheck)) {
@@ -94,7 +94,7 @@ public class Entity extends Box {
 
         centerPoint.add(xVelocity, yVelocity);
 
-        for(Enemy e : enemiesToRemove) Game.instance().getCurrentLevel().getEntites().remove(e);
+        for(Enemy e : enemiesToRemove) Game.instance().getCurrentLevel().getEnemies().remove(e);
 
     }
 

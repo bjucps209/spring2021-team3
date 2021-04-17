@@ -16,8 +16,8 @@ public class LevelTest {
 
         enemy.setId(3);
 
-        level.addEntity(enemy);
-        assertEquals(enemy, level.findEntity(3));
+        level.getEnemies().add(enemy);
+        assertEquals(enemy, level.findEnemy(3));
     }
 
     @Test 
@@ -50,7 +50,7 @@ public class LevelTest {
 
         //add new elements to the level
         level.getBlocks().add(block);
-        level.addEntity(enemy);
+        level.getEnemies().add(enemy);
         
         level.setLevelName("Custom1");
         // level.setDifficulty(DifficultyType.HARD);
@@ -77,8 +77,8 @@ public class LevelTest {
         block.setHeight(100);
 
         //add new elements to the level
-        level.addBlock(block);
-        level.addEntity(enemy);
+        level.getBlocks().add(block);
+        level.getEnemies().add(enemy);
         
         level.setLevelName("Custom1");
         // level.setDifficulty(DifficultyType.HARD);
@@ -92,7 +92,7 @@ public class LevelTest {
         Level level2 = new Level();
         level2.load("Custom1.dat");
 
-        Entity enemy2 = level2.findEntity(2);
+        Entity enemy2 = level2.findEnemy(2);
         Block block2 = level2.findBlock(1);
 
         //test the loaded level

@@ -8,10 +8,15 @@ public class Coin extends Entity implements Collectable {
         // Apply generic Collectable physics updates
         super.tick();
 
+        if(Game.instance().getPlayer().overlaps(this)) {
+            collect();
+        }
+
     }
 
     public void collect() {
-        // TODO
+        Game.instance().getPlayer().scoreProperty().set(Game.instance().getPlayer().scoreProperty().get() + 25);
+        Game.instance().getCurrentLevel().getCollectables().remove(this);
     }
 
 }

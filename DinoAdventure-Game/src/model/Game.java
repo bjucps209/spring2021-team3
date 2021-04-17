@@ -47,7 +47,7 @@ public class Game {
         currentLevel = level;
         player.scoreProperty().set(0);
 
-        level.recordStartTime();
+        level.startTimeProperty().set(System.currentTimeMillis());
     }
 
     public ArrayList<GameObserver> observers() {
