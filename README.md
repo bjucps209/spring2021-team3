@@ -16,9 +16,11 @@ after starting the program, click play. Once the game starts you can move move b
 Problems with the serialization: 1. Time only loads right when its saved and loaded back to back. If a new game is started, the time is off. (I have spent many hours trying to fix this and cannot figure it out) 2. Enemies are loaded back up on the screen lower than they should. 
 
 ## Recordings:
-[Game Recording1](https://youtu.be/u_dezk9elx8)
+[Full Alpha Demo](https://youtu.be/u_dezk9elx8)
 
-[Level Builder Recording1](https://youtu.be/g001WTeK34Y)
+[Pre-Beta Level Builder Demo](https://youtu.be/g001WTeK34Y)
+
+[Full Beta Demo](https://youtu.be/tHhD4oKkKjs)
 
 ## Expenses 
 
