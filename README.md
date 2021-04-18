@@ -12,7 +12,8 @@ after starting the program, click play. Once the game starts you can move move b
 * Implemented Basic Level Builder that can save/load levels 
 
 ## Known Issues:
-__None__
+
+Problems with the serialization: 1. Time only loads right when its saved and loaded back to back. If a new game is started, the time is off. (I have spent many hours trying to fix this and cannot figure it out) 2. Enemies are loaded back up on the screen lower than they should. 
 
 ## Recordings:
 [Game Recording1](https://youtu.be/u_dezk9elx8)
@@ -25,7 +26,7 @@ __None__
 | --- | --- | ---:|
 | Luke | 26:00 | 24:00 |
 | Reshi | 18:00 | 32:00 |
-| Rebecca | 20:55 | 29:05 |
+| Rebecca | 38:55 | 12:05 |
 | Christopher | 22:50 | 27:20 |
 
 
