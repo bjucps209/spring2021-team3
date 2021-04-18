@@ -8,6 +8,7 @@ public class Entity extends Box {
     protected double xVelocity;
     protected double yVelocity;
     protected double maxSpeed = 5;
+    protected double maxJumpHeight = 8;
     protected EntityDirection direction;
     protected boolean onSurface;
     
@@ -78,11 +79,17 @@ public class Entity extends Box {
                             yVelocity = -15;
                         }
                         enemiesToRemove.add(e);
-                        //((Player) this).scoreProperty().set(((Player) this).scoreProperty().get() + 25);
                         Collectable coin = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), CollectableType.Coin);
-                        coin.xVelocity = Game.random.nextInt(2) - 0.5;
+                        coin.xVelocity = Game.random.nextInt(5) - 2;
                         coin.yVelocity = -1;
                         Game.instance().getCurrentLevel().getCollectables().add(coin);
+                        if(Game.random.nextInt(5) == 0) {
+                            CollectableType t = CollectableType.values()[Game.random.nextInt(CollectableType.values().length)];
+                            Collectable c = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), t);
+                            c.xVelocity = Game.random.nextInt(5) - 2;
+                            c.yVelocity = -1;
+                            Game.instance().getCurrentLevel().getCollectables().add(c);
+                        }
                     } else {
                         ((Player) this).setHealth(((Player) this).getHealth() - 1);
                     }
@@ -136,6 +143,14 @@ public class Entity extends Box {
 
     public double getMaxSpeed() {
         return maxSpeed;
+    }
+
+    public void setMaxJumpHeight(double height) {
+        maxJumpHeight = height;
+    }
+
+    public double getMaxJumpHeight() {
+        return maxJumpHeight;
     }
 
     public void setDirection(EntityDirection direction) {

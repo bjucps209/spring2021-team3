@@ -442,7 +442,7 @@ public class MainWindow implements GameObserver {
         if (upKeyPressed) {
             Game.instance().getPlayer().setMoving(true);
             if (Game.instance().getPlayer().isOnSurface()) {
-                Game.instance().getPlayer().setYVelocity(Game.instance().getPlayer().getYVelocity() - 8);
+                Game.instance().getPlayer().setYVelocity(Game.instance().getPlayer().getYVelocity() - Game.instance().getPlayer().getMaxJumpHeight());
             }
         }
 
@@ -772,6 +772,11 @@ public class MainWindow implements GameObserver {
 
             Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1000, 400, CollectableType.Coin));
 
+            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1600, 400, CollectableType.FeatherPowerup));
+            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1800, 400, CollectableType.SpeedPowerup));
+            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(2000, 400, CollectableType.HealthPowerup));
+            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(2200, 400, CollectableType.CoinPowerup));
+
             Game.instance().getCurrentLevel().getGoals().add(new Goal(3800, 500));
 
         } else {
@@ -788,32 +793,12 @@ public class MainWindow implements GameObserver {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-
-            level.getGoals().stream().forEach(goal -> {
-                ImageView flagImage = new ImageView(new Image("assets/images/world/finish-flag.png"));
-                flagImage.xProperty().bind(goal.minXProperty());
-                flagImage.yProperty().bind(goal.minYProperty());
-                levelPane.getChildren().add(flagImage);
-            });
             // Generate real terrain
             level.getBlocks().stream().forEach(block -> {
                 ImageView blockImage = new ImageView(new Image(block.getTexture()));
                 blockImage.xProperty().bind(block.minXProperty());
                 blockImage.yProperty().bind(block.minYProperty());
                 levelPane.getChildren().add(blockImage);
-            });
-            // Generate enemies from the level
-            level.getEnemies().stream().forEach(enemy -> {
-                ImageView enemyImage = new ImageView(new Image(
-                        "assets/images/enemies/" + enemy.getTypeString().toLowerCase() + "-standing-left-1.png"));
-                enemyImage.xProperty().bind(enemy.minXProperty());
-                enemyImage.yProperty().bind(enemy.minYProperty());
-                enemyImage.setUserData(enemy);
-                levelPane.getChildren().add(enemyImage);
-                enemyImages.add(enemyImage);
-                // spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(),
-                // EnemyState.WANDERING);
-
             });
             // Generate Collectables from the level
             level.getCollectables().stream().forEach(enemy -> {
