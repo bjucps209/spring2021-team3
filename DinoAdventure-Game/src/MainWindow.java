@@ -793,32 +793,12 @@ public class MainWindow implements GameObserver {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-
-            level.getGoals().stream().forEach(goal -> {
-                ImageView flagImage = new ImageView(new Image("assets/images/world/finish-flag.png"));
-                flagImage.xProperty().bind(goal.minXProperty());
-                flagImage.yProperty().bind(goal.minYProperty());
-                levelPane.getChildren().add(flagImage);
-            });
             // Generate real terrain
             level.getBlocks().stream().forEach(block -> {
                 ImageView blockImage = new ImageView(new Image(block.getTexture()));
                 blockImage.xProperty().bind(block.minXProperty());
                 blockImage.yProperty().bind(block.minYProperty());
                 levelPane.getChildren().add(blockImage);
-            });
-            // Generate enemies from the level
-            level.getEnemies().stream().forEach(enemy -> {
-                ImageView enemyImage = new ImageView(new Image(
-                        "assets/images/enemies/" + enemy.getTypeString().toLowerCase() + "-standing-left-1.png"));
-                enemyImage.xProperty().bind(enemy.minXProperty());
-                enemyImage.yProperty().bind(enemy.minYProperty());
-                enemyImage.setUserData(enemy);
-                levelPane.getChildren().add(enemyImage);
-                enemyImages.add(enemyImage);
-                // spawnEnemy(enemy.centerPoint().getX(), enemy.centerPoint().getY(),
-                // EnemyState.WANDERING);
-
             });
             // Generate Collectables from the level
             level.getCollectables().stream().forEach(enemy -> {
