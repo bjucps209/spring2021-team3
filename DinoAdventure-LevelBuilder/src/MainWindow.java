@@ -425,13 +425,16 @@ public class MainWindow {
 
     public void spawnFlag(int x, int y) {
         ImageView flag = new ImageView(new Image("assets/images/world/finish-flag.png"));
-        flag.layoutXProperty().set(x);
-        flag.layoutYProperty().set(y);
+        // flag.layoutXProperty().set(x);
+        // flag.layoutYProperty().set(y);
         var goal = new Goal(x, y);
-        goal.setWidth(40);
-        goal.setHeight(46);
+        
+        flag.layoutXProperty().set(goal.centerPoint().xProperty().get());
+        flag.layoutYProperty().set(goal.centerPoint().yProperty().get());
         goal.centerPoint().xProperty().bind(flag.layoutXProperty());
         goal.centerPoint().yProperty().bind(flag.layoutYProperty());
+        goal.setWidth(40);
+        goal.setHeight(46);
         makeDraggable(flag);
         makeflagDeletable(flag);
         flag.setUserData(goal);
