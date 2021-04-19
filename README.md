@@ -4,7 +4,7 @@
 
 ## Instructions: How to play
 
-after starting the program, click play. Once the game starts you can move move by pressing the array keys.
+After starting the program, click play. Once the game starts you can move move by pressing the arrow keys.
 
 ## Work Completed:
 
