@@ -112,6 +112,7 @@ public class MainWindow {
         btnCreate.setFont(font);
         lblLvlWidth.setFont(font);
         lblLvlHeight.setFont(font);
+        lblLevelName.setFont(font);
 
 
         //TODO-
