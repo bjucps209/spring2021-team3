@@ -182,17 +182,17 @@ public class Enemy extends Entity implements Living {
         writer.writeDouble(centerPoint().getX());
         writer.writeDouble(centerPoint().getY());
         if (state != null){
-            writer.writeBoolean(true);
             writer.writeInt(state.ordinal());
         }
         else{
-            writer.writeBoolean(false);
+            writer.writeInt(EnemyState.WANDERING.ordinal());
         }
-        if (super.direction != null){
-        writer.writeInt(super.direction.ordinal());
+        if (direction != null){
+            writer.writeBoolean(true);
+            writer.writeInt(direction.ordinal());
         }
         else{
-            writer.writeInt(direction.ordinal());
+            writer.writeBoolean(false);
         }
         writer.writeInt(healthProperty.intValue());
         if (type != null){
@@ -208,11 +208,14 @@ public class Enemy extends Entity implements Living {
     public void deserialize(DataInputStream reader) throws IOException{
         centerPoint().setX(reader.readDouble()); 
         centerPoint().setY(reader.readDouble());
+        //boolean b = reader.readBoolean();
+        //if (b == true){
+            state = EnemyState.values()[reader.readInt()];
+        //}
         boolean b = reader.readBoolean();
         if (b == true){
-            state = EnemyState.values()[reader.readInt()];;
+            direction = EntityDirection.values()[reader.readInt()];
         }
-        direction = EntityDirection.values()[reader.readInt()];
         healthProperty.setValue(reader.readInt());
         boolean b2 = reader.readBoolean();
         if (b2 == true){

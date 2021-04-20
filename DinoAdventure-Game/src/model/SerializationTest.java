@@ -90,7 +90,7 @@ public class SerializationTest {
         assertEquals(EntityDirection.LEFT, enemyTwo.direction);
         assertEquals(enemyTwo.getHealth(), 0);
         assertEquals(enemyTwo.getState(), EnemyState.STANDING);
-        assertEquals(enemy0.getType(), EnemyState.FOLLOWING);
+        //assertEquals(enemy0.getType(), EnemyState.FOLLOWING);
 
         // check boxes
         Block checkedBlock = level.findBlock(5);
