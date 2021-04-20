@@ -254,6 +254,8 @@ public class Level {
             for (int i = 0; i < goals.size(); ++i) {
                 writer.writeInt(goals.get(i).centerPoint().getIntX());
                 writer.writeInt(goals.get(i).centerPoint().getIntY());
+                writer.writeInt(goals.get(i).getHeight());
+                writer.writeInt(goals.get(i).getWidth());
             }
             // write how many entities their are
             writer.writeInt(enemies.size());
@@ -274,8 +276,9 @@ public class Level {
                 writer.writeUTF(blocks.get(i).getTexture());
                 writer.writeInt(blocks.get(i).centerPoint().getIntX());
                 writer.writeInt(blocks.get(i).centerPoint().getIntY());
-                writer.writeInt(blocks.get(i).getWidth());
                 writer.writeInt(blocks.get(i).getHeight());
+                writer.writeInt(blocks.get(i).getWidth());
+                
             }
             // writer.writeInt(collectables.size());
             // // Iterate through the collectables saving each's data
@@ -299,6 +302,7 @@ public class Level {
         enemies.clear();
         blocks.clear();
         collectables.clear();
+        goals.clear();
         // Load Playermanager instance from filename.dat binary file
         var reader = new DataInputStream(new FileInputStream(fileName)); // Create loader
         // read the size of the level
@@ -311,9 +315,9 @@ public class Level {
         //read the bumber of goals
         int sizeOfGoals = reader.readInt();
         for (int i = 0; i < sizeOfGoals; ++i) {
-            Goal flag = new Goal(reader.readInt(), reader.readInt());
-            flag.setWidth(40);
-            flag.setHeight(46);
+            Goal flag = new Goal(reader.readInt() - 40, reader.readInt() - 46);
+            flag.setHeight(reader.readInt());
+            flag.setWidth(reader.readInt());
             goals.add(flag);
         }
         
