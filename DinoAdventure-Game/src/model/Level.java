@@ -400,10 +400,10 @@ public class Level {
             writer.writeBoolean(true);
             writer.writeInt(collectables.size());
             for (Collectable idem : collectables){
-                writer.writeInt(idem.getId());
-                writer.writeInt(idem.getType().ordinal());
                 writer.writeDouble(idem.centerPoint().getX());
                 writer.writeDouble(idem.centerPoint().getY());
+                writer.writeInt(idem.getType().ordinal());
+                writer.writeInt(idem.getId());
             }
         }else{
             writer.writeBoolean(false);
@@ -453,10 +453,8 @@ public class Level {
         int size = reader.readInt();
         collectables.clear();
         for (int i = 0; i < size; i++){
-            Collectable idem = collectables.get(i);
+            Collectable idem = new Collectable(reader.readDouble(), reader.readDouble(), CollectableType.values()[reader.readInt()]);
             idem.setId(reader.readInt());
-            idem.setType(CollectableType.values()[reader.readInt()]);
-            idem.centerPoint().setXY(reader.readDouble(), (reader.readDouble()));
             collectables.add(idem);
             
         }
