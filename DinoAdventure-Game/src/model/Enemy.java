@@ -179,8 +179,8 @@ public class Enemy extends Entity implements Living {
 
     // writes the each property to the DataOutputStream passed in the parameters of the enemy to the file to be saved.
     public void serialize(DataOutputStream writer) throws IOException{
-        writer.writeDouble(centerPoint().getX());
-        writer.writeDouble(centerPoint().getY());
+        writer.writeInt(centerPoint().getIntX());
+        writer.writeInt(centerPoint().getIntY());
         if (state != null){
             writer.writeBoolean(true);
             writer.writeInt(state.ordinal());
@@ -188,11 +188,12 @@ public class Enemy extends Entity implements Living {
         else{
             writer.writeBoolean(false);
         }
-        if (super.direction != null){
-        writer.writeInt(super.direction.ordinal());
+        if (direction != null){
+            writer.writeBoolean(true);
+            writer.writeInt(direction.ordinal());
         }
         else{
-            writer.writeInt(direction.ordinal());
+            writer.writeBoolean(false);
         }
         writer.writeInt(healthProperty.intValue());
         if (type != null){
@@ -206,13 +207,15 @@ public class Enemy extends Entity implements Living {
 
     // reads the DataOutputStream passed in the parameters and sets the Game model accordingly.
     public void deserialize(DataInputStream reader) throws IOException{
-        centerPoint().setX(reader.readDouble()); 
-        centerPoint().setY(reader.readDouble());
+        centerPoint().setXY(reader.readInt(), reader.readInt());
         boolean b = reader.readBoolean();
         if (b == true){
-            state = EnemyState.values()[reader.readInt()];;
+            state = EnemyState.values()[reader.readInt()];
         }
-        direction = EntityDirection.values()[reader.readInt()];
+        b = reader.readBoolean();
+        if (b == true){
+            direction = EntityDirection.values()[reader.readInt()];
+        }
         healthProperty.setValue(reader.readInt());
         boolean b2 = reader.readBoolean();
         if (b2 == true){
