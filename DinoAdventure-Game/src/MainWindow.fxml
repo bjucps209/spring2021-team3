@@ -91,25 +91,25 @@
     </VBox>
 
     <VBox fx:id="newHighscorePage" styleClass="newHighscorePage" managed="${newHighscorePage.visible}" visible="false" prefHeight="800" alignment="CENTER" spacing="30">
-        <HBox alignment="CENTER" style="-fx-font-size: 20px">
-            <Label text="New HighScore!" alignment="CENTER"/>
+        <HBox alignment="CENTER" style="-fx-font-size: 80px">
+            <Label text="New High Score!" alignment="CENTER"  style="-fx-text-fill: DARKBLUE;"/>
         </HBox>
 
-        <HBox alignment="CENTER" style="-fx-font-size: 13px;">
-            <Label text="Congratulations! You made a new High score!!" wrapText="true"/>
+        <HBox alignment="CENTER" style="-fx-font-size: 30px; fx-spacing:2px; -fx-text-fill: DARKBLUE;">
+            <Label text="Congratulations " wrapText="true" style="-fx-text-fill: DARKBLUE;"/> 
+            <Label fx:id="playerName" style="-fx-text-fill: DARKBLUE;"/>
+            <Label text="! you made a new High score!!" wrapText="true" style="-fx-text-fill: DARKBLUE;"/>
         </HBox>
 
-        <HBox alignment="CENTER" style="-fx-font-size: 13px;">
-            <Label text="Hi " wrapText="true"/>
-            <Label fx:id="playerName" text="Joe Brown" />
+        <HBox alignment="CENTER">
         </HBox>
 
-        <HBox alignment="CENTER" style="-fx-font-size: 14px;-fx-spacing:2px;">
-            <Label text="Your HighScore:"/>
-            <Label fx:id="newScore" text="50,000"/>
+        <HBox alignment="CENTER" style="-fx-font-size: 30px;-fx-spacing:2px; -fx-text-fill: DARKBLUE;">
+            <Label text="Your HighScore:" style="-fx-text-fill: DARKBLUE;"/>
+            <Label fx:id="newScore" style="-fx-text-fill: DARKBLUE;"/>
         </HBox>
 
-        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="highscorePageButton"/>
+        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
     </VBox>
 
     <VBox fx:id="helpPage" styleClass="helpPage" managed="${helpPage.visible}" visible="false">

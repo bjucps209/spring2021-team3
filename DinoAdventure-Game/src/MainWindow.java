@@ -77,8 +77,10 @@ public class MainWindow implements GameObserver {
     VBox levels; // difficulty levels of the game
 
     // GUI controls for New High score screen
-    @FXML Label newScore; // new highscore of the player
-    @FXML Label playerName; // name of the player
+    @FXML
+    Label newScore; // new highscore of the player
+    @FXML
+    Label playerName; // name of the player
 
     private Timeline gameLoop;
 
@@ -94,9 +96,14 @@ public class MainWindow implements GameObserver {
 
     private String levelToLoad = "level1";
 
-    final MediaPlayer HOME_PAGE_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/titleScreenMusic.wav").toString()));
-    final MediaPlayer ENEMY_ATTACK = new MediaPlayer(new Media(getClass().getResource("assets/sounds/EnemyHitPlayer.wav").toString()));
-    final MediaPlayer ENEMY_KILLED = new MediaPlayer(new Media(getClass().getResource("assets/sounds/PlayerKillsEnemy.wav").toString()));
+    HighScore highScores = HighScore.getInstance(); // High scores instantiation
+
+    final MediaPlayer HOME_PAGE_MUSIC = new MediaPlayer(
+            new Media(getClass().getResource("assets/sounds/titleScreenMusic.wav").toString()));
+    final MediaPlayer ENEMY_ATTACK = new MediaPlayer(
+            new Media(getClass().getResource("assets/sounds/EnemyHitPlayer.wav").toString()));
+    final MediaPlayer ENEMY_KILLED = new MediaPlayer(
+            new Media(getClass().getResource("assets/sounds/PlayerKillsEnemy.wav").toString()));
 
     @FXML
     public void initialize() throws IOException {
@@ -112,7 +119,6 @@ public class MainWindow implements GameObserver {
         HOME_PAGE_MUSIC.play();
 
         // High Scores screen initialization
-        HighScore highScores = HighScore.getInstance();
 
         /**
          * 1.Load Scores from file 2.get scores list from getScoresList 3.Loop through
@@ -144,10 +150,6 @@ public class MainWindow implements GameObserver {
             difficultyLabel.setTextFill(Color.WHITE);
             levels.getChildren().add(difficultyLabel);
         }
-
-        // New High score screen initialization
-        playerName.setText(Game.instance().getUserName());
-        newScore.setText(String.valueOf(Game.instance().getScore()));
 
         // find the levels and add them to level choice
         levelsChoice.setValue("Demo");
@@ -214,6 +216,8 @@ public class MainWindow implements GameObserver {
                 });
 
                 // Highscores implementation
+                Game.instance().setScore(Game.instance().getPlayer().scoreProperty().get());
+
                 Score score = new Score(Game.instance().getUserName(), Game.instance().getScore(),
                         Game.instance().getDifficulty());
                 // System.out.println(score.toString());
@@ -225,6 +229,7 @@ public class MainWindow implements GameObserver {
                         displayNewHighScore();
 
                         HighScore.getInstance().processScore(score);
+                        updateHighScoresScreen();
                     }
                 } catch (IOException exception) {
                     exception.printStackTrace();
@@ -331,7 +336,7 @@ public class MainWindow implements GameObserver {
                     Game.instance().setState(GameState.LEVEL_PLAYING);
                     window.getScene().getRoot().requestFocus();
                     gameLoop.play();
-                    
+
                 });
 
                 restartButtonPaused.setOnAction(ev -> {
@@ -346,12 +351,12 @@ public class MainWindow implements GameObserver {
                         game.load("saveFile.dat");
 
                     } catch (Exception ex) {
-                        var alert = new Alert(AlertType.ERROR, "Sorry, something went wrong with loading the file\n error message: \n" + ex);
+                        var alert = new Alert(AlertType.ERROR,
+                                "Sorry, something went wrong with loading the file\n error message: \n" + ex);
                         alert.setHeaderText(null);
                         alert.show();
                     }
-                   
-                    
+
                     window.getScene().getRoot().requestFocus();
 
                     Game.instance().observers().forEach(o -> o.update());
@@ -361,10 +366,10 @@ public class MainWindow implements GameObserver {
                     gamePage.getChildren().remove(playButtonHBox);
                     gamePage.getChildren().remove(gamePausedPane);
                     Game.instance().getCurrentLevel().idleTimeProperty()
-                    .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
-                            - gamePausedAt);
+                            .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
+                                    - gamePausedAt);
                     update();
-                    //Game.instance().getCurrentLevel().tick();
+                    // Game.instance().getCurrentLevel().tick();
                 });
 
                 saveButton.setOnAction(ev -> {
@@ -372,7 +377,8 @@ public class MainWindow implements GameObserver {
                     try {
                         game.save("saveFile.dat");
                     } catch (Exception ex) {
-                        var alert = new Alert(AlertType.ERROR, "Sorry, something went wrong with saving the file\n error message: \n" + ex);
+                        var alert = new Alert(AlertType.ERROR,
+                                "Sorry, something went wrong with saving the file\n error message: \n" + ex);
                         alert.setHeaderText(null);
                         alert.show();
                     }
@@ -442,7 +448,8 @@ public class MainWindow implements GameObserver {
         if (upKeyPressed) {
             Game.instance().getPlayer().setMoving(true);
             if (Game.instance().getPlayer().isOnSurface()) {
-                Game.instance().getPlayer().setYVelocity(Game.instance().getPlayer().getYVelocity() - Game.instance().getPlayer().getMaxJumpHeight());
+                Game.instance().getPlayer().setYVelocity(
+                        Game.instance().getPlayer().getYVelocity() - Game.instance().getPlayer().getMaxJumpHeight());
             }
         }
 
@@ -515,17 +522,18 @@ public class MainWindow implements GameObserver {
         }
 
         // Add enemy images
-        if(Game.instance().getCurrentLevel().getEnemies().size() != enemyImages.size()) {
+        if (Game.instance().getCurrentLevel().getEnemies().size() != enemyImages.size()) {
             for (Enemy e : Game.instance().getCurrentLevel().getEnemies()) {
                 boolean exists = false;
                 for (ImageView i : enemyImages) {
-                    if((Enemy) i.getUserData() == e) {
+                    if ((Enemy) i.getUserData() == e) {
                         exists = true;
                         break;
                     }
                 }
-                if(!exists) {
-                    ImageView enemyImage = new ImageView(new Image("assets/images/enemies/" + e.getType().toString().toLowerCase() + "-standing-left-1.png"));
+                if (!exists) {
+                    ImageView enemyImage = new ImageView(new Image(
+                            "assets/images/enemies/" + e.getType().toString().toLowerCase() + "-standing-left-1.png"));
                     enemyImage.xProperty().bind(e.minXProperty());
                     enemyImage.yProperty().bind(e.minYProperty());
                     enemyImage.setUserData(e);
@@ -534,7 +542,6 @@ public class MainWindow implements GameObserver {
                 }
             }
         }
-
 
         // Remove/update enemy images
         for (ImageView e : enemyImages) {
@@ -570,17 +577,18 @@ public class MainWindow implements GameObserver {
         }
 
         // Add collectable images
-        if(Game.instance().getCurrentLevel().getCollectables().size() != collectableImages.size()) {
+        if (Game.instance().getCurrentLevel().getCollectables().size() != collectableImages.size()) {
             for (Collectable c : Game.instance().getCurrentLevel().getCollectables()) {
                 boolean exists = false;
                 for (ImageView i : collectableImages) {
-                    if((Collectable) i.getUserData() == c) {
+                    if ((Collectable) i.getUserData() == c) {
                         exists = true;
                         break;
                     }
                 }
-                if(!exists) {
-                    ImageView collectableImage = new ImageView(new Image("assets/images/collectables/" + c.getType().toString().toLowerCase() + ".png"));
+                if (!exists) {
+                    ImageView collectableImage = new ImageView(
+                            new Image("assets/images/collectables/" + c.getType().toString().toLowerCase() + ".png"));
                     collectableImage.xProperty().bind(c.minXProperty());
                     collectableImage.yProperty().bind(c.minYProperty());
                     collectableImage.setUserData(c);
@@ -611,16 +619,16 @@ public class MainWindow implements GameObserver {
         }
 
         // Add goal images
-        if(Game.instance().getCurrentLevel().getGoals().size() != goalImages.size()) {
+        if (Game.instance().getCurrentLevel().getGoals().size() != goalImages.size()) {
             for (Goal g : Game.instance().getCurrentLevel().getGoals()) {
                 boolean exists = false;
                 for (ImageView i : goalImages) {
-                    if((Goal) i.getUserData() == g) {
+                    if ((Goal) i.getUserData() == g) {
                         exists = true;
                         break;
                     }
                 }
-                if(!exists) {
+                if (!exists) {
                     ImageView goalImage = new ImageView(new Image("assets/images/world/finish-flag.png"));
                     goalImage.xProperty().bind(g.minXProperty());
                     goalImage.yProperty().bind(g.minYProperty());
@@ -631,7 +639,7 @@ public class MainWindow implements GameObserver {
             }
         }
 
-        for(Node n : toRemove) {
+        for (Node n : toRemove) {
             enemyImages.remove(n);
             collectableImages.remove(n);
             goalImages.remove(n);
@@ -642,275 +650,286 @@ public class MainWindow implements GameObserver {
     @FXML
     public void play(ActionEvent e) {
 
-        HOME_PAGE_MUSIC.stop();
-
-        Game.instance().setDifficulty(DifficultyType.valueOf(difficultyLevels.getValue()));
-
-        window.getScene().getRoot().requestFocus();
-
-        gameLoop.play();
-
-        if (!keysBound) {
-            keysBound = true;
-            window.getScene().setOnKeyPressed(ev -> {
-                if (ev.getCode() == KeyCode.UP) {
-                    upKeyPressed = true;
-                } else if (ev.getCode() == KeyCode.LEFT) {
-                    leftKeyPressed = true;
-                } else if (ev.getCode() == KeyCode.RIGHT) {
-                    rightKeyPressed = true;
-                } else if (ev.getCode() == KeyCode.ESCAPE) {
-                    escapeKeyPressed = true;
-                }
-            });
-            window.getScene().setOnKeyReleased(ev -> {
-                if (ev.getCode() == KeyCode.UP) {
-                    upKeyPressed = false;
-                } else if (ev.getCode() == KeyCode.LEFT) {
-                    leftKeyPressed = false;
-                } else if (ev.getCode() == KeyCode.RIGHT) {
-                    rightKeyPressed = false;
-                } else if (ev.getCode() == KeyCode.ESCAPE) {
-                    escapeKeyPressed = false;
-                }
-            });
-        }
-
-        titlePage.setVisible(false);
-        gamePage.getChildren().removeAll();
-        enemyImages.clear();
-        collectableImages.clear();
-        goalImages.clear();
-
-        gamePage.setMinWidth(window.getWidth());
-        gamePage.setMinHeight(window.getHeight());
-        gamePage.setMaxWidth(window.getWidth());
-        gamePage.setMaxHeight(window.getHeight());
-
-        // Set background
-
-        background = new Pane();
-        backgroundImage = new Image("assets/images/world/background.png");
-        background.setBackground(new Background(new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT,
-                BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0, false, Side.TOP, 0, false),
-                new BackgroundSize(window.getWidth(), window.getHeight(), false, false, false, false))));
-        AnchorPane.setTopAnchor(background, 0.0);
-        AnchorPane.setLeftAnchor(background, 0.0);
-        AnchorPane.setRightAnchor(background, 0.0);
-        AnchorPane.setBottomAnchor(background, 0.0);
-        gamePage.getChildren().add(background);
-
-        levelPane = new AnchorPane();
-        gamePage.getChildren().add(levelPane);
-        AnchorPane.setTopAnchor(levelPane, 0.0);
-        AnchorPane.setLeftAnchor(levelPane, 0.0);
-        AnchorPane.setBottomAnchor(levelPane, 0.0);
-
-        // Create/load level
-
-        Level level;
-
-        // Generate some testing dummy terrain
-        // Please leave here for now so I can test with it
-        // Enable dummy terrain if you want to demo the gameplay
-
-        // boolean dummyTerrain = false;
-        if (levelsChoice.getValue().equals("Demo")) {
-
-            level = new Level();
-            level.setSpawnPoint(new Point(100, 540));
-            level.setWidth(4000);
-            level.setHeight(1080);
-
-            // Set level as the current level
-            Game.instance().startLevel(level);
-
-            for (int i = 0; i < 10; i++) {
-                ImageView blockImage = new ImageView(
-                        new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(100 + (i * 128), 600);
-                block.setWidth(128);
-                block.setHeight(128);
-                level.getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                levelPane.getChildren().add(blockImage);
-            }
-
-            for (int i = 0; i < 3; i++) {
-                ImageView blockImage = new ImageView(
-                        new Image("assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(500 + (i * 128), 418);
-                block.setWidth(128);
-                block.setHeight(93);
-                level.getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                levelPane.getChildren().add(blockImage);
-            }
-
-            for (int i = 11; i < 30; i++) {
-                ImageView blockImage = new ImageView(
-                        new Image("assets/images/world/ground-" + (i == 11 ? "1" : (i == 29 ? "3" : "2")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(100 + (i * 128), 600);
-                block.setWidth(128);
-                block.setHeight(128);
-                level.getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                levelPane.getChildren().add(blockImage);
-            }
-
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(500, 456, EnemyState.WANDERING));
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(550, 200, EnemyState.WANDERING));
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1200, 456, EnemyState.FOLLOWING));
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(800, 456, EnemyState.FLEEING));
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1100, 456, EnemyState.JUMPING));
-
-            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1000, 400, CollectableType.Coin));
-
-            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1600, 400, CollectableType.FeatherPowerup));
-            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(1800, 400, CollectableType.SpeedPowerup));
-            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(2000, 400, CollectableType.HealthPowerup));
-            Game.instance().getCurrentLevel().getCollectables().add(new Collectable(2200, 400, CollectableType.CoinPowerup));
-
-            Game.instance().getCurrentLevel().getGoals().add(new Goal(3800, 500));
-
+        if ((name.getText().equals("")) || (name.getText().equals(null))) {
+            var alert = new Alert(AlertType.INFORMATION, "Please enter a name!");
+            alert.setHeaderText(null);
+            alert.show();
         } else {
+            HOME_PAGE_MUSIC.stop();
+            
+            Game.instance().setUserName(name.getText());
+            Game.instance().setDifficulty(DifficultyType.valueOf(difficultyLevels.getValue()));
 
-            // TODO: Load level here instead of making a dummy level
-            level = new Level();
+            window.getScene().getRoot().requestFocus();
 
-            // Set level as the current level
-            Game.instance().startLevel(level);
+            gameLoop.play();
 
-            try {
-                level.load("src/levels/" + levelsChoice.getSelectionModel().getSelectedItem());
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+            if (!keysBound) {
+                keysBound = true;
+                window.getScene().setOnKeyPressed(ev -> {
+                    if (ev.getCode() == KeyCode.UP) {
+                        upKeyPressed = true;
+                    } else if (ev.getCode() == KeyCode.LEFT) {
+                        leftKeyPressed = true;
+                    } else if (ev.getCode() == KeyCode.RIGHT) {
+                        rightKeyPressed = true;
+                    } else if (ev.getCode() == KeyCode.ESCAPE) {
+                        escapeKeyPressed = true;
+                    }
+                });
+                window.getScene().setOnKeyReleased(ev -> {
+                    if (ev.getCode() == KeyCode.UP) {
+                        upKeyPressed = false;
+                    } else if (ev.getCode() == KeyCode.LEFT) {
+                        leftKeyPressed = false;
+                    } else if (ev.getCode() == KeyCode.RIGHT) {
+                        rightKeyPressed = false;
+                    } else if (ev.getCode() == KeyCode.ESCAPE) {
+                        escapeKeyPressed = false;
+                    }
+                });
             }
-            // Generate real terrain
-            level.getBlocks().stream().forEach(block -> {
-                ImageView blockImage = new ImageView(new Image(block.getTexture()));
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                levelPane.getChildren().add(blockImage);
-            });
-            // Generate Collectables from the level
-            level.getCollectables().stream().forEach(enemy -> {
-                // TODO: create logic to load in collectables
-            });
+
+            titlePage.setVisible(false);
+            gamePage.getChildren().removeAll();
+            enemyImages.clear();
+            collectableImages.clear();
+            goalImages.clear();
+
+            gamePage.setMinWidth(window.getWidth());
+            gamePage.setMinHeight(window.getHeight());
+            gamePage.setMaxWidth(window.getWidth());
+            gamePage.setMaxHeight(window.getHeight());
+
+            // Set background
+
+            background = new Pane();
+            backgroundImage = new Image("assets/images/world/background.png");
+            background.setBackground(new Background(new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT,
+                    BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0, false, Side.TOP, 0, false),
+                    new BackgroundSize(window.getWidth(), window.getHeight(), false, false, false, false))));
+            AnchorPane.setTopAnchor(background, 0.0);
+            AnchorPane.setLeftAnchor(background, 0.0);
+            AnchorPane.setRightAnchor(background, 0.0);
+            AnchorPane.setBottomAnchor(background, 0.0);
+            gamePage.getChildren().add(background);
+
+            levelPane = new AnchorPane();
+            gamePage.getChildren().add(levelPane);
+            AnchorPane.setTopAnchor(levelPane, 0.0);
+            AnchorPane.setLeftAnchor(levelPane, 0.0);
+            AnchorPane.setBottomAnchor(levelPane, 0.0);
+
+            // Create/load level
+
+            Level level;
+
+            // Generate some testing dummy terrain
+            // Please leave here for now so I can test with it
+            // Enable dummy terrain if you want to demo the gameplay
+
+            // boolean dummyTerrain = false;
+            if (levelsChoice.getValue().equals("Demo")) {
+
+                level = new Level();
+                level.setSpawnPoint(new Point(100, 540));
+                level.setWidth(4000);
+                level.setHeight(1080);
+
+                // Set level as the current level
+                Game.instance().startLevel(level);
+
+                for (int i = 0; i < 10; i++) {
+                    ImageView blockImage = new ImageView(
+                            new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
+                    Block block = new Block();
+                    block.centerPoint().setXY(100 + (i * 128), 600);
+                    block.setWidth(128);
+                    block.setHeight(128);
+                    level.getBlocks().add(block);
+                    blockImage.xProperty().bind(block.minXProperty());
+                    blockImage.yProperty().bind(block.minYProperty());
+                    levelPane.getChildren().add(blockImage);
+                }
+
+                for (int i = 0; i < 3; i++) {
+                    ImageView blockImage = new ImageView(new Image(
+                            "assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
+                    Block block = new Block();
+                    block.centerPoint().setXY(500 + (i * 128), 418);
+                    block.setWidth(128);
+                    block.setHeight(93);
+                    level.getBlocks().add(block);
+                    blockImage.xProperty().bind(block.minXProperty());
+                    blockImage.yProperty().bind(block.minYProperty());
+                    levelPane.getChildren().add(blockImage);
+                }
+
+                for (int i = 11; i < 30; i++) {
+                    ImageView blockImage = new ImageView(new Image(
+                            "assets/images/world/ground-" + (i == 11 ? "1" : (i == 29 ? "3" : "2")) + ".png"));
+                    Block block = new Block();
+                    block.centerPoint().setXY(100 + (i * 128), 600);
+                    block.setWidth(128);
+                    block.setHeight(128);
+                    level.getBlocks().add(block);
+                    blockImage.xProperty().bind(block.minXProperty());
+                    blockImage.yProperty().bind(block.minYProperty());
+                    levelPane.getChildren().add(blockImage);
+                }
+
+                Game.instance().getCurrentLevel().getEnemies().add(new Enemy(500, 456, EnemyState.WANDERING));
+                Game.instance().getCurrentLevel().getEnemies().add(new Enemy(550, 200, EnemyState.WANDERING));
+                Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1200, 456, EnemyState.FOLLOWING));
+                Game.instance().getCurrentLevel().getEnemies().add(new Enemy(800, 456, EnemyState.FLEEING));
+                Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1100, 456, EnemyState.JUMPING));
+
+                Game.instance().getCurrentLevel().getCollectables()
+                        .add(new Collectable(1000, 400, CollectableType.Coin));
+
+                Game.instance().getCurrentLevel().getCollectables()
+                        .add(new Collectable(1600, 400, CollectableType.FeatherPowerup));
+                Game.instance().getCurrentLevel().getCollectables()
+                        .add(new Collectable(1800, 400, CollectableType.SpeedPowerup));
+                Game.instance().getCurrentLevel().getCollectables()
+                        .add(new Collectable(2000, 400, CollectableType.HealthPowerup));
+                Game.instance().getCurrentLevel().getCollectables()
+                        .add(new Collectable(2200, 400, CollectableType.CoinPowerup));
+
+                Game.instance().getCurrentLevel().getGoals().add(new Goal(3800, 500));
+
+            } else {
+
+                // TODO: Load level here instead of making a dummy level
+                level = new Level();
+
+                // Set level as the current level
+                Game.instance().startLevel(level);
+
+                try {
+                    level.load("src/levels/" + levelsChoice.getSelectionModel().getSelectedItem());
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                // Generate real terrain
+                level.getBlocks().stream().forEach(block -> {
+                    ImageView blockImage = new ImageView(new Image(block.getTexture()));
+                    blockImage.xProperty().bind(block.minXProperty());
+                    blockImage.yProperty().bind(block.minYProperty());
+                    levelPane.getChildren().add(blockImage);
+                });
+                // Generate Collectables from the level
+                level.getCollectables().stream().forEach(enemy -> {
+                    // TODO: create logic to load in collectables
+                });
+            }
+
+            levelPane.setMinWidth(level.getWidth());
+            levelPane.setMinHeight(level.getHeight());
+            levelPane.setMaxWidth(level.getWidth());
+            levelPane.setMaxHeight(level.getHeight());
+
+            // Set difficulty
+            switch (Game.instance().getDifficulty()) {
+            case EASY:
+                Game.instance().getPlayer().setHealth(20);
+                Game.instance().getCurrentLevel().maxTimeProperty().set(500 * 1000);
+                break;
+            case MEDIUM:
+                Game.instance().getPlayer().setHealth(15);
+                Game.instance().getCurrentLevel().maxTimeProperty().set(400 * 1000);
+                break;
+            case HARD:
+                Game.instance().getPlayer().setHealth(10);
+                Game.instance().getCurrentLevel().maxTimeProperty().set(300 * 1000);
+                break;
+            default:
+                break;
+            }
+
+            // Show player stats
+
+            VBox dataVBox = new VBox();
+            AnchorPane.setTopAnchor(dataVBox, 0.0);
+            AnchorPane.setRightAnchor(dataVBox, 0.0);
+            dataVBox.getStyleClass().add("dataVBox");
+
+            HBox timerHBox = new HBox();
+            timerHBox.setAlignment(Pos.BOTTOM_RIGHT);
+            dataVBox.getChildren().add(timerHBox);
+
+            Label timerSecondsLabel = new Label();
+            timerSecondsLabel.textProperty().bind(Bindings.createStringBinding(() -> {
+                return String.valueOf(Game.instance().getCurrentLevel().remainingTimeProperty().get() / 1000) + "s ";
+            }, Game.instance().getCurrentLevel().remainingTimeProperty()));
+            timerHBox.getChildren().add(timerSecondsLabel);
+
+            Label timerIconLabel = new Label();
+            timerIconLabel.setText("\ue425");
+            timerIconLabel.getStyleClass().add("material-icons");
+            timerHBox.getChildren().add(timerIconLabel);
+
+            HBox scoreHBox = new HBox();
+            scoreHBox.setAlignment(Pos.BOTTOM_RIGHT);
+            dataVBox.getChildren().add(scoreHBox);
+
+            Label scoreLabel = new Label();
+            scoreLabel.textProperty().bind(Bindings.createStringBinding(() -> {
+                return String.valueOf(Game.instance().getPlayer().scoreProperty().get()) + " ";
+            }, Game.instance().getPlayer().scoreProperty()));
+            scoreHBox.getChildren().add(scoreLabel);
+
+            Label scoreIconLabel = new Label();
+            scoreIconLabel.setText("\uf06f");
+            scoreIconLabel.getStyleClass().add("material-icons");
+            scoreHBox.getChildren().add(scoreIconLabel);
+
+            HBox healthHBox = new HBox();
+            healthHBox.setAlignment(Pos.BOTTOM_RIGHT);
+            dataVBox.getChildren().add(healthHBox);
+
+            Label healthLabel = new Label();
+            healthLabel.textProperty().bind(Bindings.createStringBinding(() -> {
+                return String.valueOf(Game.instance().getPlayer().healthProperty().get()) + " ";
+            }, Game.instance().getPlayer().healthProperty()));
+            healthHBox.getChildren().add(healthLabel);
+
+            Label healthIconLabel = new Label();
+            healthIconLabel.setText("\ue87e");
+            healthIconLabel.getStyleClass().add("material-icons");
+            healthHBox.getChildren().add(healthIconLabel);
+
+            gamePage.getChildren().add(dataVBox);
+
+            // Show pause button
+
+            Button pauseButton = new Button();
+            pauseButton.getStyleClass().add("material-icons");
+            pauseButton.getStyleClass().add("playPauseButton");
+            pauseButton.setText("\ue034");
+            AnchorPane.setTopAnchor(pauseButton, 10.0);
+            AnchorPane.setLeftAnchor(pauseButton, 10.0);
+            pauseButton.setOnAction(ev -> Game.instance().setState(GameState.LEVEL_PAUSED));
+            gamePage.getChildren().add(pauseButton);
+
+            gamePage.setVisible(true);
+
+            // Create player image in world
+
+            playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
+            playerImage.xProperty().bind(Game.instance().getPlayer().minXProperty());
+            playerImage.yProperty().bind(Bindings.createIntegerBinding(() -> {
+                return Game.instance().getPlayer().minYProperty().get() + 2;
+            }, Game.instance().getPlayer().minYProperty()));
+            levelPane.getChildren().add(playerImage);
+
+            Game.instance().getCurrentLevel().spawnPlayer();
+
+            Game.instance().getCurrentLevel().idleTimeProperty().set(0);
+
+            Game.instance().setState(GameState.LEVEL_PLAYING);
         }
-
-        levelPane.setMinWidth(level.getWidth());
-        levelPane.setMinHeight(level.getHeight());
-        levelPane.setMaxWidth(level.getWidth());
-        levelPane.setMaxHeight(level.getHeight());
-
-        // Set difficulty
-        switch (Game.instance().getDifficulty()) {
-        case EASY:
-            Game.instance().getPlayer().setHealth(20);
-            Game.instance().getCurrentLevel().maxTimeProperty().set(500 * 1000);
-            break;
-        case MEDIUM:
-            Game.instance().getPlayer().setHealth(15);
-            Game.instance().getCurrentLevel().maxTimeProperty().set(400 * 1000);
-            break;
-        case HARD:
-            Game.instance().getPlayer().setHealth(10);
-            Game.instance().getCurrentLevel().maxTimeProperty().set(300 * 1000);
-            break;
-        default:
-            break;
-        }
-
-        // Show player stats
-
-        VBox dataVBox = new VBox();
-        AnchorPane.setTopAnchor(dataVBox, 0.0);
-        AnchorPane.setRightAnchor(dataVBox, 0.0);
-        dataVBox.getStyleClass().add("dataVBox");
-
-        HBox timerHBox = new HBox();
-        timerHBox.setAlignment(Pos.BOTTOM_RIGHT);
-        dataVBox.getChildren().add(timerHBox);
-
-        Label timerSecondsLabel = new Label();
-        timerSecondsLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-            return String.valueOf(Game.instance().getCurrentLevel().remainingTimeProperty().get() / 1000) + "s ";
-        }, Game.instance().getCurrentLevel().remainingTimeProperty()));
-        timerHBox.getChildren().add(timerSecondsLabel);
-
-        Label timerIconLabel = new Label();
-        timerIconLabel.setText("\ue425");
-        timerIconLabel.getStyleClass().add("material-icons");
-        timerHBox.getChildren().add(timerIconLabel);
-
-        HBox scoreHBox = new HBox();
-        scoreHBox.setAlignment(Pos.BOTTOM_RIGHT);
-        dataVBox.getChildren().add(scoreHBox);
-
-        Label scoreLabel = new Label();
-        scoreLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-            return String.valueOf(Game.instance().getPlayer().scoreProperty().get()) + " ";
-        }, Game.instance().getPlayer().scoreProperty()));
-        scoreHBox.getChildren().add(scoreLabel);
-
-        Label scoreIconLabel = new Label();
-        scoreIconLabel.setText("\uf06f");
-        scoreIconLabel.getStyleClass().add("material-icons");
-        scoreHBox.getChildren().add(scoreIconLabel);
-
-        HBox healthHBox = new HBox();
-        healthHBox.setAlignment(Pos.BOTTOM_RIGHT);
-        dataVBox.getChildren().add(healthHBox);
-
-        Label healthLabel = new Label();
-        healthLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-            return String.valueOf(Game.instance().getPlayer().healthProperty().get()) + " ";
-        }, Game.instance().getPlayer().healthProperty()));
-        healthHBox.getChildren().add(healthLabel);
-
-        Label healthIconLabel = new Label();
-        healthIconLabel.setText("\ue87e");
-        healthIconLabel.getStyleClass().add("material-icons");
-        healthHBox.getChildren().add(healthIconLabel);
-
-        gamePage.getChildren().add(dataVBox);
-
-        // Show pause button
-
-        Button pauseButton = new Button();
-        pauseButton.getStyleClass().add("material-icons");
-        pauseButton.getStyleClass().add("playPauseButton");
-        pauseButton.setText("\ue034");
-        AnchorPane.setTopAnchor(pauseButton, 10.0);
-        AnchorPane.setLeftAnchor(pauseButton, 10.0);
-        pauseButton.setOnAction(ev -> Game.instance().setState(GameState.LEVEL_PAUSED));
-        gamePage.getChildren().add(pauseButton);
-
-        gamePage.setVisible(true);
-
-        // Create player image in world
-
-        playerImage = new ImageView(new Image("assets/images/player/player-standing-right-1.png"));
-        playerImage.xProperty().bind(Game.instance().getPlayer().minXProperty());
-        playerImage.yProperty().bind(Bindings.createIntegerBinding(() -> {
-            return Game.instance().getPlayer().minYProperty().get() + 2;
-        }, Game.instance().getPlayer().minYProperty()));
-        levelPane.getChildren().add(playerImage);
-
-        Game.instance().getCurrentLevel().spawnPlayer();
-
-        Game.instance().getCurrentLevel().idleTimeProperty().set(0);
-
-        Game.instance().setState(GameState.LEVEL_PLAYING);
-
     }
 
     // Event Handlers for Title Screen
@@ -964,6 +983,7 @@ public class MainWindow implements GameObserver {
     @FXML
     void onMainMenuClicked(ActionEvent event) throws IOException {
         highScoresPage.setVisible(false);
+        newHighscorePage.setVisible(false);
         titlePage.setVisible(true);
     }
 
@@ -971,9 +991,48 @@ public class MainWindow implements GameObserver {
     // highscore.
     @FXML
     public void displayNewHighScore() throws IOException {
+        // New High score screen initialization
+        playerName.setText(Game.instance().getUserName());
+        newScore.setText(String.valueOf(Game.instance().getScore()));
         // Show the new Score Screen
         titlePage.setVisible(false);
         newHighscorePage.setVisible(true);
+        gamePage.setVisible(false);
+    }
+
+    public void updateHighScoresScreen() throws IOException {
+        ranks.getChildren().removeAll();
+        names.getChildren().removeAll();
+        scores.getChildren().removeAll();
+        levels.getChildren().removeAll();
+
+        highScores.loadScores("HighScoreFiles/SaveScoresData.txt");
+        List<Score> slist = highScores.getScoresList(); // list of highscores obtained from the scoresList
+
+        for (int i = 0; i < slist.size(); i++) {
+
+            Label rank = new Label();
+            Label name = new Label();
+            Label scoreLabel = new Label();
+            Label difficultyLabel = new Label();
+
+            rank.setText("" + (i + 1));
+            rank.setTextFill(Color.WHITE);
+            ranks.getChildren().add(rank);
+
+            name.setText(slist.get(i).getName());
+            name.setTextFill(Color.WHITE);
+            names.getChildren().add(name);
+
+            scoreLabel.setText(String.valueOf(slist.get(i).getScore()));
+            scoreLabel.setTextFill(Color.WHITE);
+            scores.getChildren().add(scoreLabel);
+
+            difficultyLabel.setText(String.valueOf(slist.get(i).getDifficultyType()));
+            difficultyLabel.setTextFill(Color.WHITE);
+            levels.getChildren().add(difficultyLabel);
+        }
+
     }
 
 }
