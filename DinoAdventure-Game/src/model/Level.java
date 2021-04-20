@@ -388,7 +388,7 @@ public class Level {
         writer.writeInt(blocks.size());
         for (int i = 0; i < blocks.size(); ++i) {
             writer.writeInt( blocks.get(i).getId());
-            //writer.writeUTF(surfaces.get(i).getType());
+            writer.writeUTF(blocks.get(i).getTexture());
             writer.writeInt( blocks.get(i).centerPoint().getIntX());
             writer.writeInt( blocks.get(i).centerPoint().getIntY());
             writer.writeInt( blocks.get(i).getWidth());
@@ -408,18 +408,18 @@ public class Level {
 
 
 
-        // if (collectables.size() > 0){
-        //     writer.writeBoolean(true);
-        //     writer.writeInt(collectables.size());
-        //     for (Collectable idem : collectables){
-        //         writer.writeInt(idem.getId());
-        //         writer.writeUTF(idem.getType());
-        //         writer.writeInt(idem.centerPoint().getIntX());
-        //         writer.writeInt(idem.centerPoint().getIntY());
-        //     }
-        // }else{
-        //     writer.writeBoolean(false);
-        // }
+        if (collectables.size() > 0){
+            writer.writeBoolean(true);
+            writer.writeInt(collectables.size());
+            for (Collectable idem : collectables){
+                writer.writeDouble(idem.centerPoint().getX());
+                writer.writeDouble(idem.centerPoint().getY());
+                writer.writeInt(idem.getType().ordinal());
+                writer.writeInt(idem.getId());
+            }
+        }else{
+            writer.writeBoolean(false);
+        }
          
     }
             
@@ -440,23 +440,16 @@ public class Level {
 
         int surfaceSize = reader.readInt();
 
+        blocks.clear();
         for (int i = 0; i < surfaceSize; i++) {
             int id = reader.readInt();
-            if (this.findBlock(id) != null){
-                Block block = this.findBlock(id);
-                //String Type = reader.readUTF();
-                block.centerPoint().setXY(reader.readInt(), reader.readInt());
-                block.setWidth(reader.readInt());
-                block.setHeight(reader.readInt());
-            }else{
-                Block block = new Block();
-                block.setId(id);
-                //String type = reader.readUTF(); //I do really know what or where this would be set for
-                block.centerPoint().setXY(reader.readInt(), reader.readInt());
-                block.setWidth(reader.readInt());
-                block.setHeight(reader.readInt());
-                blocks.add(block);
-            }
+            Block block = new Block();
+            block.setId(id);
+            block.setTexture(reader.readUTF());
+            block.centerPoint().setXY(reader.readInt(), reader.readInt());
+            block.setWidth(reader.readInt());
+            block.setHeight(reader.readInt());
+            blocks.add(block);
         }
 
         levelName = reader.readUTF();  
@@ -468,16 +461,16 @@ public class Level {
         idleTimeProperty.setValue(reader.readLong());
 
 
-    // if (reader.readBoolean() == true){
-    //     int size = reader.readInt();
-    //     for (int i = 0; i < size; i++){
-    //         Collectable idem = collectables.get(i);
-    //         idem.setId(reader.readInt());
-    //         idem.setType(reader.readUTF());
-    //         idem.centerPoint().setIntX(reader.readInt());
-    //         idem.centerPoint().setIntY(reader.readInt());
-    //     }
-    // }
+    if (reader.readBoolean() == true){
+        int size = reader.readInt();
+        collectables.clear();
+        for (int i = 0; i < size; i++){
+            Collectable idem = new Collectable(reader.readDouble(), reader.readDouble(), CollectableType.values()[reader.readInt()]);
+            idem.setId(reader.readInt());
+            collectables.add(idem);
+            
+        }
+    }
 
     }
 }

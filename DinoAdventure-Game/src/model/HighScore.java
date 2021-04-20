@@ -32,7 +32,7 @@ public class HighScore {
      */
     public void processScore(Score score) throws IOException {
         // Load scores
-        String fileName = "HighScoreFiles/SaveScoresTestData.txt";
+        String fileName = "HighScoreFiles/SaveScoresData.txt";
         File fileObj = new File(fileName);
         if (!fileObj.exists()) {
             fileObj.createNewFile();
@@ -108,7 +108,7 @@ public class HighScore {
         scoresList.clear();
         // 5. Read through the BufferedReader obbject line by line
         String line = buffObj.readLine();
-        while (line != null) {
+        while ((line != null) && line != "") {
             // 6. Parse the individual items in the line into fields
             String[] allFields = line.split(",");
             String name = allFields[0];
