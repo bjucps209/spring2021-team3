@@ -105,7 +105,7 @@
         </HBox>
 
         <HBox alignment="CENTER" style="-fx-font-size: 30px;-fx-spacing:2px; -fx-text-fill: DARKBLUE;">
-            <Label text="Your HighScore:" style="-fx-text-fill: DARKBLUE;"/>
+            <Label text="Your HighScore: " style="-fx-text-fill: DARKBLUE;"/>
             <Label fx:id="newScore" style="-fx-text-fill: DARKBLUE;"/>
         </HBox>
 
