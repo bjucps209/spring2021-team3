@@ -64,6 +64,21 @@ public class MainWindow {
     Button btnNewGoal;
 
     @FXML
+    Button btnNewFeatherPowerup;
+
+    @FXML
+    Button btnNewSpeedPowerup;
+    
+    @FXML
+    Button btnNewCoinPowerup;
+
+    @FXML
+    Button btnNewHealthPowerup;
+
+    @FXML
+    Button btnNewCoin;
+
+    @FXML
     TextField txtLevelName;
 
     @FXML
@@ -150,10 +165,39 @@ public class MainWindow {
         btnNewRightFullBlock.setOnAction(e -> onNewRightFullBlockClicked());
         btnCreate.setOnAction(e -> onCreateClicked());
         btnNewGoal.setOnAction(e -> onNewGoalClicked());
-
+        btnNewCoin.setOnAction(e -> onNewCoinClicked());
+        btnNewFeatherPowerup.setOnAction(e -> onNewFeatherPowerupClicked());
+        btnNewSpeedPowerup.setOnAction(e -> onNewSpeedPowerupClicked());
+        btnNewCoinPowerup.setOnAction(e -> onNewCoinPowerupClicked());
+        btnNewHealthPowerup.setOnAction(e -> onNewHealthPowerupClicked());
+        
         spawnDino(150, 300);
         
 
+    }
+
+    private void onNewCoinClicked() {
+        var type = CollectableType.Coin;
+        spawnCollectable(100, 300, type);
+    }
+
+    private void onNewFeatherPowerupClicked() {
+        var type = CollectableType.FeatherPowerup;
+        spawnCollectable(100, 300, type);
+    }
+
+    private void onNewSpeedPowerupClicked() {
+        var type = CollectableType.SpeedPowerup;
+        spawnCollectable(100, 300, type);
+    }
+    private void onNewCoinPowerupClicked() {
+        var type = CollectableType.CoinPowerup;
+        spawnCollectable(100, 300, type);
+    }
+
+    private void onNewHealthPowerupClicked() {
+        var type = CollectableType.HealthPowerup;
+        spawnCollectable(100, 300, type);
     }
 
     private void onCreateClicked() {
@@ -278,13 +322,29 @@ public class MainWindow {
             makeDraggable(enemyImage);
             makeEnemyDeletable(enemyImage);
         });
+        LevelDesigner.instance().getLevel().getCollectables().stream().forEach(c -> {
+            ImageView collectableImage = new ImageView(new Image("assets/images/collectables/" + c.getType().toString().toLowerCase() + ".png"));
+            collectableImage.layoutXProperty().set(c.centerPoint().xProperty().get());
+            collectableImage.layoutYProperty().set(c.centerPoint().yProperty().get());
+            c.centerPoint().xProperty().bind(collectableImage.layoutXProperty());
+            c.centerPoint().yProperty().bind(collectableImage.layoutYProperty());
+            collectableImage.setUserData(c);
+            pane.getChildren().add(collectableImage);
+            makeDraggable(collectableImage);
+            makeCollectableDeletable(collectableImage);
+
+
+        });
         // Generate Collectables from the level
         LevelDesigner.instance().getLevel().getCollectables().stream().forEach(enemy -> {
             // TODO: create logic to load in collectables
         });
     }
 
-
+       
+    
+    
+    
     private void makeBlockDeletable(ImageView node) {
         node.setOnMouseClicked( ev ->
         {
@@ -314,8 +374,7 @@ public class MainWindow {
                 LevelDesigner.instance().getLevel().removeCollectable((Collectable)node.getUserData());
                 pane.getChildren().remove(node);
             }
-        });
-            
+        });  
     }
 
     private void makeflagDeletable(ImageView node) {
@@ -442,6 +501,19 @@ public class MainWindow {
         LevelDesigner.instance().getLevel().getGoals().add(goal);
     }
  
+    private void spawnCollectable(int x, int y, CollectableType type) {
+        ImageView collectableImage = new ImageView(new Image("assets/images/collectables/" + type + ".png"));
+        var c = new Collectable(x, y, type);
+        collectableImage.layoutXProperty().set(c.centerPoint().xProperty().get());
+        collectableImage.layoutYProperty().set(c.centerPoint().yProperty().get());
+        c.centerPoint().xProperty().bind(collectableImage.layoutXProperty());
+        c.centerPoint().yProperty().bind(collectableImage.layoutYProperty());
+        collectableImage.setUserData(c);
+        pane.getChildren().add(collectableImage);
+        makeDraggable(collectableImage);
+        makeCollectableDeletable(collectableImage);
+        LevelDesigner.instance().getLevel().getCollectables().add(c);
+    }
 
     // From
     // https://stackoverflow.com/questions/18407634/rounding-up-to-the-nearest-hundred,

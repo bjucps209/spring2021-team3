@@ -342,14 +342,14 @@ public class Level {
                 writer.writeInt(blocks.get(i).getWidth());
                 
             }
-            // writer.writeInt(collectables.size());
-            // // Iterate through the collectables saving each's data
-            // for (int i = 0; i < collectables.size(); ++i) {
-            // // writer.writeInt(collectables.get(i).getId());
-            // writer.writeUTF(collectables.get(i).getType());
-            // writer.writeInt(collectables.get(i).centerPoint().getIntX());
-            // writer.writeInt(collectables.get(i).centerPoint().getIntY());
-            // }
+            writer.writeInt(collectables.size());
+            // Iterate through the collectables saving each's data
+            for (int i = 0; i < collectables.size(); ++i) {
+            // writer.writeInt(collectables.get(i).getId());
+            writer.writeUTF(collectables.get(i).getStringType());
+            writer.writeInt(collectables.get(i).centerPoint().getIntX());
+            writer.writeInt(collectables.get(i).centerPoint().getIntY());
+            }
         }
     }
 
@@ -409,6 +409,18 @@ public class Level {
             box.setHeight(reader.readInt());
             blocks.add(box);
         }
+        //Load colletables
+        int sizeOfCollectables = reader.readInt();
+            // Iterate through the collectables saving each's data
+            for (int i = 0; i < sizeOfCollectables; ++i) {
+                String type = reader.readUTF();
+                int x = reader.readInt();
+                int y = reader.readInt();
+                Collectable col = new Collectable(x, y, CollectableType.valueOf(type));
+                collectables.add(col);
+            }
+
+
         //set the spawn point
         setSpawnPoint(new Point(spawnX, spawnY));
 
