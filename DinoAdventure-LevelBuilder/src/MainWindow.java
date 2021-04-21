@@ -115,6 +115,7 @@ public class MainWindow {
 
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
     
+    private int currentLevelIndex = 0;
    
             
 
@@ -124,7 +125,7 @@ public class MainWindow {
      
     public void initialize() {
 
-        Font font = Font.font("Garamond", FontWeight.EXTRA_BOLD, 16);
+        Font font = Font.font("Garamond", FontWeight.EXTRA_BOLD, 14);
 
         btnSave.setFont(font);
         btnLoad.setFont(font);
@@ -139,12 +140,8 @@ public class MainWindow {
         //bind the levels spawn point to Dino's location
         //make him dragable
         
-        File[] files = new File("../DinoAdventure-Game/src/levels/").listFiles();
-        for (File file : files) {
-            if (file.isFile()) {
-                levelsChoice.getItems().add(file.getName());
-            }
-        }
+        updateLevelist();
+        
         
 
 
@@ -210,10 +207,37 @@ public class MainWindow {
     }
 
     private void onCreateClicked() {
+        
+        if (txtLevelName.getText().equals("")) {
+            var alert = new Alert(AlertType.INFORMATION, "Please Enter new Level's name!");
+            alert.setHeaderText(null);
+            alert.show();
+        }
+        else {
         pane.setPrefWidth(Integer.parseInt(txtWidth.getText()));
         LevelDesigner.instance().getLevel().setWidth((int)pane.getPrefWidth());
         pane.setPrefHeight(Integer.parseInt(txtHeight.getText()));
         LevelDesigner.instance().getLevel().setHeight((int)pane.getPrefHeight());
+        levelsChoice.setValue(txtLevelName.getText() + ".dat");
+        pane.getChildren().clear();
+        spawnDino(150, 300);
+        LevelDesigner.reset();
+        try {
+            onSaveClicked();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        updateLevelist();
+        try {
+            onLoadClicked();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        txtLevelName.setText("");
+        }
+
         
     }
 
@@ -277,13 +301,16 @@ public class MainWindow {
         LevelDesigner.instance().getLevel().setHeight((int)pane.getPrefHeight());
         LevelDesigner.instance().getLevel().getSpawnPoint().setX(pane.getChildren().get(0).getLayoutX());
         LevelDesigner.instance().getLevel().getSpawnPoint().setY(pane.getChildren().get(0).getLayoutY());
-        LevelDesigner.instance().getLevel().save("../DinoAdventure-Game/src/levels/" + txtLevelName.getText() + ".dat");
-
+        pane.setPrefWidth(Integer.parseInt(txtWidth.getText()));
+        LevelDesigner.instance().getLevel().setWidth((int)pane.getPrefWidth());
+        pane.setPrefHeight(Integer.parseInt(txtHeight.getText()));
+        LevelDesigner.instance().getLevel().setHeight((int)pane.getPrefHeight());
+        LevelDesigner.instance().getLevel().save("../DinoAdventure-Game/src/levels/" + levelsChoice.getValue());
     }
 
     private void onLoadClicked() throws Exception {
         pane.getChildren().clear();
-        LevelDesigner.instance().getLevel().load("../DinoAdventure-Game/src/levels/" + txtLevelName.getText() + ".dat");
+        LevelDesigner.instance().getLevel().load("../DinoAdventure-Game/src/levels/" + levelsChoice.getValue());
         txtWidth.setText(String.valueOf(LevelDesigner.instance().getLevel().getWidth()));
         txtHeight.setText(String.valueOf(LevelDesigner.instance().getLevel().getHeight()));
         spawnDino(LevelDesigner.instance().getLevel().getSpawnPoint().getIntX(), 
@@ -344,10 +371,7 @@ public class MainWindow {
 
 
         });
-        // Generate Collectables from the level
-        LevelDesigner.instance().getLevel().getCollectables().stream().forEach(enemy -> {
-            // TODO: create logic to load in collectables
-        });
+        
     }
 
        
@@ -522,6 +546,19 @@ public class MainWindow {
         makeDraggable(collectableImage);
         makeCollectableDeletable(collectableImage);
         LevelDesigner.instance().getLevel().getCollectables().add(c);
+    }
+
+
+    public void updateLevelist() {
+        File[] files = new File("../DinoAdventure-Game/src/levels/").listFiles();
+        String currentLevel = levelsChoice.getValue();
+        levelsChoice.getItems().clear();
+        for (File file : files) {
+            if (file.isFile()) {
+                levelsChoice.getItems().add(file.getName());
+            }
+        }
+        levelsChoice.setValue(currentLevel);
     }
 
     // From

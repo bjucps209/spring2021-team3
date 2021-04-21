@@ -11,7 +11,7 @@
     <!-- <ImageView><image><Image url="@images/logo.png" /></image></ImageView> -->
     <HBox spacing="10" prefHeight="980" >
         <HBox spacing="10" styleClass="propview">
-            <VBox spacing="10"  minWidth="200">
+            <VBox spacing="10"  minWidth="220">
                 <!-- <Label text = "Level Choice:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" /> -->
                 <HBox spacing="10">
                     <ChoiceBox fx:id="levelsChoice">
@@ -24,14 +24,9 @@
                         </value>
                     </ChoiceBox>
                     <Button text="_Load" fx:id="btnLoad" />
-                </HBox>
-                <Label fx:id="lblLevelName" text="Level Name"/>
-                <TextField fx:id="txtLevelName"/>
-                <HBox spacing="10">
-                    <Button text="_New Level" fx:id="btnCreate"/>
                     <Button text="_Save" fx:id="btnSave" />
-                    
                 </HBox>
+                
                 <HBox spacing="10">
                     <Label fx:id="lblLvlWidth" text="Width:"/>
                     <TextField fx:id="txtWidth" text="5000" maxWidth="90" />
@@ -40,6 +35,12 @@
                     <Label fx:id="lblLvlHeight" text="Height:"/>
                     <TextField fx:id="txtHeight" text="1080" maxWidth="90"/>
                 </HBox>
+                <HBox spacing="10">
+                    <Button text="_New Level" fx:id="btnCreate"/>                    
+                </HBox>
+                <Label fx:id="lblLevelName" text="Level Name"/>
+                <TextField fx:id="txtLevelName"/>
+                
                 
                 <ScrollPane fx:id="scrlPaneButtons" >
                 <!-- <Button text="_Delete" fx:id="btnDelete" /> -->
@@ -73,7 +74,7 @@
             </VBox>
         </HBox>
         <ScrollPane fx:id="scrlPaneLvl">
-            <Pane fx:id="pane" prefHeight="950" prefWidth="1700" style="-fx-background-color: lightgray" />
+            <Pane fx:id="pane" prefHeight="950" prefWidth="1680" style="-fx-background-color: lightgray" />
         </ScrollPane>
     </HBox>
     
