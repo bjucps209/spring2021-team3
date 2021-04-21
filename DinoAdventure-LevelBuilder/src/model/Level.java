@@ -29,8 +29,8 @@ public class Level {
     private LongProperty idleTimeProperty = new SimpleLongProperty();
     private Point spawnPoint = new Point();
 
-    //TODO fix the flag
-    //TODO fix level1
+   
+   
     //TODO rework the save/load/create functionality
     //TODO add a delete option
     //TODO Remove the .dat from file name (in main program)
