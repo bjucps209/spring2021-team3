@@ -1001,10 +1001,10 @@ public class MainWindow implements GameObserver {
     }
 
     public void updateHighScoresScreen() throws IOException {
-        ranks.getChildren().removeAll();
-        names.getChildren().removeAll();
-        scores.getChildren().removeAll();
-        levels.getChildren().removeAll();
+        ranks.getChildren().clear();
+        names.getChildren().clear();
+        scores.getChildren().clear();
+        levels.getChildren().clear();
 
         highScores.loadScores("HighScoreFiles/SaveScoresData.txt");
         List<Score> slist = highScores.getScoresList(); // list of highscores obtained from the scoresList
