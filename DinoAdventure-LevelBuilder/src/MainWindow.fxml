@@ -14,7 +14,7 @@
             <VBox spacing="10"  minWidth="220">
                 <!-- <Label text = "Level Choice:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" /> -->
                 <HBox spacing="10">
-                    <ChoiceBox fx:id="levelsChoice">
+                    <ChoiceBox fx:id="levelsChoice" maxWidth="100">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
                             </FXCollections>

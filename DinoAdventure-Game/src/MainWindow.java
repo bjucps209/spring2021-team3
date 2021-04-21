@@ -94,7 +94,7 @@ public class MainWindow implements GameObserver {
     private ArrayList<ImageView> collectableImages = new ArrayList<ImageView>();
     private ArrayList<ImageView> goalImages = new ArrayList<ImageView>();
 
-    private String levelToLoad = "level1";
+    private int currentLevelIndex = 0;
 
     HighScore highScores = HighScore.getInstance(); // High scores instantiation
 
