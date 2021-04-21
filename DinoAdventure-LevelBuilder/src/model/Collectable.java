@@ -34,16 +34,16 @@ public class Collectable extends Entity {
             return "Coin";
         }
         else if (type == CollectableType.FeatherPowerup) {
-            return "FeatherPowerup";
+            return "featherpowerup";
         }
         else if (type == CollectableType.SpeedPowerup) {
-            return "SpeedPowerup";
+            return "speedpowerup";
         }
         else if (type == CollectableType.CoinPowerup) {
-            return "CoinPowerup";
+            return "coinpowerup";
         }
         else if (type == CollectableType.HealthPowerup) {
-            return "HealthPowerup";
+            return "healthpowerup";
         }
         return "";
     }
