@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -108,13 +109,16 @@ public class MainWindow {
     @FXML
     ScrollPane scrlPaneLvl;
 
+    @FXML
+    ChoiceBox<String> levelsChoice;
+
 
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
     
-    // TODO: Make a button to add a (single) player to the level (but all it really does is set the spawn point)
+   
             
 
-    // TODO: add ability to add collectables
+  
 
     // TODO: ADD real drag n drop ability
      
@@ -135,7 +139,12 @@ public class MainWindow {
         //bind the levels spawn point to Dino's location
         //make him dragable
         
-    
+        File[] files = new File("../DinoAdventure-Game/src/levels/").listFiles();
+        for (File file : files) {
+            if (file.isFile()) {
+                levelsChoice.getItems().add(file.getName());
+            }
+        }
         
 
 

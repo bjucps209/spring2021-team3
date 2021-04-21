@@ -3,6 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+<?import java.lang.String?>
 
 <VBox fx:id="VboxMain" alignment="CENTER" spacing="10" stylesheets="@MainWindow.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="MainWindow" >
 
@@ -10,12 +12,25 @@
     <HBox spacing="10" prefHeight="980" >
         <HBox spacing="10" styleClass="propview">
             <VBox spacing="10"  minWidth="200">
+                <!-- <Label text = "Level Choice:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" /> -->
+                <HBox spacing="10">
+                    <ChoiceBox fx:id="levelsChoice">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                            </FXCollections>
+                        </items>
+                        <value>
+                            <String fx:value="EASY" />
+                        </value>
+                    </ChoiceBox>
+                    <Button text="_Load" fx:id="btnLoad" />
+                </HBox>
                 <Label fx:id="lblLevelName" text="Level Name"/>
                 <TextField fx:id="txtLevelName"/>
                 <HBox spacing="10">
-                    <Button text="_Create" fx:id="btnCreate"/>
+                    <Button text="_New Level" fx:id="btnCreate"/>
                     <Button text="_Save" fx:id="btnSave" />
-                    <Button text="_Load" fx:id="btnLoad" />
+                    
                 </HBox>
                 <HBox spacing="10">
                     <Label fx:id="lblLvlWidth" text="Width:"/>
