@@ -18,7 +18,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import model.*;
 
-;
+
 
 public class MainWindow {
 
@@ -111,6 +111,8 @@ public class MainWindow {
 
     @FXML
     ChoiceBox<String> levelsChoice;
+
+    boolean customMode = false;
 
 
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
@@ -305,12 +307,12 @@ public class MainWindow {
         LevelDesigner.instance().getLevel().setWidth((int)pane.getPrefWidth());
         pane.setPrefHeight(Integer.parseInt(txtHeight.getText()));
         LevelDesigner.instance().getLevel().setHeight((int)pane.getPrefHeight());
-        LevelDesigner.instance().getLevel().save("../DinoAdventure-Game/src/levels/" + levelsChoice.getValue());
+        LevelDesigner.instance().getLevel().save("../DinoAdventure-Game/CustomLevels/" + levelsChoice.getValue());
     }
 
     private void onLoadClicked() throws Exception {
         pane.getChildren().clear();
-        LevelDesigner.instance().getLevel().load("../DinoAdventure-Game/src/levels/" + levelsChoice.getValue());
+        LevelDesigner.instance().getLevel().load("../DinoAdventure-Game/CustomLevels/" + levelsChoice.getValue());
         txtWidth.setText(String.valueOf(LevelDesigner.instance().getLevel().getWidth()));
         txtHeight.setText(String.valueOf(LevelDesigner.instance().getLevel().getHeight()));
         spawnDino(LevelDesigner.instance().getLevel().getSpawnPoint().getIntX(), 
@@ -348,7 +350,7 @@ public class MainWindow {
         LevelDesigner.instance().getLevel().getEntites().stream().forEach(enemy -> {
             // spawnEnemy(enemy.centerPoint().xProperty().get(), enemy.centerPoint().yProperty().get(), enemy.getType());
             ImageView enemyImage = new ImageView(
-                    new Image("assets/images/enemies/" + enemy.getTypeString() + "-standing-left-1.png"));
+                    new Image("assets/images/enemies/" + enemy.getTypeString().toLowerCase() + "-standing-left-1.png"));
             enemyImage.layoutXProperty().set(enemy.centerPoint().xProperty().get());
             enemyImage.layoutYProperty().set(enemy.centerPoint().yProperty().get());
             enemy.centerPoint().xProperty().bind(enemyImage.layoutXProperty());
@@ -550,7 +552,7 @@ public class MainWindow {
 
 
     public void updateLevelist() {
-        File[] files = new File("../DinoAdventure-Game/src/levels/").listFiles();
+        File[] files = new File("../DinoAdventure-Game/CustomLevels/").listFiles();
         String currentLevel = levelsChoice.getValue();
         levelsChoice.getItems().clear();
         for (File file : files) {

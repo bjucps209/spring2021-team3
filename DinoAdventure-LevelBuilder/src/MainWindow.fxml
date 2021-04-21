@@ -35,11 +35,12 @@
                     <Label fx:id="lblLvlHeight" text="Height:"/>
                     <TextField fx:id="txtHeight" text="1080" maxWidth="90"/>
                 </HBox>
+                
+                <Label fx:id="lblLevelName" text="Level Name"/>
+                <TextField fx:id="txtLevelName"/>
                 <HBox spacing="10">
                     <Button text="_New Level" fx:id="btnCreate"/>                    
                 </HBox>
-                <Label fx:id="lblLevelName" text="Level Name"/>
-                <TextField fx:id="txtLevelName"/>
                 
                 
                 <ScrollPane fx:id="scrlPaneButtons" >
