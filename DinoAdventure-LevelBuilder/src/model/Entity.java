@@ -15,9 +15,6 @@ public class Entity extends Box {
 
         ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
 
-        // Apply gravity
-        yVelocity += Game.GRAVITY / Game.FPS;
-
         // Create dummy boxes for checking where our future velocities will place us
         Box xCheck = new Box();
         xCheck.centerPoint().copyFrom(centerPoint);
@@ -31,71 +28,6 @@ public class Entity extends Box {
         yCheck.centerPoint().add(0, yVelocity);
 
         onSurface = false;
-
-        // Check if the entity would be colliding with a surface based on the future velocities
-        for(Block b : Game.instance().getCurrentLevel().getBlocks()) {
-            if(b.overlaps(xCheck) && b.overlaps(yCheck)) {
-                xVelocity = 0;
-                yVelocity = 0;
-                if(centerPoint.getY() < b.centerPoint().getY()) {
-                    // Handle spawning inside a Block
-                    // Move the entity up to the surface if Entity.centerPoint is higher than Block.centerPoint
-                    centerPoint.setY(b.getMinY() - (heightProperty.get() / 2) - 1);
-                } else {
-                    // Handle corners/spawning inside the bottom of a Block
-                    // Move the Entity down to the bottom of a Block if Block.centerPoint is higher than Entity.centerPoint
-                    centerPoint.setY(b.getMaxY() + (heightProperty.get() / 2) + 1);
-                }
-            } else if(b.overlaps(xCheck)) {
-                // Handle hitting a wall
-                xVelocity = 0;
-            } else if(b.overlaps(yCheck)) {
-                // Handle hitting a ceiling/landing on a surface
-                yVelocity = 0;
-                if(centerPoint.getY() < b.centerPoint().getY()) {
-                    centerPoint.setY(b.getMinY() - (heightProperty.get() / 2) - 1);
-                    onSurface = true;
-                }
-            }
-        }
-
-        // Handle Player colliding with Enemy
-        if(this instanceof Player) {
-            for(Enemy e : Game.instance().getCurrentLevel().getEntites()) {
-                if(e.overlaps(xCheck) || e.overlaps(yCheck)) {
-
-                    if(e.overlaps(xCheck)) {
-                        if(centerPoint.getX() < e.centerPoint().getX()) {
-                            xVelocity -= 5;
-                        } else {
-                            xVelocity += 5;
-                        }
-                        yVelocity -= 5;
-                    }
-
-                    if(getMaxY() < e.getMinY()) {
-                        if(yVelocity > 0) {
-                            yVelocity = -15;
-                        }
-                        enemiesToRemove.add(e);
-                        ((Player) this).scoreProperty().set(((Player) this).scoreProperty().get() + 25);
-                    } else {
-                        ((Player) this).setHealth(((Player) this).getHealth() - 1);
-                    }
-
-                }
-            }
-        }
-
-        if(onSurface && !(this instanceof Player && ((Player) this).isMoving())) {
-            // Apply friction unless this Entity is a Player and the user is moving the Player
-            xVelocity = xVelocity * Game.FRICTION;
-        }
-
-        centerPoint.add(xVelocity, yVelocity);
-
-        for(Enemy e : enemiesToRemove) Game.instance().getCurrentLevel().getEntites().remove(e);
-
     }
 
     public boolean isOnSurface() {

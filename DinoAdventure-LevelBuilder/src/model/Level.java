@@ -17,7 +17,6 @@ public class Level {
     private ArrayList<Goal> goals = new ArrayList<Goal>();
     private ArrayList<Block> blocks = new ArrayList<Block>();
     private ArrayList<Collectable> collectables = new ArrayList<Collectable>();
-    private Player player;
     private int width = 0;
     private int height = 0;
     private String levelName;
@@ -37,7 +36,7 @@ public class Level {
 
     public Level() {
 
-        player = Game.instance().getPlayer();
+        // player = Game.instance().getPlayer();
 
         // Setup timer bindings
 
@@ -80,15 +79,6 @@ public class Level {
 
     public LongProperty remainingTimeProperty() {
         return remainingTimeProperty;
-    }
-
-    public void tick() {
-
-        currentTimeProperty.set(System.currentTimeMillis());
-        for (Entity e : enemies)
-            e.tick();
-        player.tick();
-
     }
 
     public LongProperty startTimeProperty() {
@@ -172,25 +162,11 @@ public class Level {
         return null;
     }
 
-    // /**
-    // * find the surface with the given id
-    // *
-    // * @param id
-    // * @return Block
-    // */
-    // public Collectable findCollectable(int id) {
-    // for (Collectable item : collectables) {
-    // if (item.getId() == id) {
-    // return item;
-    // }
-    // }
-    // return null;
-    // }
 
     /**
-     * remove the surface with the given surface id from surfaces
+     * remove the given block from blocks
      * 
-     * @param id
+     * @param block
      */
     public void removeBlock(Block block) {
         blocks.remove(block);
@@ -429,87 +405,6 @@ public class Level {
         setHeight(height);
 
         reader.close();
-    }
-
-    
-    // this was made for serialization the Game model. This method does not save the
-    // play in the Player.
-    // THe writer passed by the parameter is the one used in the save method in the
-    // game class
-    public void serialize(DataOutputStream writer) throws IOException {
-        writer.writeInt(width);
-        writer.writeInt(height);
-        int size = enemies.size();
-        writer.writeInt(size);
-        for (int i = 0; i < size; i++) {
-            if (enemies.get(i) instanceof Enemy) {
-                Enemy enemy = (Enemy) enemies.get(i);
-                writer.writeInt(enemies.get(i).getId());
-                enemy.serialize(writer); // This method needs more to be added when there are going to be multiple types
-                                         // of enemies in the game.
-            }
-        }
-
-        //
-        writer.writeInt(blocks.size());
-        for (int i = 0; i < blocks.size(); ++i) {
-            writer.writeInt(blocks.get(i).getId());
-            // writer.writeUTF(surfaces.get(i).getType());
-            writer.writeInt(blocks.get(i).centerPoint().getIntX());
-            writer.writeInt(blocks.get(i).centerPoint().getIntY());
-            writer.writeInt(blocks.get(i).getWidth());
-            writer.writeInt(blocks.get(i).getHeight());
-        }
-        if (levelName != null) {
-            writer.writeUTF(levelName);
-        } else {
-            writer.writeUTF("None");
-        }
-    }
-
-    // this was made for serialization the Game model. This method loads everything
-    // that was saved in the serialize method.
-    // The reader passed by the parameter is the one used in the load method in the
-    // game class.
-    public void deserialize(DataInputStream reader) throws IOException {
-        width = reader.readInt();
-        height = reader.readInt();
-        int entitiesSize = reader.readInt();
-        for (int i = 0; i < entitiesSize; i++) {
-            int id = reader.readInt();
-            if (this.findEntity(id) != null) {
-                Enemy enemy = (Enemy) this.findEntity(id);
-                enemy.deserialize(reader);
-            } else {
-                Enemy enemy = new Enemy();
-                this.addEntity(enemy);
-                enemy.deserialize(reader);
-                enemies.add(enemy);
-            }
-        }
-
-        int surfaceSize = reader.readInt();
-
-        for (int i = 0; i < surfaceSize; i++) {
-            int id = reader.readInt();
-            if (this.findBlock(id) != null) {
-                Block block = this.findBlock(id);
-                // String Type = reader.readUTF();
-                block.centerPoint().setXY(reader.readInt(), reader.readInt());
-                block.setWidth(reader.readInt());
-                block.setHeight(reader.readInt());
-            } else {
-                Block block = new Block();
-                block.setId(id);
-                // String type = reader.readUTF(); //I do really know what or where this would
-                // be set for
-                block.centerPoint().setXY(reader.readInt(), reader.readInt());
-                block.setWidth(reader.readInt());
-                block.setHeight(reader.readInt());
-                blocks.add(block);
-            }
-        }
-        levelName = reader.readUTF();
     }
     
 }

@@ -3,7 +3,7 @@ package model;
 import java.io.*;
 import javafx.beans.property.*;
 
-public class Enemy extends Entity implements Living {
+public class Enemy extends Entity {
 
     protected EnemyState state;
     protected EnemyState type;
@@ -50,80 +50,6 @@ public class Enemy extends Entity implements Living {
 
     public void setType(EnemyState type) {
         this.type = type;
-    }
-
-    @Override
-    public void tick() {
-
-        switch(type) {
-
-            
-            case WANDERING:
-                if(tps / Game.FPS == 1) {
-                    // Apply specific WanderingEnemy physics/behavior
-                    if(Game.random.nextInt(10) == 0) {
-                        // Randomly every ~X seconds, toggle whether or not the enemy is walking
-                        state = (state == EnemyState.STANDING ? EnemyState.WANDERING : EnemyState.STANDING);
-                    }
-
-                    if(Game.random.nextInt(15) == 0) {
-                        // Randomly every ~X seconds, toggle which direction the enemy is facing
-                        direction = (direction == EntityDirection.LEFT ? EntityDirection.RIGHT : EntityDirection.LEFT);
-                    }
-                }
-
-                if(state == EnemyState.WANDERING) {
-                    if(direction == EntityDirection.LEFT) {
-                        xVelocity = Math.max(-maxSpeed, xVelocity - (8 / Game.FPS));
-                    } else {
-                        xVelocity = Math.min(maxSpeed, xVelocity + (8 / Game.FPS));
-                    }
-                }
-                break;
-
-            case FOLLOWING:
-                if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 1000) {
-                    state = EnemyState.FOLLOWING;
-                    if(centerPoint.getX() - 15 > Game.instance().getPlayer().centerPoint().getX()) {
-                        xVelocity = Math.max(-maxSpeed, xVelocity - (10 / Game.FPS));
-                        direction = EntityDirection.LEFT;
-                    } else if(centerPoint.getX() + 15 < Game.instance().getPlayer().centerPoint().getX()) {
-                        xVelocity = Math.min(maxSpeed, xVelocity + (10 / Game.FPS));
-                        direction = EntityDirection.RIGHT;
-                    }
-                } else {
-                    state = EnemyState.STANDING;
-                }
-                break;
-
-            case FLEEING:
-                if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 500) {
-                    state = EnemyState.FOLLOWING;
-                    if(centerPoint.getX() > Game.instance().getPlayer().centerPoint().getX()) {
-                        xVelocity = Math.min(maxSpeed, xVelocity + (10 / Game.FPS));
-                        direction = EntityDirection.RIGHT;
-                    } else {
-                        xVelocity = Math.max(-maxSpeed, xVelocity - (10 / Game.FPS));
-                        direction = EntityDirection.LEFT;
-                    }
-                } else {
-                    state = EnemyState.STANDING;
-                }
-                break;
-
-            default:
-                break;
-
-        }
-
-        // Apply generic entity physics updates
-        super.tick();
-
-        tps++;
-        if(tps > Game.FPS) {
-            tps = 1;
-        }
-
     }
 
     /**
