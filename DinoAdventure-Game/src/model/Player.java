@@ -1,6 +1,8 @@
 package model;
 
 import java.io.*;
+import java.util.*;
+
 import javafx.beans.property.*;
 
 public class Player extends Entity implements Living {
@@ -9,6 +11,7 @@ public class Player extends Entity implements Living {
     private PlayerState state = PlayerState.STANDING;
     private IntegerProperty scoreProperty = new SimpleIntegerProperty();
     private IntegerProperty healthProperty = new SimpleIntegerProperty();
+    private EnumMap<CollectableType, Integer> effects = new EnumMap<CollectableType, Integer>(CollectableType.class);
     private boolean moving;
 
     public int getHealth() {
