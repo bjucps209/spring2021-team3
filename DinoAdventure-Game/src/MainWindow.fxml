@@ -18,7 +18,7 @@
         * Use `<fx:id>.setVisible(boolean)` to show and hide pages within the Java, just make sure only one is shown at a time.
     -->
 
-    <VBox fx:id="titlePage" styleClass="titlePage" managed="${titlePage.visible}" visible="true" alignment="CENTER" prefHeight="800">
+    <VBox fx:id="titlePage" styleClass="titlePage" managed="${titlePage.visible}" visible="true" alignment="CENTER" prefHeight="${window.height}">
         <Label text="DINO ADVENTURE" fx:id="title"  prefHeight="150">
         <style>
             -fx-font-size: 80px;
