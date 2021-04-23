@@ -1,21 +1,3 @@
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.geometry.Side;
-import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.Node;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import model.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,9 +5,51 @@ import java.util.List;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
+import model.Block;
+import model.Collectable;
+import model.CollectableType;
+import model.DifficultyType;
+import model.Enemy;
+import model.EnemyState;
+import model.EntityDirection;
+import model.Game;
+import model.GameObserver;
+import model.GameState;
+import model.Goal;
+import model.HighScore;
+import model.Level;
+import model.Point;
+import model.Score;
 
 public class MainWindow implements GameObserver {
 
@@ -56,6 +80,10 @@ public class MainWindow implements GameObserver {
     @FXML
     Label title; // title on the title screen
     @FXML
+    Label aboutTitle; // title on the about screen
+    @FXML
+    Label instructions; // title on the instructions screen
+    @FXML
     Label mainMenu; // main menu
     @FXML
     TextField name; // textfield for the player to enter their name
@@ -65,6 +93,9 @@ public class MainWindow implements GameObserver {
     @FXML
     ChoiceBox<String> levelsChoice; // dropdown for level selection TODO-update this list to show the levels in
                                     // src/levels/
+
+    @FXML
+    ChoiceBox<String> gameMode;
 
     // GUI controls for Highscores screen
     @FXML
@@ -117,6 +148,20 @@ public class MainWindow implements GameObserver {
         mainMenu.setFont(font);
 
         HOME_PAGE_MUSIC.play();
+
+        // Disable the level selection dropdown unless custom mode is selected (event
+        // handler onCustomClicked).
+        levelsChoice.setDisable(true);
+
+        // About screen initialization
+        aboutTitle.setTextFill(Color.DARKBLUE);
+        // set font of title and main menu
+        aboutTitle.setFont(font);
+
+        // Help screen initialization
+        instructions.setTextFill(Color.WHITE);
+        // set font of title and main menu
+        instructions.setFont(font);
 
         // High Scores screen initialization
 
@@ -449,13 +494,13 @@ public class MainWindow implements GameObserver {
             Game.instance().getPlayer().setMoving(true);
             if (Game.instance().getPlayer().isOnSurface()) {
                 Game.instance().getPlayer().setYVelocity(
-                        Game.instance().getPlayer().getYVelocity() - Game.instance().getPlayer().getMaxJumpHeight());
+                        Game.instance().getPlayer().getYVelocity() - Game.instance().getPlayer().getMaxJumpHeight() - (Game.instance().getPlayer().getEffects().containsKey(CollectableType.FeatherPowerup) ? 4 : 0));
             }
         }
 
         if (leftKeyPressed && !rightKeyPressed) {
             Game.instance().getPlayer().setMoving(true);
-            Game.instance().getPlayer().setXVelocity(Math.max(-Game.instance().getPlayer().getMaxSpeed(),
+            Game.instance().getPlayer().setXVelocity(Math.max(-(Game.instance().getPlayer().getMaxSpeed() + (Game.instance().getPlayer().getEffects().containsKey(CollectableType.SpeedPowerup) ? 3 : 0)),
                     Game.instance().getPlayer().getXVelocity() - (10 / Game.FPS)));
             Game.instance().getPlayer().setDirection(EntityDirection.LEFT);
         }
@@ -471,13 +516,16 @@ public class MainWindow implements GameObserver {
             Game.instance().setState(GameState.LEVEL_PAUSED);
         }
 
-        if (Game.instance().getPlayer().getMinY() > window.getHeight()) {
+        if (Game.instance().getPlayer().getMinY() > Game.instance().getCurrentLevel().getHeight()) {
 
             // If the player falls off the screen, deduct 10 HP
-            Game.instance().getPlayer().setHealth(Game.instance().getPlayer().getHealth() - 10);
+            Game.instance().getPlayer().setHealth(Math.max(0, Game.instance().getPlayer().getHealth() - 10));
+
+            // Clear effects
+            Game.instance().getPlayer().getEffects().clear();
 
             // If the player isn't out of health, respawn them
-            if (Game.instance().getPlayer().getHealth() > 0) {
+            if (Game.instance().getPlayer().getHealth() != 0 || Game.instance().isCheating()) {
                 Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
                 Game.instance().getPlayer().centerPoint().subtract(0, 50);
                 Game.instance().getPlayer().setXVelocity(0);
@@ -656,7 +704,7 @@ public class MainWindow implements GameObserver {
             alert.show();
         } else {
             HOME_PAGE_MUSIC.stop();
-            
+
             Game.instance().setUserName(name.getText());
             Game.instance().setDifficulty(DifficultyType.valueOf(difficultyLevels.getValue()));
 
@@ -693,6 +741,7 @@ public class MainWindow implements GameObserver {
             titlePage.setVisible(false);
             gamePage.getChildren().removeAll();
             enemyImages.clear();
+            Game.instance().getPlayer().getEffects().clear();
             collectableImages.clear();
             goalImages.clear();
 
@@ -835,14 +884,22 @@ public class MainWindow implements GameObserver {
             case EASY:
                 Game.instance().getPlayer().setHealth(20);
                 Game.instance().getCurrentLevel().maxTimeProperty().set(500 * 1000);
+                Game.instance().setCheating(false);
                 break;
             case MEDIUM:
                 Game.instance().getPlayer().setHealth(15);
                 Game.instance().getCurrentLevel().maxTimeProperty().set(400 * 1000);
+                Game.instance().setCheating(false);
                 break;
             case HARD:
                 Game.instance().getPlayer().setHealth(10);
                 Game.instance().getCurrentLevel().maxTimeProperty().set(300 * 1000);
+                Game.instance().setCheating(false);
+                break;
+            case CHEAT:
+                Game.instance().getPlayer().setHealth(-1);
+                Game.instance().getCurrentLevel().maxTimeProperty().set(-1);
+                Game.instance().setCheating(true);
                 break;
             default:
                 break;
@@ -861,8 +918,8 @@ public class MainWindow implements GameObserver {
 
             Label timerSecondsLabel = new Label();
             timerSecondsLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-                return String.valueOf(Game.instance().getCurrentLevel().remainingTimeProperty().get() / 1000) + "s ";
-            }, Game.instance().getCurrentLevel().remainingTimeProperty()));
+                return Game.instance().isCheating() ? "∞" : String.valueOf(Game.instance().getCurrentLevel().remainingTimeProperty().get() / 1000) + "s ";
+            }, Game.instance().getCurrentLevel().maxTimeProperty(), Game.instance().getCurrentLevel().remainingTimeProperty()));
             timerHBox.getChildren().add(timerSecondsLabel);
 
             Label timerIconLabel = new Label();
@@ -891,7 +948,7 @@ public class MainWindow implements GameObserver {
 
             Label healthLabel = new Label();
             healthLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-                return String.valueOf(Game.instance().getPlayer().healthProperty().get()) + " ";
+                return Game.instance().isCheating() ? "∞" : String.valueOf(Game.instance().getPlayer().healthProperty().get()) + " ";
             }, Game.instance().getPlayer().healthProperty()));
             healthHBox.getChildren().add(healthLabel);
 
@@ -934,13 +991,24 @@ public class MainWindow implements GameObserver {
 
     // Event Handlers for Title Screen
     @FXML
-    void onAboutClicked(ActionEvent event) throws IOException {
+    void onCustomClicked(ActionEvent e) {
+        if (gameMode.getSelectionModel().getSelectedItem().equals("CUSTOM")) {
+            levelsChoice.setDisable(false);
+        } else {
+            levelsChoice.setDisable(true);
+        }
+    }
 
+    @FXML
+    void onAboutClicked(ActionEvent event) throws IOException {
+        titlePage.setVisible(false);
+        aboutPage.setVisible(true);
     }
 
     @FXML
     void onHelpClicked(ActionEvent event) throws IOException {
-
+        titlePage.setVisible(false);
+        helpPage.setVisible(true);
     }
 
     @FXML
@@ -984,6 +1052,8 @@ public class MainWindow implements GameObserver {
     void onMainMenuClicked(ActionEvent event) throws IOException {
         highScoresPage.setVisible(false);
         newHighscorePage.setVisible(false);
+        aboutPage.setVisible(false);
+        helpPage.setVisible(false);
         titlePage.setVisible(true);
     }
 

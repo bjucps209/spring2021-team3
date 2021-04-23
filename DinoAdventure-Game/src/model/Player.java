@@ -1,6 +1,8 @@
 package model;
 
 import java.io.*;
+import java.util.*;
+
 import javafx.beans.property.*;
 
 public class Player extends Entity implements Living {
@@ -9,10 +11,15 @@ public class Player extends Entity implements Living {
     private PlayerState state = PlayerState.STANDING;
     private IntegerProperty scoreProperty = new SimpleIntegerProperty();
     private IntegerProperty healthProperty = new SimpleIntegerProperty();
+    private EnumMap<CollectableType, Integer> effects = new EnumMap<CollectableType, Integer>(CollectableType.class);
     private boolean moving;
 
     public int getHealth() {
         return healthProperty.get();
+    }
+
+    public EnumMap<CollectableType, Integer> getEffects() {
+        return effects;
     }
 
     public boolean isMoving() {
@@ -53,13 +60,13 @@ public class Player extends Entity implements Living {
         // Apply generic entity physics updates
         super.tick();
 
-        if(healthProperty.get() <= 0) {
+        if(!Game.instance().isCheating() && healthProperty.get() == 0) {
             Game.instance().setGameOverMessage("You ran out of health!");
             Game.instance().setState(GameState.GAME_OVER);
             Game.instance().getPlayer().setState(PlayerState.DEAD);
         }
 
-        if(Game.instance().getCurrentLevel().remainingTimeProperty().get() <= 0) {
+        if(!Game.instance().isCheating() && Game.instance().getCurrentLevel().remainingTimeProperty().get() <= 0) {
             Game.instance().setGameOverMessage("You ran out of time!");
             Game.instance().setState(GameState.GAME_OVER);
             Game.instance().getPlayer().setState(PlayerState.DEAD);

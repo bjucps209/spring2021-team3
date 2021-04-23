@@ -91,7 +91,8 @@ public class Entity extends Box {
                             Game.instance().getCurrentLevel().getCollectables().add(c);
                         }
                     } else {
-                        ((Player) this).setHealth(((Player) this).getHealth() - 1);
+                        ((Player) this).setHealth(Math.max(0, ((Player) this).getHealth() - 1));
+                        ((Player) this).getEffects().clear();
                     }
 
                 }

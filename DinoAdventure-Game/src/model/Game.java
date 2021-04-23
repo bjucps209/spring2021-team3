@@ -15,6 +15,7 @@ public class Game {
     private int score;
     private DifficultyType difficulty = DifficultyType.EASY;
     private String gameOverMessage;
+    private boolean cheating;
 
     public static Random random = new Random();
 
@@ -29,6 +30,14 @@ public class Game {
     private Game() {
         player = new Player();
         state = GameState.MENU;
+    }
+
+    public boolean isCheating() {
+        return cheating;
+    }
+
+    public void setCheating(boolean cheating) {
+        this.cheating = cheating;
     }
 
     public String getGameOverMessage() {

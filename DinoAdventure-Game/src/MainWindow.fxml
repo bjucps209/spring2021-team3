@@ -37,7 +37,7 @@
         </HBox>
 
         <HBox spacing="20" alignment="CENTER" prefHeight="100">
-            <Label text = "Enter your name:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" prefWidth = "200" />
+            <Label text = "Enter your name:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" prefWidth = "150" />
             <TextField fx:id="name" text = "" />
             <Label text = "Difficulty Level:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
             <ChoiceBox fx:id="difficultyLevels">
@@ -46,14 +46,28 @@
                     <String fx:value="EASY" />
                     <String fx:value="MEDIUM" />
                     <String fx:value="HARD" />
-                    <String fx:value="CUSTOM" />
+                    <String fx:value="CHEAT" />
                     </FXCollections>
                 </items>
                 <value>
                     <String fx:value="EASY" />
                 </value>
             </ChoiceBox>
-            <Label text = "Level Choice:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
+            
+            <Label text = "Game Mode:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
+            <ChoiceBox fx:id="gameMode" onAction="#onCustomClicked">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="NORMAL" />
+                    <String fx:value="CUSTOM" />
+                    </FXCollections>
+                </items>
+                <value>
+                    <String fx:value="NORMAL" />
+                </value>
+            </ChoiceBox>
+
+            <Label text = "Level:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
             <ChoiceBox fx:id="levelsChoice">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
@@ -61,7 +75,7 @@
                     </FXCollections>
                 </items>
                 <value>
-                    <String fx:value="EASY" />
+                    <String fx:value="Demo" />
                 </value>
             </ChoiceBox>
         </HBox>
@@ -112,15 +126,38 @@
         <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
     </VBox>
 
-    <VBox fx:id="helpPage" styleClass="helpPage" managed="${helpPage.visible}" visible="false">
+    <VBox fx:id="helpPage" styleClass="helpPage" managed="${helpPage.visible}" visible="false" prefHeight="800" alignment="CENTER" spacing="30">
+        <HBox alignment="CENTER" style="-fx-font-size: 50px;-fx-border-color:#DAA520;-fx-border-width:2px;-fx-border-height:2px;-fx-font: 28px Vivaldi;" >
+            <Label fx:id="instructions" text="INSTRUCTIONS" alignment="CENTER"/>
+        </HBox>
 
-        <!-- TODO: Build help page here -->
+        <HBox alignment="CENTER" style="-fx-font-size:30px;">
+            <Label text="Follow these to finish DINO ADVENTURE." style="-fx-text-fill: WHITE"/>
+        </HBox>
 
+        <VBox alignment="CENTER" style="-fx-font-size:20px; -fx-padding:40px;" spacing="15">
+            <Label text="You are DINO and must proceed platform by platform to reach the end of your adventure. Use the left arrow to go left, the right arrow to go forward, and the up arrow to jump." wrapText="true" style="-fx-text-fill: WHITE"/>
+            <Label text="Kill the enemies by jumping and landing on their head. Every time you kill an enemy, you can collect a coin worth 25 points. Hitting an enemy anywhere other than the head makes you lose 1 health point." wrapText="true" style="-fx-text-fill: WHITE"/>
+            <Label text="Falling in the gap between platforms makes you lose 10 points. The feather powerup enables you to jump higher for 10 seconds. The lightning powerup increases your speed, and the first-aid powerup increases your health by 10 points" wrapText="true" style="-fx-text-fill: WHITE"/>
+            <Label text="Each level ends at the finish line. The game ends when you run out of health or complete the levels in the sequence you have chosen." wrapText="true" style="-fx-text-fill: WHITE"/>
+            <Label text="HAVE A GREAT GAME!" wrapText="true" style="-fx-text-fill: WHITE"/>
+        </VBox>
+
+        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="highscorePageButton"/>
     </VBox>
 
-    <VBox fx:id="aboutPage" styleClass="aboutPage" managed="${aboutPage.visible}" visible="false">
-
-        <!-- TODO: Build about page here -->
+    <VBox fx:id="aboutPage" styleClass="aboutPage" managed="${aboutPage.visible}" visible="false" prefHeight="800" alignment="CENTER" spacing="30">
+        <Label fx:id="aboutTitle" text="ABOUT DINO ADVENTURE" />
+        <Label text="Version 1.0" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
+        <Label text="DINO ADVENTURE is created by Team 3 of CPS 209." style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+        <VBox spacing = "20" alignment="CENTER">
+            <Label text="Developers:" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Luke Darling" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Rebecca Henderson" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Christopher Zuehlke" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Reshi Pasupuleti" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+        </VBox>
+        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
 
     </VBox>
 
