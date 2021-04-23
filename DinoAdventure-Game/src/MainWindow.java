@@ -126,7 +126,7 @@ public class MainWindow implements GameObserver {
     private ArrayList<ImageView> goalImages = new ArrayList<ImageView>();
 
     //holds the current index of the level
-    private int currentLevelIndex = 1;
+    private int currentLevelIndex = 3;
 
     //holds the current score of the player for when the next level is loaded
     private int currentScore = 0;
@@ -828,130 +828,9 @@ public class MainWindow implements GameObserver {
             AnchorPane.setLeftAnchor(levelPane, 0.0);
             AnchorPane.setBottomAnchor(levelPane, 0.0);
 
+            //load the level
             loadLevel();
-            // // Create/load level
-
-            // Level level;
-
-            // // Generate some testing dummy terrain
-            // // Please leave here for now so I can test with it
-            // // Enable dummy terrain if you want to demo the gameplay
-
-            // // boolean dummyTerrain = false;
-            // if (levelsChoice.getValue().equals("Demo") && gameMode.getValue().equals("Custom")) {
-
-            //     level = new Level();
-            //     level.setSpawnPoint(new Point(100, 540));
-            //     level.setWidth(4000);
-            //     level.setHeight(1080);
-
-            //     // Set level as the current level
-            //     Game.instance().startLevel(level);
-
-            //     for (int i = 0; i < 10; i++) {
-            //         ImageView blockImage = new ImageView(
-            //                 new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
-            //         Block block = new Block();
-            //         block.centerPoint().setXY(100 + (i * 128), 600);
-            //         block.setWidth(128);
-            //         block.setHeight(128);
-            //         level.getBlocks().add(block);
-            //         blockImage.xProperty().bind(block.minXProperty());
-            //         blockImage.yProperty().bind(block.minYProperty());
-            //         levelPane.getChildren().add(blockImage);
-            //     }
-
-            //     for (int i = 0; i < 3; i++) {
-            //         ImageView blockImage = new ImageView(new Image(
-            //                 "assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
-            //         Block block = new Block();
-            //         block.centerPoint().setXY(500 + (i * 128), 418);
-            //         block.setWidth(128);
-            //         block.setHeight(93);
-            //         level.getBlocks().add(block);
-            //         blockImage.xProperty().bind(block.minXProperty());
-            //         blockImage.yProperty().bind(block.minYProperty());
-            //         levelPane.getChildren().add(blockImage);
-            //     }
-
-            //     for (int i = 11; i < 30; i++) {
-            //         ImageView blockImage = new ImageView(new Image(
-            //                 "assets/images/world/ground-" + (i == 11 ? "1" : (i == 29 ? "3" : "2")) + ".png"));
-            //         Block block = new Block();
-            //         block.centerPoint().setXY(100 + (i * 128), 600);
-            //         block.setWidth(128);
-            //         block.setHeight(128);
-            //         level.getBlocks().add(block);
-            //         blockImage.xProperty().bind(block.minXProperty());
-            //         blockImage.yProperty().bind(block.minYProperty());
-            //         levelPane.getChildren().add(blockImage);
-            //     }
-
-            //     Game.instance().getCurrentLevel().getEnemies().add(new Enemy(500, 456, EnemyState.WANDERING));
-            //     Game.instance().getCurrentLevel().getEnemies().add(new Enemy(550, 200, EnemyState.WANDERING));
-            //     Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1200, 456, EnemyState.FOLLOWING));
-            //     Game.instance().getCurrentLevel().getEnemies().add(new Enemy(800, 456, EnemyState.FLEEING));
-            //     Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1100, 456, EnemyState.JUMPING));
-
-            //     Game.instance().getCurrentLevel().getCollectables()
-            //             .add(new Collectable(1000, 400, CollectableType.Coin));
-
-            //     Game.instance().getCurrentLevel().getCollectables()
-            //             .add(new Collectable(1600, 400, CollectableType.FeatherPowerup));
-            //     Game.instance().getCurrentLevel().getCollectables()
-            //             .add(new Collectable(1800, 400, CollectableType.SpeedPowerup));
-            //     Game.instance().getCurrentLevel().getCollectables()
-            //             .add(new Collectable(2000, 400, CollectableType.HealthPowerup));
-            //     Game.instance().getCurrentLevel().getCollectables()
-            //             .add(new Collectable(2200, 400, CollectableType.CoinPowerup));
-
-            //     Game.instance().getCurrentLevel().getGoals().add(new Goal(3800, 500));
-
-            // } else {
-                
-            //     // TODO: Load level here instead of making a dummy level
-            //     level = new Level();
-
-            //     // Set level as the current level
-            //     Game.instance().startLevel(level);
-
-            //     if (gameMode.getValue().equals("CUSTOM")) {
-            //         try {
-            //             level.load("CustomLevels/" + levelsChoice.getSelectionModel().getSelectedItem() + ".dat");
-            //         } catch (IOException e1) {
-            //             // TODO Auto-generated catch block
-            //             e1.printStackTrace();
-            //         }
-            //     }
-            //     else {
-            //         try {
-            //             level.load("src/levels/" + "Level" + currentLevelIndex + ".dat");
-            //         } catch (IOException e1) {
-            //             // TODO Auto-generated catch block
-            //             e1.printStackTrace();
-            //         }
-                    
-            //     }
-            //     // Generate real terrain
-            //     level.getBlocks().stream().forEach(block -> {
-            //         ImageView blockImage = new ImageView(new Image(block.getTexture()));
-            //         blockImage.xProperty().bind(block.minXProperty());
-            //         blockImage.yProperty().bind(block.minYProperty());
-            //         levelPane.getChildren().add(blockImage);
-            //     });
-            //     // Generate Collectables from the level
-            //     level.getCollectables().stream().forEach(enemy -> {
-            //         // TODO: create logic to load in collectables
-            //     });
-            // }
-
-            // levelPane.setMinWidth(level.getWidth());
-            // levelPane.setMinHeight(level.getHeight());
-            // levelPane.setMaxWidth(level.getWidth());
-            // levelPane.setMaxHeight(level.getHeight());
-
-
-            
+           
 
             // Set difficulty
             switch (Game.instance().getDifficulty()) {
@@ -1142,6 +1021,7 @@ public class MainWindow implements GameObserver {
         titlePage.setVisible(false);
         newHighscorePage.setVisible(true);
         gamePage.setVisible(false);
+        highScoresPage.setVisible(false);
     }
 
     public void loadLevel() {
