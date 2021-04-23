@@ -128,9 +128,6 @@ public class MainWindow implements GameObserver {
     //holds the current index of the level
     private int currentLevelIndex = 0;
 
-    //holds the current score of the player for when the next level is loaded
-    private int currentScore = 0;
-
     HighScore highScores = HighScore.getInstance(); // High scores instantiation
 
     final MediaPlayer HOME_PAGE_MUSIC = new MediaPlayer(
@@ -439,7 +436,6 @@ public class MainWindow implements GameObserver {
                 gameLoop.stop();
     
                 File[] levels = new File("src/levels").listFiles();
-                currentScore = 0;
                 VBox levelWonPane = new VBox();
                 levelWonPane.setAlignment(Pos.CENTER);
                 levelWonPane.getStyleClass().add("levelWonPane");
@@ -491,7 +487,6 @@ public class MainWindow implements GameObserver {
                         levelWonButtons.getChildren().add(levelWonNextButton);
                         
                         levelWonNextButton.setOnAction(ev -> {
-                            currentScore = Game.instance().getScore();
                             ++currentLevelIndex;
                             play(new ActionEvent());
                         });
@@ -1149,12 +1144,6 @@ public class MainWindow implements GameObserver {
             level.getCollectables().stream().forEach(enemy -> {
                 // TODO: create logic to load in collectables
             });
-        }
-
-
-        //get current score
-        if (currentScore != 0) {
-            Game.instance().setScore(currentScore);
         }
         
         levelPane.setMinWidth(level.getWidth());
