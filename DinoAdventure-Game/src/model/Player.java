@@ -18,6 +18,10 @@ public class Player extends Entity implements Living {
         return healthProperty.get();
     }
 
+    public EnumMap<CollectableType, Integer> getEffects() {
+        return effects;
+    }
+
     public boolean isMoving() {
         return moving;
     }
@@ -56,7 +60,7 @@ public class Player extends Entity implements Living {
         // Apply generic entity physics updates
         super.tick();
 
-        if(healthProperty.get() <= 0) {
+        if(healthProperty.get() == 0) {
             Game.instance().setGameOverMessage("You ran out of health!");
             Game.instance().setState(GameState.GAME_OVER);
             Game.instance().getPlayer().setState(PlayerState.DEAD);

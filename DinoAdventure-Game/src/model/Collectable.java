@@ -25,25 +25,15 @@ public class Collectable extends Entity {
     }
 
     public void collect() {
+        int effectSeconds = 10;
         switch(type) {
             case Coin:
                 Game.instance().getPlayer().scoreProperty().set(Game.instance().getPlayer().scoreProperty().get() + 25);
                 break;
 
-            case SpeedPowerup:
-                int speedChange = 3;
-                Game.instance().getPlayer().setMaxSpeed(Game.instance().getPlayer().getMaxSpeed() + speedChange);
-                new Timeline(new KeyFrame(Duration.seconds(10), e -> {
-                    Game.instance().getPlayer().setMaxSpeed(Game.instance().getPlayer().getMaxSpeed() - speedChange);
-                })).play();
-                break;
-
             case FeatherPowerup:
-                int jumpChange = 4;
-                Game.instance().getPlayer().setMaxJumpHeight(Game.instance().getPlayer().getMaxJumpHeight() + jumpChange);
-                new Timeline(new KeyFrame(Duration.seconds(10), e -> {
-                    Game.instance().getPlayer().setMaxJumpHeight(Game.instance().getPlayer().getMaxJumpHeight() - jumpChange);
-                })).play();
+            case SpeedPowerup:
+                Game.instance().getPlayer().getEffects().put(type, effectSeconds);
                 break;
 
             case HealthPowerup:

@@ -449,13 +449,13 @@ public class MainWindow implements GameObserver {
             Game.instance().getPlayer().setMoving(true);
             if (Game.instance().getPlayer().isOnSurface()) {
                 Game.instance().getPlayer().setYVelocity(
-                        Game.instance().getPlayer().getYVelocity() - Game.instance().getPlayer().getMaxJumpHeight());
+                        Game.instance().getPlayer().getYVelocity() - Game.instance().getPlayer().getMaxJumpHeight() - (Game.instance().getPlayer().getEffects().containsKey(CollectableType.FeatherPowerup) ? 4 : 0));
             }
         }
 
         if (leftKeyPressed && !rightKeyPressed) {
             Game.instance().getPlayer().setMoving(true);
-            Game.instance().getPlayer().setXVelocity(Math.max(-Game.instance().getPlayer().getMaxSpeed(),
+            Game.instance().getPlayer().setXVelocity(Math.max(-(Game.instance().getPlayer().getMaxSpeed() + (Game.instance().getPlayer().getEffects().containsKey(CollectableType.SpeedPowerup) ? 3 : 0)),
                     Game.instance().getPlayer().getXVelocity() - (10 / Game.FPS)));
             Game.instance().getPlayer().setDirection(EntityDirection.LEFT);
         }
@@ -471,13 +471,16 @@ public class MainWindow implements GameObserver {
             Game.instance().setState(GameState.LEVEL_PAUSED);
         }
 
-        if (Game.instance().getPlayer().getMinY() > window.getHeight()) {
+        if (Game.instance().getPlayer().getMinY() > Game.instance().getCurrentLevel().getHeight()) {
 
             // If the player falls off the screen, deduct 10 HP
-            Game.instance().getPlayer().setHealth(Game.instance().getPlayer().getHealth() - 10);
+            Game.instance().getPlayer().setHealth(Math.max(0, Game.instance().getPlayer().getHealth() - 10));
+
+            // Clear effects
+            Game.instance().getPlayer().getEffects().clear();
 
             // If the player isn't out of health, respawn them
-            if (Game.instance().getPlayer().getHealth() > 0) {
+            if (Game.instance().getPlayer().getHealth() != 0) {
                 Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
                 Game.instance().getPlayer().centerPoint().subtract(0, 50);
                 Game.instance().getPlayer().setXVelocity(0);
@@ -693,6 +696,7 @@ public class MainWindow implements GameObserver {
             titlePage.setVisible(false);
             gamePage.getChildren().removeAll();
             enemyImages.clear();
+            Game.instance().getPlayer().getEffects().clear();
             collectableImages.clear();
             goalImages.clear();
 
@@ -843,6 +847,10 @@ public class MainWindow implements GameObserver {
             case HARD:
                 Game.instance().getPlayer().setHealth(10);
                 Game.instance().getCurrentLevel().maxTimeProperty().set(300 * 1000);
+                break;
+            case CHEAT:
+                Game.instance().getPlayer().setHealth(-1);
+                Game.instance().getCurrentLevel().maxTimeProperty().set(-1);
                 break;
             default:
                 break;
