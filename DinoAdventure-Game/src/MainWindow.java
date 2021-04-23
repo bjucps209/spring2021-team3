@@ -884,14 +884,17 @@ public class MainWindow implements GameObserver {
             case EASY:
                 Game.instance().getPlayer().setHealth(20);
                 Game.instance().getCurrentLevel().maxTimeProperty().set(500 * 1000);
+                Game.instance().setCheating(false);
                 break;
             case MEDIUM:
                 Game.instance().getPlayer().setHealth(15);
                 Game.instance().getCurrentLevel().maxTimeProperty().set(400 * 1000);
+                Game.instance().setCheating(false);
                 break;
             case HARD:
                 Game.instance().getPlayer().setHealth(10);
                 Game.instance().getCurrentLevel().maxTimeProperty().set(300 * 1000);
+                Game.instance().setCheating(false);
                 break;
             case CHEAT:
                 Game.instance().getPlayer().setHealth(-1);
