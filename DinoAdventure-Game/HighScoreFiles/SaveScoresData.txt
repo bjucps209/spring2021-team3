@@ -5,6 +5,6 @@ Joe,225,EASY
 Rita,180,MEDIUM
 Mary,175,EASY
 Sebastian,160,EASY
+Rose,150,EASY
 Yanel,125,EASY
 Leah,125,EASY
-James,75,EASY

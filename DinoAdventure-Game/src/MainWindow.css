@@ -33,15 +33,29 @@
     -fx-text-fill: WHITE
 }
 
+.highscorePageButton {
+    -fx-font-size: 20px; 
+    -fx-background-color: #25ac3b;
+    -fx-text-fill: DARKBLUE; 
+}
+
+.highscorePageButton:hover {
+    -fx-background-color: #7bee8e;
+}
+
 .newHighscorePage{
     -fx-background-color: #25ac3b;
     -fx-text-fill: DARKBLUE;  
 }
 
-.highscorePageButton {
-    -fx-font-size: 20px; 
+.aboutPage{
     -fx-background-color: #25ac3b;
     -fx-text-fill: DARKBLUE; 
+}
+
+.helpPage{
+    -fx-background-color: DARKBLUE; 
+    -fx-text-fill: WHITE
 }
 
 /* Game styles */
