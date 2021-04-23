@@ -52,6 +52,13 @@ public class Game {
         return instance;
     }
 
+    //start the next level without reseting the score
+    public void startNextLevel(Level level) {
+        currentLevel = level;
+
+        level.startTimeProperty().set(System.currentTimeMillis());
+    }
+
     public void startLevel(Level level) {
         currentLevel = level;
         player.scoreProperty().set(0);

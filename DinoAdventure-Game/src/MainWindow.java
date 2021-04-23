@@ -1107,12 +1107,16 @@ public class MainWindow implements GameObserver {
 
         } else {
             
-            // TODO: Load level here instead of making a dummy level
             level = new Level();
 
             // Set level as the current level
-            Game.instance().startLevel(level);
+            if (Game.instance().getState() == GameState.LEVEL_WON) {
+                Game.instance().startNextLevel(level);
+            }
             
+            else {
+                Game.instance().startLevel(level);
+            }
             
 
             if (gameMode.getValue().equals("CUSTOM")) {
