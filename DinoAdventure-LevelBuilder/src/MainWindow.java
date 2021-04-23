@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -307,12 +307,12 @@ public class MainWindow {
         LevelDesigner.instance().getLevel().setWidth((int)pane.getPrefWidth());
         pane.setPrefHeight(Integer.parseInt(txtHeight.getText()));
         LevelDesigner.instance().getLevel().setHeight((int)pane.getPrefHeight());
-        LevelDesigner.instance().getLevel().save("../DinoAdventure-Game/CustomLevels/" + levelsChoice.getValue());
+        LevelDesigner.instance().getLevel().save("../DinoAdventure-Game/CustomLevels/" + levelsChoice.getValue() + ".dat");
     }
 
     private void onLoadClicked() throws Exception {
         pane.getChildren().clear();
-        LevelDesigner.instance().getLevel().load("../DinoAdventure-Game/CustomLevels/" + levelsChoice.getValue());
+        LevelDesigner.instance().getLevel().load("../DinoAdventure-Game/CustomLevels/" + levelsChoice.getValue() + ".dat");
         txtWidth.setText(String.valueOf(LevelDesigner.instance().getLevel().getWidth()));
         txtHeight.setText(String.valueOf(LevelDesigner.instance().getLevel().getHeight()));
         spawnDino(LevelDesigner.instance().getLevel().getSpawnPoint().getIntX(), 
@@ -537,7 +537,7 @@ public class MainWindow {
     }
  
     private void spawnCollectable(int x, int y, CollectableType type) {
-        ImageView collectableImage = new ImageView(new Image("assets/images/collectables/" + type + ".png"));
+        ImageView collectableImage = new ImageView(new Image("assets/images/collectables/" + type.name().toLowerCase() + ".png"));
         var c = new Collectable(x, y, type);
         collectableImage.layoutXProperty().set(c.centerPoint().xProperty().get());
         collectableImage.layoutYProperty().set(c.centerPoint().yProperty().get());
@@ -557,7 +557,8 @@ public class MainWindow {
         levelsChoice.getItems().clear();
         for (File file : files) {
             if (file.isFile()) {
-                levelsChoice.getItems().add(file.getName());
+                levelsChoice.getItems().add(removeFileExtension(file.getName(), true));
+                
             }
         }
         levelsChoice.setValue(currentLevel);
@@ -585,5 +586,18 @@ public class MainWindow {
         }
         return result;
 
+    }
+
+
+    /**
+     * https://www.baeldung.com/java-filename-without-extension
+     */
+    public static String removeFileExtension(String filename, boolean removeAllExtensions) {
+        if (filename == null || filename.isEmpty()) {
+            return filename;
+        }
+    
+        String extPattern = "(?<!^)[.]" + (removeAllExtensions ? ".*" : "[^.]*$");
+        return filename.replaceAll(extPattern, "");
     }
 }
