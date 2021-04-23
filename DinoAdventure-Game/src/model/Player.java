@@ -2,6 +2,7 @@ package model;
 
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 
 import javafx.beans.property.*;
 
@@ -91,6 +92,16 @@ public class Player extends Entity implements Living {
             writer.writeInt(healthProperty.intValue());
             writer.writeDouble(centerPoint.getX());
             writer.writeDouble(centerPoint.getY());
+            writer.writeInt(effects.size());
+            for (Entry<CollectableType, Integer> entry : effects.entrySet()) {
+                CollectableType type = entry.getKey();
+                Integer num = entry.getValue();
+                writer.writeInt(type.ordinal());
+                writer.writeInt(num);
+            }
+
+
+            // use get() and set() not setValue
     
             } catch (IOException e) {
                 throw new IOException("Some thing went wrong in the serialize method for the player class");
@@ -103,7 +114,14 @@ public class Player extends Entity implements Living {
         state = PlayerState.values()[reader.readInt()];
         scoreProperty.setValue(reader.readInt());
         healthProperty.setValue(reader.readInt());
-        centerPoint.setXY(reader.readDouble(), reader.readDouble());    
+        centerPoint.setXY(reader.readDouble(), reader.readDouble());
+        int sizeNum = reader.readInt();
+        effects.clear();
+        for (int i = 0; i < sizeNum; i++) {
+            CollectableType type = CollectableType.values()[reader.readInt()];
+            Integer num = reader.readInt();
+            effects.put(type, num);
+        }   
         } catch (IOException e) {
             throw new IOException("Some thing went wrong in the serialize method for the player class");
         } 

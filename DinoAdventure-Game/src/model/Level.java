@@ -31,7 +31,6 @@ public class Level {
 
     public Level() {
 
-
         player = Game.instance().getPlayer();
 
         // Setup timer bindings
@@ -43,7 +42,7 @@ public class Level {
         remainingTimeProperty.bind(Bindings.createLongBinding(() -> {
             return maxTimeProperty.get() - runTimeProperty.get();
         }, maxTimeProperty, runTimeProperty));
-        
+
     }
 
     public void spawnPlayer() {
@@ -127,7 +126,7 @@ public class Level {
      * @return Entity
      */
     public Entity findEnemy(int id) {
-        
+
         for (Enemy enemy : enemies) {
             if (enemy.getId() == id) {
                 return enemy;
@@ -150,6 +149,7 @@ public class Level {
         }
         return null;
     }
+
     public Collectable findCollectable(int id) {
         for (Collectable c : collectables) {
             if (c.getId() == id) {
@@ -160,18 +160,18 @@ public class Level {
     }
 
     // /**
-    //  * find the surface with the given id
-    //  * 
-    //  * @param id
-    //  * @return Block
-    //  */
+    // * find the surface with the given id
+    // *
+    // * @param id
+    // * @return Block
+    // */
     // public Collectable findCollectable(int id) {
-    //     for (Collectable item : collectables) {
-    //         if (item.getId() == id) {
-    //             return item;
-    //         }
-    //     }
-    //     return null;
+    // for (Collectable item : collectables) {
+    // if (item.getId() == id) {
+    // return item;
+    // }
+    // }
+    // return null;
     // }
 
     /**
@@ -248,9 +248,9 @@ public class Level {
             // write the spawn point
             writer.writeInt(spawnPoint.getIntX());
             writer.writeInt(spawnPoint.getIntY());
-            //write the number of goals
+            // write the number of goals
             writer.writeInt(goals.size());
-            //write the coardinates for each Goal
+            // write the coardinates for each Goal
             for (int i = 0; i < goals.size(); ++i) {
                 writer.writeInt(goals.get(i).centerPoint().getIntX());
                 writer.writeInt(goals.get(i).centerPoint().getIntY());
@@ -278,7 +278,7 @@ public class Level {
                 writer.writeInt(blocks.get(i).centerPoint().getIntY());
                 writer.writeInt(blocks.get(i).getHeight());
                 writer.writeInt(blocks.get(i).getWidth());
-                
+
             }
             // writer.writeInt(collectables.size());
             // // Iterate through the collectables saving each's data
@@ -312,7 +312,7 @@ public class Level {
 
         int spawnX = reader.readInt();
         int spawnY = reader.readInt();
-        //read the bumber of goals
+        // read the bumber of goals
         int sizeOfGoals = reader.readInt();
         for (int i = 0; i < sizeOfGoals; ++i) {
             Goal flag = new Goal(reader.readInt() - 40, reader.readInt() - 46);
@@ -320,12 +320,12 @@ public class Level {
             flag.setWidth(reader.readInt());
             goals.add(flag);
         }
-        
+
         // read the number of entities
         int sizeOfEntities = reader.readInt();
         // iterate over each playing gathering their values
         for (int i = 0; i < sizeOfEntities; ++i) {
-            
+
             Enemy entity = new Enemy();
             entity.setId(reader.readInt());
             entity.setType(reader.readUTF());
@@ -347,96 +347,95 @@ public class Level {
             box.setHeight(reader.readInt());
             blocks.add(box);
         }
-        //Load colletables
+        // Load colletables
         int sizeOfCollectables = reader.readInt();
-            // Iterate through the collectables saving each's data
-            for (int i = 0; i < sizeOfCollectables; ++i) {
-                String type = reader.readUTF();
-                int x = reader.readInt();
-                int y = reader.readInt();
-                Collectable col = new Collectable(x, y, CollectableType.valueOf(type));
-                collectables.add(col);
-            }
+        // Iterate through the collectables saving each's data
+        for (int i = 0; i < sizeOfCollectables; ++i) {
+            String type = reader.readUTF();
+            int x = reader.readInt();
+            int y = reader.readInt();
+            Collectable col = new Collectable(x, y, CollectableType.valueOf(type));
+            collectables.add(col);
+        }
 
-
-        //set the spawn point
+        // set the spawn point
         setSpawnPoint(new Point(spawnX, spawnY));
 
-        //set the size of the level
+        // set the size of the level
         setWidth(width);
         setHeight(height);
 
         reader.close();
     }
 
-    // this was made for serialization the Game model. This method does not save the play in the Player. 
-    // THe writer passed by the parameter is the one used in the save method in the game class
-    public void serialize(DataOutputStream writer)throws IOException{
-        writer.writeInt(width); 
+    // this was made for serialization the Game model. This method does not save the
+    // play in the Player.
+    // THe writer passed by the parameter is the one used in the save method in the
+    // game class
+    public void serialize(DataOutputStream writer) throws IOException {
+        writer.writeInt(width);
         writer.writeInt(height);
         int size = enemies.size();
         writer.writeInt(size);
-         for (int i = 0; i < size; i++) {
-            if (enemies.get(i) instanceof Enemy){
+        for (int i = 0; i < size; i++) {
+            if (enemies.get(i) instanceof Enemy) {
                 Enemy enemy = (Enemy) enemies.get(i);
-                writer.writeInt( enemies.get(i).getId());
-                enemy.serialize(writer); 
+                writer.writeInt(enemies.get(i).getId());
+                enemy.serialize(writer);
             }
-         }
-        
-    
+        }
+
         writer.writeInt(blocks.size());
         for (int i = 0; i < blocks.size(); ++i) {
-            writer.writeInt( blocks.get(i).getId());
+            writer.writeInt(blocks.get(i).getId());
             writer.writeUTF(blocks.get(i).getTexture());
-            writer.writeInt( blocks.get(i).centerPoint().getIntX());
-            writer.writeInt( blocks.get(i).centerPoint().getIntY());
-            writer.writeInt( blocks.get(i).getWidth());
-            writer.writeInt( blocks.get(i).getHeight());
+            writer.writeInt(blocks.get(i).centerPoint().getIntX());
+            writer.writeInt(blocks.get(i).centerPoint().getIntY());
+            writer.writeInt(blocks.get(i).getWidth());
+            writer.writeInt(blocks.get(i).getHeight());
         }
-        if (levelName != null) {       
+        if (levelName != null) {
             writer.writeUTF(levelName);
-        } 
-        else{
+        } else {
             writer.writeUTF("None");
         }
-        writer.writeLong(startTimeProperty.longValue());
-        writer.writeLong(currentTimeProperty.longValue());
-        writer.writeLong(maxTimeProperty.longValue());
-        writer.writeLong(idleTimeProperty.longValue());
-        //writer.writeLong(remainingTimeProperty.longValue());
+        writer.writeLong(startTimeProperty.get());
+        writer.writeLong(currentTimeProperty.get());
+        writer.writeLong(maxTimeProperty.get());
+        writer.writeLong(idleTimeProperty.get());
+        writer.writeLong((long) System.currentTimeMillis());
 
-
-
-        if (collectables.size() > 0){
+        if (collectables.size() > 0) {
             writer.writeBoolean(true);
             writer.writeInt(collectables.size());
-            for (Collectable idem : collectables){
+            for (Collectable idem : collectables) {
                 writer.writeDouble(idem.centerPoint().getX());
                 writer.writeDouble(idem.centerPoint().getY());
                 writer.writeInt(idem.getType().ordinal());
                 writer.writeInt(idem.getId());
             }
-        }else{
+        } else {
             writer.writeBoolean(false);
         }
-         
+
     }
-            
-    // this was made for serialization the Game model. This method loads everything that was saved in the serialize method. 
-    // The reader passed by the parameter is the one used in the load method in the game class.
-    public void deserialize(DataInputStream reader)throws IOException{
-        width = reader.readInt(); 
+
+    // this was made for serialization the Game model. This method loads everything
+    // that was saved in the serialize method.
+    // The reader passed by the parameter is the one used in the load method in the
+    // game class.
+    public void deserialize(DataInputStream reader) throws IOException {
+        width = reader.readInt();
         height = reader.readInt();
         int entitiesSize = reader.readInt();
         enemies.clear();
-         for (int i = 0; i < entitiesSize; i++){   
+        for (int i = 0; i < entitiesSize; i++) {
             int id = reader.readInt();
             Enemy enemy = new Enemy();
             enemies.add(enemy);
             enemy.deserialize(reader);
             enemy.setId(id);
-            }
+        }
 
         int surfaceSize = reader.readInt();
 
@@ -452,25 +451,25 @@ public class Level {
             blocks.add(block);
         }
 
-        levelName = reader.readUTF();  
-        startTimeProperty.setValue(reader.readLong());
-        currentTimeProperty.setValue(reader.readLong());
-        //runTimeProperty = new SimpleLongProperty(reader.readLong());
-        maxTimeProperty.setValue(reader.readLong());
-        //remainingTimeProperty = new SimpleLongProperty(reader.readLong());
-        idleTimeProperty.setValue(reader.readLong());
+        levelName = reader.readUTF();
+        startTimeProperty.set(reader.readLong());
+        currentTimeProperty.set(reader.readLong());
+        maxTimeProperty.set(reader.readLong());
+        long idleTime = reader.readLong();
+        long savedTime = reader.readLong();
+        idleTimeProperty.set(idleTime + (System.currentTimeMillis() - savedTime));
 
+        if (reader.readBoolean() == true) {
+            int size = reader.readInt();
+            collectables.clear();
+            for (int i = 0; i < size; i++) {
+                Collectable idem = new Collectable(reader.readDouble(), reader.readDouble(),
+                        CollectableType.values()[reader.readInt()]);
+                idem.setId(reader.readInt());
+                collectables.add(idem);
 
-    if (reader.readBoolean() == true){
-        int size = reader.readInt();
-        collectables.clear();
-        for (int i = 0; i < size; i++){
-            Collectable idem = new Collectable(reader.readDouble(), reader.readDouble(), CollectableType.values()[reader.readInt()]);
-            idem.setId(reader.readInt());
-            collectables.add(idem);
-            
+            }
         }
-    }
 
     }
 }

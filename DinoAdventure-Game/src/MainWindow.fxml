@@ -18,7 +18,7 @@
         * Use `<fx:id>.setVisible(boolean)` to show and hide pages within the Java, just make sure only one is shown at a time.
     -->
 
-    <VBox fx:id="titlePage" styleClass="titlePage" managed="${titlePage.visible}" visible="true" alignment="CENTER" prefHeight="800">
+    <VBox fx:id="titlePage" styleClass="titlePage" managed="${titlePage.visible}" visible="true" alignment="CENTER" prefHeight="${window.height}">
         <Label text="DINO ADVENTURE" fx:id="title"  prefHeight="150">
         <style>
             -fx-font-size: 80px;
@@ -37,8 +37,8 @@
         </HBox>
 
         <HBox spacing="20" alignment="CENTER" prefHeight="100">
-            <Label text = "Enter your name:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" prefWidth = "150" />
-            <TextField fx:id="name" text = "" />
+            <Label text = "Enter your name:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" prefWidth = "250" alignment="CENTER_RIGHT"/>
+            <TextField fx:id="name" text = "Joe" />
             <Label text = "Difficulty Level:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
             <ChoiceBox fx:id="difficultyLevels">
                 <items>

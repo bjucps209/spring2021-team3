@@ -7,4 +7,4 @@ Mary,175,EASY
 Sebastian,160,EASY
 Rose,150,EASY
 Yanel,125,EASY
-Leah,125,EASY
+Olivia,125,HARD
