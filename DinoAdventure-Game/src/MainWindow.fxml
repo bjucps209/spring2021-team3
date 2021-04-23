@@ -38,7 +38,7 @@
 
         <HBox spacing="20" alignment="CENTER" prefHeight="100">
             <Label text = "Enter your name:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" prefWidth = "150" />
-            <TextField fx:id="name" text = "" />
+            <TextField fx:id="name" text = "Joe" />
             <Label text = "Difficulty Level:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
             <ChoiceBox fx:id="difficultyLevels">
                 <items>
