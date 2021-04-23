@@ -203,6 +203,8 @@ public class Enemy extends Entity implements Living {
         else{
             writer.writeBoolean(false);
         }
+        writer.writeInt(widthProperty.get());
+        writer.writeInt(heightProperty.get());
     }
 
     // reads the DataOutputStream passed in the parameters and sets the Game model accordingly.
@@ -221,6 +223,8 @@ public class Enemy extends Entity implements Living {
         if (b2 == true){
             type = EnemyState.values()[reader.readInt()] ;
         }
+        widthProperty.set(reader.readInt());
+        heightProperty.set(reader.readInt());
     }
 
     public void setType(String type) {
