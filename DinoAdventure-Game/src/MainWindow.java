@@ -525,7 +525,7 @@ public class MainWindow implements GameObserver {
             Game.instance().getPlayer().getEffects().clear();
 
             // If the player isn't out of health, respawn them
-            if (Game.instance().getPlayer().getHealth() != 0) {
+            if (Game.instance().getPlayer().getHealth() != 0 || Game.instance().isCheating()) {
                 Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
                 Game.instance().getPlayer().centerPoint().subtract(0, 50);
                 Game.instance().getPlayer().setXVelocity(0);
@@ -896,6 +896,7 @@ public class MainWindow implements GameObserver {
             case CHEAT:
                 Game.instance().getPlayer().setHealth(-1);
                 Game.instance().getCurrentLevel().maxTimeProperty().set(-1);
+                Game.instance().setCheating(true);
                 break;
             default:
                 break;
@@ -914,8 +915,8 @@ public class MainWindow implements GameObserver {
 
             Label timerSecondsLabel = new Label();
             timerSecondsLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-                return String.valueOf(Game.instance().getCurrentLevel().remainingTimeProperty().get() / 1000) + "s ";
-            }, Game.instance().getCurrentLevel().remainingTimeProperty()));
+                return Game.instance().isCheating() ? "∞" : String.valueOf(Game.instance().getCurrentLevel().remainingTimeProperty().get() / 1000) + "s ";
+            }, Game.instance().getCurrentLevel().maxTimeProperty(), Game.instance().getCurrentLevel().remainingTimeProperty()));
             timerHBox.getChildren().add(timerSecondsLabel);
 
             Label timerIconLabel = new Label();
@@ -944,7 +945,7 @@ public class MainWindow implements GameObserver {
 
             Label healthLabel = new Label();
             healthLabel.textProperty().bind(Bindings.createStringBinding(() -> {
-                return String.valueOf(Game.instance().getPlayer().healthProperty().get()) + " ";
+                return Game.instance().isCheating() ? "∞" : String.valueOf(Game.instance().getPlayer().healthProperty().get()) + " ";
             }, Game.instance().getPlayer().healthProperty()));
             healthHBox.getChildren().add(healthLabel);
 
