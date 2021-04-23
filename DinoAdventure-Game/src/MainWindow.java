@@ -156,7 +156,7 @@ public class MainWindow implements GameObserver {
         File[] files = new File("src/levels").listFiles();
         for (File file : files) {
             if (file.isFile()) {
-                levelsChoice.getItems().add(file.getName());
+                levelsChoice.getItems().add(removeFileExtension(file.getName(), true));
             }
         }
 
@@ -807,7 +807,7 @@ public class MainWindow implements GameObserver {
                 Game.instance().startLevel(level);
 
                 try {
-                    level.load("src/levels/" + levelsChoice.getSelectionModel().getSelectedItem());
+                    level.load("src/levels/" + levelsChoice.getSelectionModel().getSelectedItem() + ".dat");
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -1033,6 +1033,18 @@ public class MainWindow implements GameObserver {
             levels.getChildren().add(difficultyLabel);
         }
 
-    }
+        
 
+    }
+    /**
+     * https://www.baeldung.com/java-filename-without-extension
+     */
+    public static String removeFileExtension(String filename, boolean removeAllExtensions) {
+        if (filename == null || filename.isEmpty()) {
+            return filename;
+        }
+    
+        String extPattern = "(?<!^)[.]" + (removeAllExtensions ? ".*" : "[^.]*$");
+        return filename.replaceAll(extPattern, "");
+    }
 }
