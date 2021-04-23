@@ -126,7 +126,7 @@ public class MainWindow implements GameObserver {
     private ArrayList<ImageView> goalImages = new ArrayList<ImageView>();
 
     //holds the current index of the level
-    private int currentLevelIndex = 3;
+    private int currentLevelIndex = 0;
 
     //holds the current score of the player for when the next level is loaded
     private int currentScore = 0;
@@ -461,7 +461,7 @@ public class MainWindow implements GameObserver {
                 levelWonButtons.setSpacing(10);
                 levelWonPane.getChildren().add(levelWonButtons);
                 
-                if ((currentLevelIndex) < levels.length) {    
+                if ((currentLevelIndex + 1) < levels.length) {    
                     Button levelWonRestartButton = new Button();
                     levelWonRestartButton.setText("PLAY AGAIN");
                     levelWonRestartButton.getStyleClass().add("menuButton");
@@ -1125,7 +1125,9 @@ public class MainWindow implements GameObserver {
             }
             else {
                 try {
-                    level.load("src/levels/" + "Level" + currentLevelIndex + ".dat");
+                    File[] files = new File("src/levels").listFiles();
+                    
+                    level.load("src/levels/" + files[currentLevelIndex].getName());
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
