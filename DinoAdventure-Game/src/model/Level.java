@@ -400,10 +400,11 @@ public class Level {
         else{
             writer.writeUTF("None");
         }
-        writer.writeLong(startTimeProperty.longValue());
-        writer.writeLong(currentTimeProperty.longValue());
-        writer.writeLong(maxTimeProperty.longValue());
-        writer.writeLong(idleTimeProperty.longValue());
+        writer.writeLong(startTimeProperty.get());
+        writer.writeLong(currentTimeProperty.get());
+        writer.writeLong(maxTimeProperty.get());
+        writer.writeLong(idleTimeProperty.get());
+        writer.writeLong((long) System.currentTimeMillis());
         //writer.writeLong(remainingTimeProperty.longValue());
 
 
@@ -453,12 +454,14 @@ public class Level {
         }
 
         levelName = reader.readUTF();  
-        startTimeProperty.setValue(reader.readLong());
-        currentTimeProperty.setValue(reader.readLong());
+        startTimeProperty.set(reader.readLong());
+        currentTimeProperty.set(reader.readLong());
         //runTimeProperty = new SimpleLongProperty(reader.readLong());
-        maxTimeProperty.setValue(reader.readLong());
+        maxTimeProperty.set(reader.readLong());
         //remainingTimeProperty = new SimpleLongProperty(reader.readLong());
-        idleTimeProperty.setValue(reader.readLong());
+        long idleTime = reader.readLong();
+        long savedTime = reader.readLong();
+        idleTimeProperty.set(idleTime + (System.currentTimeMillis() - savedTime));
 
 
     if (reader.readBoolean() == true){
