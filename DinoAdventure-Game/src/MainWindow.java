@@ -433,9 +433,13 @@ public class MainWindow implements GameObserver {
                 break;
 
             case LEVEL_WON:
+                //add level bones from time remaing - not working yet
+                //Game.instance().setScore((int)(Game.instance().getScore() + (getLevelCompletionBonus() * Game.instance().getCurrentLevel().remainingTimeProperty().get())));
+
                 gameLoop.stop();
     
                 File[] levels = new File("src/levels").listFiles();
+
                 VBox levelWonPane = new VBox();
                 levelWonPane.setAlignment(Pos.CENTER);
                 levelWonPane.getStyleClass().add("levelWonPane");
@@ -458,10 +462,10 @@ public class MainWindow implements GameObserver {
                 levelWonPane.getChildren().add(levelWonButtons);
                 
                 if ((currentLevelIndex + 1) < levels.length) {    
-                    Button levelWonRestartButton = new Button();
-                    levelWonRestartButton.setText("PLAY AGAIN");
-                    levelWonRestartButton.getStyleClass().add("menuButton");
-                    levelWonButtons.getChildren().add(levelWonRestartButton);
+                    // Button levelWonRestartButton = new Button();
+                    // levelWonRestartButton.setText("PLAY AGAIN");
+                    // levelWonRestartButton.getStyleClass().add("menuButton");
+                    // levelWonButtons.getChildren().add(levelWonRestartButton);
                     
                     Button levelWonMenuButton = new Button();
                     levelWonMenuButton.setText("MENU");
@@ -474,9 +478,9 @@ public class MainWindow implements GameObserver {
                         gamePage.setVisible(false);
                         titlePage.setVisible(true);
                     });
-                    levelWonRestartButton.setOnAction(ev -> {
-                        play(new ActionEvent());
-                    });
+                    // levelWonRestartButton.setOnAction(ev -> {
+                    //     play(new ActionEvent());
+                    // });
 
                     if (gameMode.getValue().equals("NORMAL")) {
 
@@ -496,7 +500,7 @@ public class MainWindow implements GameObserver {
                     Button gameWonButton = new Button();
 
                     levelWonHeader.setText("GAME COMPLETE!");
-
+                    currentLevelIndex = 0;
                     gameWonButton.setText("NEXT");
                     gameWonButton.getStyleClass().add("menuButton");
                     levelWonButtons.getChildren().add(gameWonButton);
@@ -505,27 +509,27 @@ public class MainWindow implements GameObserver {
                         gamePage.setVisible(false);
                         highScoresPage.setVisible(true);
                         Game.instance().setScore(Game.instance().getPlayer().scoreProperty().get());
+                        
+                        
+                        Score score2 = new Score(Game.instance().getUserName(), Game.instance().getScore(),
+                                Game.instance().getDifficulty());
+                        try {
+                            HighScore.getInstance().loadScores("HighScoreFiles/SaveScoresData.txt");
+                            if (HighScore.getInstance().findIfScoreQualifiesAsHigh(score2)) {
+                                // System.out.println("It is a high Score");
+                                // Show the new Score Screen
+                                displayNewHighScore();
 
-                Score score2 = new Score(Game.instance().getUserName(), Game.instance().getScore(),
-                        Game.instance().getDifficulty());
-                // System.out.println(score.toString());
-                try {
-                    HighScore.getInstance().loadScores("HighScoreFiles/SaveScoresData.txt");
-                    if (HighScore.getInstance().findIfScoreQualifiesAsHigh(score2)) {
-                        // System.out.println("It is a high Score");
-                        // Show the new Score Screen
-                        displayNewHighScore();
+                                HighScore.getInstance().processScore(score2);
+                                updateHighScoresScreen();
+                            }
+                        } catch (IOException exception) {
+                            exception.printStackTrace();
+                        }
+                        
 
-                        HighScore.getInstance().processScore(score2);
-                        updateHighScoresScreen();
-                    }
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-
-
-                    });
-                    
+                });
+               
                 }
                 break;
 
@@ -1018,6 +1022,17 @@ public class MainWindow implements GameObserver {
         gamePage.setVisible(false);
         highScoresPage.setVisible(false);
     }
+
+    //Get the bonus multiplier for completling a level
+    public int getLevelCompletionBonus() {
+        if (difficultyLevels.getValue().equals("MEADIUM")) {
+            return 2;
+        }
+        else if (difficultyLevels.getValue().equals("HARD")) {
+            return 3;
+        }
+        return 1;
+    }   
 
     public void loadLevel() {
         // Create/load level
