@@ -136,7 +136,6 @@ public class MainWindow implements GameObserver {
             new Media(getClass().getResource("assets/sounds/EnemyHitPlayer.wav").toString()));
     final MediaPlayer ENEMY_KILLED = new MediaPlayer(
             new Media(getClass().getResource("assets/sounds/PlayerKillsEnemy.wav").toString()));
-            
 
     @FXML
     public void initialize() throws IOException {
@@ -511,20 +510,20 @@ public class MainWindow implements GameObserver {
                             play(new ActionEvent());
                         });
                     }
-                    
-                    Button levelWonMenuButton = new Button();
-                    levelWonMenuButton.setText("MENU");
-                    levelWonMenuButton.getStyleClass().add("menuButton");
-                    levelWonButtons.getChildren().add(levelWonMenuButton);
-                    
-                    levelWonMenuButton.setOnAction(ev -> {
-                        HOME_PAGE_MUSIC.play();
-                        Game.instance().setState(GameState.MENU);
-                        gamePage.setVisible(false);
-                        titlePage.setVisible(true);
-                    });
                
                 }
+                    
+                Button levelWonMenuButton = new Button();
+                levelWonMenuButton.setText("MENU");
+                levelWonMenuButton.getStyleClass().add("menuButton");
+                levelWonButtons.getChildren().add(levelWonMenuButton);
+                
+                levelWonMenuButton.setOnAction(ev -> {
+                    HOME_PAGE_MUSIC.play();
+                    Game.instance().setState(GameState.MENU);
+                    gamePage.setVisible(false);
+                    titlePage.setVisible(true);
+                });
                 break;
 
             default:
@@ -624,20 +623,23 @@ public class MainWindow implements GameObserver {
 
 
 
-
-        // Top-bottom-scrolling logic
-        if (Game.instance().getPlayer().centerPoint().getY() > (gamePage.getHeight() / 2) && Game.instance().getPlayer()
-                .centerPoint().getY() < Game.instance().getCurrentLevel().getHeight() - (gamePage.getHeight() / 2)) {
-            // Scrolling
-            AnchorPane.setTopAnchor(levelPane,
-                    ((gamePage.getHeight() / 2) - Game.instance().getPlayer().centerPoint().getY()));
-        } else if (Game.instance().getPlayer().centerPoint().getY() <= (gamePage.getHeight() / 2)) {
-            // Up
-            AnchorPane.setTopAnchor(levelPane, 0.0);
+        if(Game.instance().getCurrentLevel().getHeight() > window.getHeight()) {
+            // Top-bottom-scrolling logic
+            // if (Game.instance().getPlayer().centerPoint().getY() > (gamePage.getHeight() / 2) && Game.instance().getPlayer()
+            //         .centerPoint().getY() < Game.instance().getCurrentLevel().getHeight() - (gamePage.getHeight() / 2)) {
+                // Scrolling
+                AnchorPane.setTopAnchor(levelPane, ((gamePage.getHeight() / 2) - Game.instance().getPlayer().centerPoint().getY()));
+            // } else if (Game.instance().getPlayer().centerPoint().getY() <= (gamePage.getHeight() / 2)) {
+                // Up
+            //     AnchorPane.setTopAnchor(levelPane, 0.0);
+            // } else {
+                // Down
+            //    AnchorPane.setTopAnchor(levelPane,
+            //    (double) (gamePage.getHeight() - Game.instance().getCurrentLevel().getHeight()));
+            //}
         } else {
             // Down
-            AnchorPane.setTopAnchor(levelPane,
-            (double) (gamePage.getHeight() - Game.instance().getCurrentLevel().getHeight()));
+            AnchorPane.setTopAnchor(levelPane, window.getHeight() - Game.instance().getCurrentLevel().getHeight());
         }
 
 
@@ -819,6 +821,8 @@ public class MainWindow implements GameObserver {
             Game.instance().getPlayer().getEffects().clear();
             collectableImages.clear();
             goalImages.clear();
+            Game.instance().getPlayer().setXVelocity(0);
+            Game.instance().getPlayer().setYVelocity(0);
 
             gamePage.setMinWidth(window.getWidth());
             gamePage.setMinHeight(window.getHeight());
@@ -1056,127 +1060,57 @@ public class MainWindow implements GameObserver {
 
         Level level;
 
-        // Generate some testing dummy terrain
-        // Please leave here for now so I can test with it
-        // Enable dummy terrain if you want to demo the gameplay
-
-        // boolean dummyTerrain = false;
-        if (levelsChoice.getValue().equals("Demo") && gameMode.getValue().equals("Custom")) {
-
-            level = new Level();
-            level.setSpawnPoint(new Point(100, 540));
-            level.setWidth(4000);
-            level.setHeight(1080);
-
-            // Set level as the current level
-            Game.instance().startLevel(level);
             
-            
+        level = new Level();
 
-            for (int i = 0; i < 10; i++) {
-                ImageView blockImage = new ImageView(
-                        new Image("assets/images/world/ground-" + (i == 0 ? "1" : (i == 9 ? "3" : "2")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(100 + (i * 128), 600);
-                block.setWidth(128);
-                block.setHeight(128);
-                level.getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                levelPane.getChildren().add(blockImage);
-            }
-
-            for (int i = 0; i < 3; i++) {
-                ImageView blockImage = new ImageView(new Image(
-                        "assets/images/world/ground-" + (i == 0 ? "13" : (i == 2 ? "15" : "14")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(500 + (i * 128), 418);
-                block.setWidth(128);
-                block.setHeight(93);
-                level.getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                levelPane.getChildren().add(blockImage);
-            }
-
-            for (int i = 11; i < 30; i++) {
-                ImageView blockImage = new ImageView(new Image(
-                        "assets/images/world/ground-" + (i == 11 ? "1" : (i == 29 ? "3" : "2")) + ".png"));
-                Block block = new Block();
-                block.centerPoint().setXY(100 + (i * 128), 600);
-                block.setWidth(128);
-                block.setHeight(128);
-                level.getBlocks().add(block);
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                levelPane.getChildren().add(blockImage);
-            }
-
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(500, 456, EnemyState.WANDERING));
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(550, 200, EnemyState.WANDERING));
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1200, 456, EnemyState.FOLLOWING));
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(800, 456, EnemyState.FLEEING));
-            Game.instance().getCurrentLevel().getEnemies().add(new Enemy(1100, 456, EnemyState.JUMPING));
-
-            Game.instance().getCurrentLevel().getCollectables()
-                    .add(new Collectable(1000, 400, CollectableType.Coin));
-
-            Game.instance().getCurrentLevel().getCollectables()
-                    .add(new Collectable(1600, 400, CollectableType.FeatherPowerup));
-            Game.instance().getCurrentLevel().getCollectables()
-                    .add(new Collectable(1800, 400, CollectableType.SpeedPowerup));
-            Game.instance().getCurrentLevel().getCollectables()
-                    .add(new Collectable(2000, 400, CollectableType.HealthPowerup));
-            Game.instance().getCurrentLevel().getCollectables()
-                    .add(new Collectable(2200, 400, CollectableType.CoinPowerup));
-
-            Game.instance().getCurrentLevel().getGoals().add(new Goal(3800, 500));
-
+        // Set level as the current level
+        if (Game.instance().getState() == GameState.LEVEL_WON) {
+            Game.instance().startNextLevel(level);
         } else {
-            
-            level = new Level();
-
-            // Set level as the current level
-            if (Game.instance().getState() == GameState.LEVEL_WON) {
-                Game.instance().startNextLevel(level);
-            }
-            
-            else {
-                Game.instance().startLevel(level);
-            }
-            
-
-            if (gameMode.getValue().equals("CUSTOM")) {
-                try {
-                    level.load("CustomLevels/" + levelsChoice.getSelectionModel().getSelectedItem() + ".dat");
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            }
-            else {
-                try {
-                    File[] files = new File("src/levels").listFiles();
-                    
-                    level.load("src/levels/" + files[currentLevelIndex].getName());
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-                
-            }
-            // Generate real terrain
-            level.getBlocks().stream().forEach(block -> {
-                ImageView blockImage = new ImageView(new Image(block.getTexture()));
-                blockImage.xProperty().bind(block.minXProperty());
-                blockImage.yProperty().bind(block.minYProperty());
-                levelPane.getChildren().add(blockImage);
-            });
-            // Generate Collectables from the level
-            level.getCollectables().stream().forEach(enemy -> {
-                // TODO: create logic to load in collectables
-            });
+            Game.instance().startLevel(level);
         }
+        
+
+        if (gameMode.getValue().equals("CUSTOM")) {
+            try {
+                level.load("CustomLevels/" + levelsChoice.getSelectionModel().getSelectedItem() + ".dat");
+            } catch (IOException e1) {
+                // Auto-generated catch block
+                e1.printStackTrace();
+            }
+        } else if(gameMode.getValue().equals("SCHAUB MODE")) {
+            try {
+                
+                level.load("src/levels/boss.dat");
+                Enemy e = new Enemy(1600, 600, EnemyState.SCHAUB);
+                level.getEnemies().add(e);
+            } catch (IOException e1) {
+                // Auto-generated catch block
+                e1.printStackTrace();
+            }
+            
+        } else {
+            try {
+                File[] files = new File("src/levels").listFiles();
+                
+                level.load("src/levels/" + files[currentLevelIndex].getName());
+            } catch (IOException e1) {
+                // Auto-generated catch block
+                e1.printStackTrace();
+            }
+            
+        }
+        // Generate real terrain
+        level.getBlocks().stream().forEach(block -> {
+            ImageView blockImage = new ImageView(new Image(block.getTexture()));
+            blockImage.xProperty().bind(block.minXProperty());
+            blockImage.yProperty().bind(block.minYProperty());
+            levelPane.getChildren().add(blockImage);
+        });
+        // Generate Collectables from the level
+        level.getCollectables().stream().forEach(enemy -> {
+            // TODO: create logic to load in collectables
+        });
         
         levelPane.setMinWidth(level.getWidth());
         levelPane.setMinHeight(level.getHeight());

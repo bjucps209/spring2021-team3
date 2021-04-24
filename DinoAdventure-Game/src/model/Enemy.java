@@ -11,22 +11,23 @@ public class Enemy extends Entity implements Living {
 
     protected IntegerProperty healthProperty = new SimpleIntegerProperty();
 
-    public Enemy() { }
-
-    public Enemy(double x, double y) {
-        centerPoint.xProperty().set(x);
-        centerPoint.yProperty().set(y);
-        setWidth(59);
-        setHeight(50);
-        setDirection(EntityDirection.LEFT);
+    public Enemy() {
+        setHealth(1);
     }
 
     public Enemy(double x, double y, EnemyState type) {
         centerPoint.xProperty().set(x);
         centerPoint.yProperty().set(y);
         this.type = type;
-        setWidth(59);
-        setHeight(50);
+        if(type == EnemyState.SCHAUB) {
+            setWidth(76);
+            setHeight(100);
+            setHealth(3);
+        } else {
+            setWidth(59);
+            setHeight(50);
+            setHealth(1);
+        }
         setDirection(EntityDirection.LEFT);
     }
 
@@ -132,6 +133,26 @@ public class Enemy extends Entity implements Living {
                         }
                         if(onSurface) {
                             yVelocity = -5;
+                        }
+                    } else {
+                        state = EnemyState.STANDING;
+                    }
+                    break;
+
+                case SCHAUB:
+                    if(centerPoint.distanceFrom(Game.instance().getPlayer().centerPoint()) <= 2000) {
+                        state = EnemyState.SCHAUB;
+                        if(centerPoint.getX() - 15 > Game.instance().getPlayer().centerPoint().getX()) {
+                            xVelocity = Math.max(-maxSpeed, xVelocity - (20 / Game.FPS));
+                            direction = EntityDirection.LEFT;
+                        } else if(centerPoint.getX() + 15 < Game.instance().getPlayer().centerPoint().getX()) {
+                            xVelocity = Math.min(maxSpeed, xVelocity + (20 / Game.FPS));
+                            direction = EntityDirection.RIGHT;
+                        }
+                        if(onSurface) {
+                            if(tps / Game.FPS == 1 && Game.random.nextInt(4) > 0) {
+                                yVelocity = -15;
+                            }
                         }
                     } else {
                         state = EnemyState.STANDING;

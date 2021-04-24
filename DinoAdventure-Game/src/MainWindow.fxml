@@ -60,6 +60,7 @@
                     <FXCollections fx:factory="observableArrayList">
                     <String fx:value="NORMAL" />
                     <String fx:value="CUSTOM" />
+                    <String fx:value="SCHAUB MODE" />
                     </FXCollections>
                 </items>
                 <value>

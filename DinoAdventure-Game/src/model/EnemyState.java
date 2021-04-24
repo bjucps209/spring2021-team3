@@ -5,5 +5,6 @@ public enum EnemyState {
     WANDERING,
     JUMPING,
     FOLLOWING,
-    FLEEING
+    FLEEING,
+    SCHAUB
 }

@@ -78,17 +78,26 @@ public class Entity extends Box {
                         if(yVelocity > 0) {
                             yVelocity = -15;
                         }
-                        enemiesToRemove.add(e);
-                        Collectable coin = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), CollectableType.Coin);
-                        coin.xVelocity = Game.random.nextInt(5) - 2;
-                        coin.yVelocity = -1;
-                        Game.instance().getCurrentLevel().getCollectables().add(coin);
-                        if(Game.random.nextInt(5) == 0) {
-                            CollectableType t = CollectableType.values()[Game.random.nextInt(CollectableType.values().length)];
-                            Collectable c = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), t);
-                            c.xVelocity = Game.random.nextInt(5) - 2;
-                            c.yVelocity = -1;
-                            Game.instance().getCurrentLevel().getCollectables().add(c);
+                        e.setHealth(e.getHealth() - 1);
+                        if(e.getHealth() <= 0) {
+                            int coins = Game.random.nextInt(3) + 1;
+                            if(e.getType() == EnemyState.SCHAUB) {
+                                coins = 100;
+                            }
+                            enemiesToRemove.add(e);
+                            for(int i = 0; i < coins; i++) {
+                                Collectable coin = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), CollectableType.Coin);
+                                coin.xVelocity = (Game.random.nextInt(100) - 50) / 10;
+                                coin.yVelocity = -Game.random.nextInt(5);
+                                Game.instance().getCurrentLevel().getCollectables().add(coin);
+                            }
+                            if(Game.random.nextInt(5) == 0) {
+                                CollectableType t = CollectableType.values()[Game.random.nextInt(CollectableType.values().length)];
+                                Collectable c = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), t);
+                                c.xVelocity = (Game.random.nextInt(100) - 50) / 10;
+                                c.yVelocity = -Game.random.nextInt(5);
+                                Game.instance().getCurrentLevel().getCollectables().add(c);
+                            }
                         }
                     } else {
                         ((Player) this).setHealth(Math.max(0, ((Player) this).getHealth() - 1));
