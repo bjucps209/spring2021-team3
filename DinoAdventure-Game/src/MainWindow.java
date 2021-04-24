@@ -243,7 +243,7 @@ public class MainWindow implements GameObserver {
                 buttons.setSpacing(10);
                 gameOverPane.getChildren().add(buttons);
                 Button restartButton = new Button();
-                restartButton.setText("TRY AGAIN");
+                restartButton.setText("PLAY AGAIN");
                 restartButton.getStyleClass().add("menuButton");
                 buttons.getChildren().add(restartButton);
                 Button highsButton = new Button();
@@ -453,9 +453,10 @@ public class MainWindow implements GameObserver {
 
                 File[] levels = new File("src/levels").listFiles();
 
-                if (gameMode.getValue().equals("NORMAL") && (currentLevelIndex + 1) < levels.length) {   
+                if (gameMode.getValue().equals("NORMAL") && (currentLevelIndex + 1) >= levels.length) {   
                     Game.instance().setState(GameState.GAME_OVER);
                     Game.instance().setGameOverMessage("You completed all the levels!");
+                    return;
                 }
 
                 gameLoop.stop();
