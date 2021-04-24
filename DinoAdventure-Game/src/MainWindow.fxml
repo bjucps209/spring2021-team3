@@ -75,9 +75,9 @@
                     
                     </FXCollections>
                 </items>
-                <value>
+                <!-- <value>
                     <String fx:value="Demo" />
-                </value>
+                </value> -->
             </ChoiceBox>
         </HBox>
 
