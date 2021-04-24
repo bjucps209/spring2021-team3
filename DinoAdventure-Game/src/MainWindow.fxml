@@ -71,7 +71,7 @@
             <ChoiceBox fx:id="levelsChoice">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Demo" />
+                    
                     </FXCollections>
                 </items>
                 <value>
