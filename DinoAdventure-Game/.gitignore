@@ -16,4 +16,4 @@ build
 
 # Ignore local save data
 saveFile.dat
-src/levels
+CustomLevels
