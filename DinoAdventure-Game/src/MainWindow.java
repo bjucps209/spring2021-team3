@@ -458,7 +458,7 @@ public class MainWindow implements GameObserver {
 
                 File[] levels = new File("src/levels").listFiles();
 
-                if (gameMode.getValue().equals("NORMAL") && (currentLevelIndex + 1) < levels.length) {   
+                if (gameMode.getValue().equals("NORMAL") && (currentLevelIndex < levels.length)) {   
                     Game.instance().setState(GameState.GAME_OVER);
                     Game.instance().setGameOverMessage("You completed all the levels!");
                 }
