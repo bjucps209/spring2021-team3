@@ -136,6 +136,7 @@ public class MainWindow implements GameObserver {
             new Media(getClass().getResource("assets/sounds/EnemyHitPlayer.wav").toString()));
     final MediaPlayer ENEMY_KILLED = new MediaPlayer(
             new Media(getClass().getResource("assets/sounds/PlayerKillsEnemy.wav").toString()));
+            
 
     @FXML
     public void initialize() throws IOException {
@@ -271,10 +272,14 @@ public class MainWindow implements GameObserver {
                 if(gameMode.getValue().equals("NORMAL")) {
                     // Highscores implementation
                     Game.instance().setScore(Game.instance().getPlayer().scoreProperty().get());
-
                     Score score = new Score(Game.instance().getUserName(), Game.instance().getScore(),
                             Game.instance().getDifficulty());
                     // System.out.println(score.toString());
+
+                    //ensure only save highScores from non custom game mode;
+                    if (gameMode.getValue().equals("CUSTOM")) {
+                        break;
+                    }
                     try {
                         HighScore.getInstance().loadScores("HighScoreFiles/SaveScoresData.txt");
                         if (HighScore.getInstance().findIfScoreQualifiesAsHigh(score)) {
@@ -453,7 +458,7 @@ public class MainWindow implements GameObserver {
 
                 File[] levels = new File("src/levels").listFiles();
 
-                if (gameMode.getValue().equals("NORMAL") && (currentLevelIndex + 1) >= levels.length) {   
+                if (gameMode.getValue().equals("NORMAL") && (currentLevelIndex + 1) >= levels.length) {
                     Game.instance().setState(GameState.GAME_OVER);
                     Game.instance().setGameOverMessage("You completed all the levels!");
                     return;
@@ -1181,6 +1186,7 @@ public class MainWindow implements GameObserver {
     }
 
     public void updateHighScoresScreen() throws IOException {
+        
         ranks.getChildren().clear();
         names.getChildren().clear();
         scores.getChildren().clear();

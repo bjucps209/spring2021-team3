@@ -162,23 +162,39 @@ public class MainWindow {
             }
         });
         btnNewBlock.setOnAction(e -> onNewBlockClicked());
+        btnNewBlock.setDisable(true);
         btnNewFleeingEnemy.setOnAction(e -> onNewFleeingEnemyClicked());
+        btnNewFleeingEnemy.setDisable(true);
         btnNewFollowingEnemy.setOnAction(e -> onNewFollowingEnemyClicked());
+        btnNewFollowingEnemy.setDisable(true);
         btnNewJumpingEnemy.setOnAction(e -> onNewJumpingEnemyClicked());
+        btnNewJumpingEnemy.setDisable(true);
         btnNewWanderingEnemy.setOnAction(e -> onNewWanderingEnemyClicked());
+        btnNewWanderingEnemy.setDisable(true);
         btnNewLeftBlock.setOnAction(e -> onNewLeftBlockClicked());
+        btnNewLeftBlock.setDisable(true);
         btnNewMiddleBlock.setOnAction(e -> onNewMiddleBlockClicked());
+        btnNewMiddleBlock.setDisable(true);
         btnNewRightBlock.setOnAction(e -> onNewRightBlockClicked());
+        btnNewRightBlock.setDisable(true);
         btnNewLeftFullBlock.setOnAction(e -> onNewLeftFullBlockClicked());
+        btnNewLeftFullBlock.setDisable(true);
         btnNewRightFullBlock.setOnAction(e -> onNewRightFullBlockClicked());
+        btnNewRightFullBlock.setDisable(true);
         btnCreate.setOnAction(e -> onCreateClicked());
         btnNewGoal.setOnAction(e -> onNewGoalClicked());
+        btnNewGoal.setDisable(true);
         btnNewCoin.setOnAction(e -> onNewCoinClicked());
+        btnNewCoin.setDisable(true);
         btnNewFeatherPowerup.setOnAction(e -> onNewFeatherPowerupClicked());
+        btnNewFeatherPowerup.setDisable(true);
         btnNewSpeedPowerup.setOnAction(e -> onNewSpeedPowerupClicked());
+        btnNewSpeedPowerup.setDisable(true);
         btnNewCoinPowerup.setOnAction(e -> onNewCoinPowerupClicked());
+        btnNewCoinPowerup.setDisable(true);
         btnNewHealthPowerup.setOnAction(e -> onNewHealthPowerupClicked());
-        
+        btnNewHealthPowerup.setDisable(true);
+
         spawnDino(150, 300);
         
 
@@ -216,11 +232,12 @@ public class MainWindow {
             alert.show();
         }
         else {
+        
         pane.setPrefWidth(Integer.parseInt(txtWidth.getText()));
         LevelDesigner.instance().getLevel().setWidth((int)pane.getPrefWidth());
         pane.setPrefHeight(Integer.parseInt(txtHeight.getText()));
         LevelDesigner.instance().getLevel().setHeight((int)pane.getPrefHeight());
-        levelsChoice.setValue(txtLevelName.getText() + ".dat");
+        levelsChoice.setValue(txtLevelName.getText());
         pane.getChildren().clear();
         spawnDino(150, 300);
         LevelDesigner.reset();
@@ -237,7 +254,7 @@ public class MainWindow {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        txtLevelName.setText("");
+        // txtLevelName.setText("");
         }
 
         
@@ -316,7 +333,7 @@ public class MainWindow {
         txtWidth.setText(String.valueOf(LevelDesigner.instance().getLevel().getWidth()));
         txtHeight.setText(String.valueOf(LevelDesigner.instance().getLevel().getHeight()));
         spawnDino(LevelDesigner.instance().getLevel().getSpawnPoint().getIntX(), 
-            LevelDesigner.instance().getLevel().getSpawnPoint().getIntY());
+        LevelDesigner.instance().getLevel().getSpawnPoint().getIntY());
         
         pane.setPrefWidth(Integer.parseInt(txtWidth.getText()));
         pane.setPrefHeight(Integer.parseInt(txtHeight.getText()));
@@ -373,7 +390,22 @@ public class MainWindow {
 
 
         });
-        
+        btnNewBlock.setDisable(false);
+        btnNewFleeingEnemy.setDisable(false);
+        btnNewFollowingEnemy.setDisable(false);
+        btnNewJumpingEnemy.setDisable(false);
+        btnNewWanderingEnemy.setDisable(false);
+        btnNewLeftBlock.setDisable(false);
+        btnNewMiddleBlock.setDisable(false);
+        btnNewRightBlock.setDisable(false);
+        btnNewLeftFullBlock.setDisable(false);
+        btnNewRightFullBlock.setDisable(false);
+        btnNewGoal.setDisable(false);
+        btnNewCoin.setDisable(false);
+        btnNewFeatherPowerup.setDisable(false);
+        btnNewSpeedPowerup.setDisable(false);
+        btnNewCoinPowerup.setDisable(false);
+        btnNewHealthPowerup.setDisable(false);
     }
 
        
