@@ -199,14 +199,15 @@ public class MainWindow implements GameObserver {
         }
 
         // find the levels and add them to level choice
-        levelsChoice.setValue("Demo");
+        // levelsChoice.setValue("Demo");
         File[] files = new File("CustomLevels").listFiles();
         for (File file : files) {
             if (file.isFile()) {
                 levelsChoice.getItems().add(removeFileExtension(file.getName(), true));
+                
             }
         }
-
+        levelsChoice.setValue(levelsChoice.getItems().get(0));
         name.requestFocus();
 
         Game.instance().observers().add(this);
