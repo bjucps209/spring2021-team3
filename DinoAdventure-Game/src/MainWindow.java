@@ -615,6 +615,29 @@ public class MainWindow implements GameObserver {
                     Game.instance().getCurrentLevel().getWidth() - (gamePage.getWidth() / 2)) / 2));
         }
 
+
+
+
+
+        // Top-bottom-scrolling logic
+        if (Game.instance().getPlayer().centerPoint().getY() > (gamePage.getHeight() / 2) && Game.instance().getPlayer()
+                .centerPoint().getY() < Game.instance().getCurrentLevel().getHeight() - (gamePage.getHeight() / 2)) {
+            // Scrolling
+            AnchorPane.setTopAnchor(levelPane,
+                    ((gamePage.getHeight() / 2) - Game.instance().getPlayer().centerPoint().getY()));
+        } else if (Game.instance().getPlayer().centerPoint().getY() <= (gamePage.getHeight() / 2)) {
+            // Up
+            AnchorPane.setTopAnchor(levelPane, 0.0);
+        } else {
+            // Down
+            AnchorPane.setTopAnchor(levelPane,
+            (double) (gamePage.getHeight() - Game.instance().getCurrentLevel().getHeight()));
+        }
+
+
+
+
+
         // Add enemy images
         if (Game.instance().getCurrentLevel().getEnemies().size() != enemyImages.size()) {
             for (Enemy e : Game.instance().getCurrentLevel().getEnemies()) {
