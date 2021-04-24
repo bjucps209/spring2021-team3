@@ -98,6 +98,10 @@ public class Entity extends Box {
                                 c.yVelocity = -Game.random.nextInt(5);
                                 Game.instance().getCurrentLevel().getCollectables().add(c);
                             }
+                            if(e.getType() == EnemyState.SCHAUB) {
+                                Goal g = new Goal(e.centerPoint().getX(), e.centerPoint().getY());
+                                Game.instance().getCurrentLevel().getGoals().add(g);
+                            }
                         }
                     } else {
                         ((Player) this).setHealth(Math.max(0, ((Player) this).getHealth() - 1));

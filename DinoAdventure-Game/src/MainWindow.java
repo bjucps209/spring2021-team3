@@ -247,10 +247,16 @@ public class MainWindow implements GameObserver {
                 restartButton.setText("PLAY AGAIN");
                 restartButton.getStyleClass().add("menuButton");
                 buttons.getChildren().add(restartButton);
-                Button highsButton = new Button();
-                highsButton.setText("HIGH SCORES");
-                highsButton.getStyleClass().add("menuButton");
-                buttons.getChildren().add(highsButton);
+                if(gameMode.getValue().equals("NORMAL")) {
+                    Button highsButton = new Button();
+                    highsButton.setText("HIGH SCORES");
+                    highsButton.getStyleClass().add("menuButton");
+                    buttons.getChildren().add(highsButton);
+                    highsButton.setOnAction(ev -> {
+                        gamePage.setVisible(false);
+                        highScoresPage.setVisible(true);
+                    });
+                }
                 Button menuButton = new Button();
                 menuButton.setText("MENU");
                 menuButton.getStyleClass().add("menuButton");
@@ -263,10 +269,6 @@ public class MainWindow implements GameObserver {
                 });
                 restartButton.setOnAction(ev -> {
                     play(new ActionEvent());
-                });
-                highsButton.setOnAction(ev -> {
-                    gamePage.setVisible(false);
-                    highScoresPage.setVisible(true);
                 });
 
                 if(gameMode.getValue().equals("NORMAL")) {
@@ -487,7 +489,7 @@ public class MainWindow implements GameObserver {
                 levelWonButtons.setSpacing(10);
                 levelWonPane.getChildren().add(levelWonButtons);
 
-                if (gameMode.getValue().equals("CUSTOM")) {
+                if (!gameMode.getValue().equals("NORMAL")) {
                     Button levelWonRestartButton = new Button();
                     levelWonRestartButton.setText("PLAY AGAIN");
                     levelWonRestartButton.getStyleClass().add("menuButton");
@@ -641,6 +643,8 @@ public class MainWindow implements GameObserver {
         } else {
             // Down
             AnchorPane.setTopAnchor(levelPane, window.getHeight() - Game.instance().getCurrentLevel().getHeight());
+            AnchorPane.setBottomAnchor(levelPane, 0.0);
+            levelPane.setPrefHeight(Game.instance().getCurrentLevel().getHeight());
         }
 
 
