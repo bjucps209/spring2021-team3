@@ -71,7 +71,7 @@
             <ChoiceBox fx:id="levelsChoice">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Demo" />
+                    
                     </FXCollections>
                 </items>
                 <value>
@@ -82,7 +82,7 @@
 
     </VBox>
 
-    <VBox fx:id="highScoresPage" styleClass="highScoresPage" managed="${highScoresPage.visible}" visible="false" prefHeight="800" alignment="CENTER" spacing="30">
+    <VBox fx:id="highScoresPage" styleClass="highScoresPage" managed="${highScoresPage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
         <HBox alignment="CENTER">
         <Label text="High Scores" style="-fx-font-size: 50px; -fx-text-fill: WHITE" alignment="CENTER"/>
         </HBox>
@@ -104,7 +104,7 @@
 
     </VBox>
 
-    <VBox fx:id="newHighscorePage" styleClass="newHighscorePage" managed="${newHighscorePage.visible}" visible="false" prefHeight="800" alignment="CENTER" spacing="30">
+    <VBox fx:id="newHighscorePage" styleClass="newHighscorePage" managed="${newHighscorePage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
         <HBox alignment="CENTER" style="-fx-font-size: 80px">
             <Label text="New High Score!" alignment="CENTER"  style="-fx-text-fill: DARKBLUE;"/>
         </HBox>
@@ -126,7 +126,7 @@
         <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
     </VBox>
 
-    <VBox fx:id="helpPage" styleClass="helpPage" managed="${helpPage.visible}" visible="false" prefHeight="800" alignment="CENTER" spacing="30">
+    <VBox fx:id="helpPage" styleClass="helpPage" managed="${helpPage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
         <HBox alignment="CENTER" style="-fx-font-size: 50px;-fx-border-color:#DAA520;-fx-border-width:2px;-fx-border-height:2px;-fx-font: 28px Vivaldi;" >
             <Label fx:id="instructions" text="INSTRUCTIONS" alignment="CENTER"/>
         </HBox>
@@ -146,7 +146,7 @@
         <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="highscorePageButton"/>
     </VBox>
 
-    <VBox fx:id="aboutPage" styleClass="aboutPage" managed="${aboutPage.visible}" visible="false" prefHeight="800" alignment="CENTER" spacing="30">
+    <VBox fx:id="aboutPage" styleClass="aboutPage" managed="${aboutPage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
         <Label fx:id="aboutTitle" text="ABOUT DINO ADVENTURE" />
         <Label text="Version 1.0" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
         <Label text="DINO ADVENTURE is created by Team 3 of CPS 209." style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>

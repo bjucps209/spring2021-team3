@@ -27,7 +27,7 @@ Problems with the serialization: 1. Time only loads right when its saved and loa
 | Developer | Time Spent | Remaining |
 | --- | --- | ---:|
 | Luke | 36:45 | 13:15 |
-| Reshi | 33:50 | 16.10 |
+| Reshi | 35:20 | 14.40 |
 | Rebecca | 38:55 | 12:05 |
 | Christopher | 22:50 | 27:20 |
 
