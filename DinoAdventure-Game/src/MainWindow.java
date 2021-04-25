@@ -31,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -114,6 +115,7 @@ public class MainWindow implements GameObserver {
     Label playerName; // name of the player
 
     private Timeline gameLoop;
+    private Timeline musicLoop;
 
     private boolean keysBound;
     private boolean upKeyPressed;
@@ -130,12 +132,7 @@ public class MainWindow implements GameObserver {
 
     HighScore highScores = HighScore.getInstance(); // High scores instantiation
 
-    final MediaPlayer HOME_PAGE_MUSIC = new MediaPlayer(
-            new Media(getClass().getResource("assets/sounds/titleScreenMusic.wav").toString()));
-    final MediaPlayer ENEMY_ATTACK = new MediaPlayer(
-            new Media(getClass().getResource("assets/sounds/EnemyHitPlayer.wav").toString()));
-    final MediaPlayer ENEMY_KILLED = new MediaPlayer(
-            new Media(getClass().getResource("assets/sounds/PlayerKillsEnemy.wav").toString()));
+    final MediaPlayer HOME_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/titleScreenMusic.wav").toString()));
 
     @FXML
     public void initialize() throws IOException {
@@ -147,8 +144,18 @@ public class MainWindow implements GameObserver {
         // set font of title and main menu
         title.setFont(font);
         mainMenu.setFont(font);
-
-        HOME_PAGE_MUSIC.play();
+        HOME_MUSIC.setCycleCount(MediaPlayer.INDEFINITE);
+        musicLoop = new Timeline(new KeyFrame(Duration.millis(100), e -> {
+            if(Game.instance().getState().equals(GameState.MENU)) {
+                if(!HOME_MUSIC.getStatus().equals(Status.PLAYING)) {
+                    HOME_MUSIC.play();
+                }
+            } else {
+                HOME_MUSIC.stop();
+            }
+        }));
+        musicLoop.setCycleCount(Timeline.INDEFINITE);
+        musicLoop.play();
 
         // Disable the level selection dropdown unless custom mode is selected (event
         // handler onCustomClicked).
@@ -262,7 +269,6 @@ public class MainWindow implements GameObserver {
                 menuButton.getStyleClass().add("menuButton");
                 buttons.getChildren().add(menuButton);
                 menuButton.setOnAction(ev -> {
-                    HOME_PAGE_MUSIC.play();
                     Game.instance().setState(GameState.MENU);
                     gamePage.setVisible(false);
                     titlePage.setVisible(true);
@@ -387,7 +393,6 @@ public class MainWindow implements GameObserver {
                 pauseLoop.play();
 
                 menuButtonPaused.setOnAction(ev -> {
-                    HOME_PAGE_MUSIC.play();
                     pauseLoop.stop();
                     Game.instance().setState(GameState.MENU);
                     gamePage.setVisible(false);
@@ -522,7 +527,6 @@ public class MainWindow implements GameObserver {
                 levelWonButtons.getChildren().add(levelWonMenuButton);
                 
                 levelWonMenuButton.setOnAction(ev -> {
-                    HOME_PAGE_MUSIC.play();
                     Game.instance().setState(GameState.MENU);
                     gamePage.setVisible(false);
                     titlePage.setVisible(true);
@@ -785,7 +789,6 @@ public class MainWindow implements GameObserver {
             alert.setHeaderText(null);
             alert.show();
         } else {
-            HOME_PAGE_MUSIC.stop();
 
             Game.instance().setUserName(name.getText());
             Game.instance().setDifficulty(DifficultyType.valueOf(difficultyLevels.getValue()));
@@ -991,7 +994,6 @@ public class MainWindow implements GameObserver {
 
     @FXML
     void onLoadClicked(ActionEvent event) throws IOException {
-        HOME_PAGE_MUSIC.stop();
         play(event);
         Game.instance().getCurrentLevel().getEnemies().clear();
         try {
