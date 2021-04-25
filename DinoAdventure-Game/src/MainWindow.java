@@ -1009,8 +1009,10 @@ public class MainWindow implements GameObserver {
             Game.instance().load("saveFile.dat");
 
         } catch (Exception ex) {
-            System.out.println(ex);
-            System.out.println("Something went wrong with loading the file");
+            var alert = new Alert(AlertType.ERROR,
+                    "Sorry, something went wrong with loading the file\n error message: \n" + ex);
+            alert.setHeaderText(null);
+            alert.show();
         }
 
         window.getScene().getRoot().requestFocus();
