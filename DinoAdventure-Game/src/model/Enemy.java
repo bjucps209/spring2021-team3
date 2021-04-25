@@ -226,6 +226,8 @@ public class Enemy extends Entity implements Living {
         }
         writer.writeInt(widthProperty.get());
         writer.writeInt(heightProperty.get());
+        writer.writeDouble(xVelocity);
+        writer.writeDouble(yVelocity);
     }
 
     // reads the DataOutputStream passed in the parameters and sets the Game model accordingly.
@@ -246,6 +248,8 @@ public class Enemy extends Entity implements Living {
         }
         widthProperty.set(reader.readInt());
         heightProperty.set(reader.readInt());
+        this.setXVelocity(reader.readDouble());
+        this.setYVelocity(reader.readDouble());
     }
 
     public void setType(String type) {

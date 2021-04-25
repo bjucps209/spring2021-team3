@@ -105,9 +105,8 @@ public class Player extends Entity implements Living {
                 writer.writeInt(type.ordinal());
                 writer.writeInt(num);
             }
-
-
-            // use get() and set() not setValue
+            writer.writeDouble(xVelocity);
+            writer.writeDouble(yVelocity);
     
             } catch (IOException e) {
                 throw new IOException("Some thing went wrong in the serialize method for the player class");
@@ -128,6 +127,8 @@ public class Player extends Entity implements Living {
             Integer num = reader.readInt();
             effects.put(type, num);
         }   
+        this.setXVelocity(reader.readDouble());
+        this.setYVelocity(reader.readDouble());
         } catch (IOException e) {
             throw new IOException("Some thing went wrong in the serialize method for the player class");
         } 

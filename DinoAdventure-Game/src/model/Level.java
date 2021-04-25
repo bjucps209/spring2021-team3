@@ -413,6 +413,8 @@ public class Level {
                 writer.writeDouble(idem.centerPoint().getY());
                 writer.writeInt(idem.getType().ordinal());
                 writer.writeInt(idem.getId());
+                writer.writeDouble(idem.getXVelocity());
+                writer.writeDouble(idem.getYVelocity());
             }
         } else {
             writer.writeBoolean(false);
@@ -467,7 +469,8 @@ public class Level {
                         CollectableType.values()[reader.readInt()]);
                 idem.setId(reader.readInt());
                 collectables.add(idem);
-
+                idem.setXVelocity(reader.readDouble());
+                idem.setYVelocity(reader.readDouble());
             }
         }
 
