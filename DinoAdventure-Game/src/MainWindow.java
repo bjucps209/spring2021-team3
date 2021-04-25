@@ -133,6 +133,53 @@ public class MainWindow implements GameObserver {
     HighScore highScores = HighScore.getInstance(); // High scores instantiation
 
     final MediaPlayer HOME_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/titleScreenMusic.wav").toString()));
+    final MediaPlayer ORGAN_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/organ.wav").toString()));
+    
+    final MediaPlayer JUMP_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/jump.wav").toString()));
+    final MediaPlayer COIN_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/coin.wav").toString()));
+    final MediaPlayer POWERUP_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/powerup.wav").toString()));
+    final MediaPlayer ENEMY_KILL_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/playerkillsenemy.wav").toString()));
+    final MediaPlayer ENEMY_HIT_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/playerhitsenemy.wav").toString()));
+    final MediaPlayer PLAYER_HIT_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/enemyhitsplayer.wav").toString()));
+    final MediaPlayer LOSE_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/lose.wav").toString()));
+    final MediaPlayer WIN_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/win.wav").toString()));
+
+    public void playSound(String cause) {
+        switch(cause) {
+            case "jump":
+                JUMP_SOUND.stop();
+                JUMP_SOUND.play();
+                break;
+            case "coin":
+                COIN_SOUND.stop();
+                COIN_SOUND.play();
+                break;
+            case "pke":
+                ENEMY_KILL_SOUND.stop();
+                ENEMY_KILL_SOUND.play();
+                break;
+            case "phe":
+                ENEMY_HIT_SOUND.stop();
+                ENEMY_HIT_SOUND.play();
+                break;
+            case "ehp":
+                PLAYER_HIT_SOUND.stop();
+                PLAYER_HIT_SOUND.play();
+                break;
+            case "powerup":
+                POWERUP_SOUND.stop();
+                POWERUP_SOUND.play();
+                break;
+            case "lose":
+                LOSE_SOUND.stop();
+                LOSE_SOUND.play();
+                break;
+            case "win":
+                WIN_SOUND.stop();
+                WIN_SOUND.play();
+                break;
+        }
+    }
 
     @FXML
     public void initialize() throws IOException {
@@ -145,6 +192,7 @@ public class MainWindow implements GameObserver {
         title.setFont(font);
         mainMenu.setFont(font);
         HOME_MUSIC.setCycleCount(MediaPlayer.INDEFINITE);
+        ORGAN_MUSIC.setCycleCount(MediaPlayer.INDEFINITE);
         musicLoop = new Timeline(new KeyFrame(Duration.millis(100), e -> {
             if(Game.instance().getState().equals(GameState.MENU)) {
                 if(!HOME_MUSIC.getStatus().equals(Status.PLAYING)) {
@@ -152,6 +200,13 @@ public class MainWindow implements GameObserver {
                 }
             } else {
                 HOME_MUSIC.stop();
+            }
+            if(Game.instance().getState().equals(GameState.LEVEL_PLAYING) && gameMode.getValue().equals("SCHAUB MODE")) {
+                if(!ORGAN_MUSIC.getStatus().equals(Status.PLAYING)) {
+                    ORGAN_MUSIC.play();
+                }
+            } else {
+                ORGAN_MUSIC.stop();
             }
         }));
         musicLoop.setCycleCount(Timeline.INDEFINITE);
@@ -468,10 +523,18 @@ public class MainWindow implements GameObserver {
                 if (gameMode.getValue().equals("NORMAL") && (currentLevelIndex + 1) >= levels.length) {
                     Game.instance().setState(GameState.GAME_OVER);
                     Game.instance().setGameOverMessage("You completed all the levels!");
+                    Game.instance().observers().forEach(o -> {
+                        o.playSound("win");
+                    });
                     return;
                 }
 
                 gameLoop.stop();
+
+
+                Game.instance().observers().forEach(o -> {
+                    o.playSound("win");
+                });
 
                 VBox levelWonPane = new VBox();
                 levelWonPane.setAlignment(Pos.CENTER);
@@ -551,6 +614,9 @@ public class MainWindow implements GameObserver {
         if (upKeyPressed) {
             Game.instance().getPlayer().setMoving(true);
             if (Game.instance().getPlayer().isOnSurface()) {
+                Game.instance().observers().forEach(o -> {
+                o.playSound("jump");
+                });
                 Game.instance().getPlayer().setYVelocity(
                         Game.instance().getPlayer().getYVelocity() - Game.instance().getPlayer().getMaxJumpHeight() - (Game.instance().getPlayer().getEffects().containsKey(CollectableType.FeatherPowerup) ? 4 : 0));
             }
@@ -589,6 +655,11 @@ public class MainWindow implements GameObserver {
                 Game.instance().getPlayer().setXVelocity(0);
                 Game.instance().getPlayer().setYVelocity(0);
             }
+
+
+            Game.instance().observers().forEach(o -> {
+                o.playSound("ehp");
+            });
 
         }
 
@@ -1088,7 +1159,7 @@ public class MainWindow implements GameObserver {
         } else if(gameMode.getValue().equals("SCHAUB MODE")) {
             try {
                 
-                level.load("src/levels/boss.dat");
+                level.load("src/assets/boss.dat");
                 Enemy e = new Enemy(1600, 600, EnemyState.SCHAUB);
                 level.getEnemies().add(e);
             } catch (IOException e1) {

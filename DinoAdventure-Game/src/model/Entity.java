@@ -80,6 +80,9 @@ public class Entity extends Box {
                         }
                         e.setHealth(e.getHealth() - 1);
                         if(e.getHealth() <= 0) {
+                            Game.instance().observers().forEach(o -> {
+                                o.playSound("pke");
+                            });
                             int coins = Game.random.nextInt(3) + 1;
                             if(e.getType() == EnemyState.SCHAUB) {
                                 coins = 100;
@@ -102,8 +105,15 @@ public class Entity extends Box {
                                 Goal g = new Goal(e.centerPoint().getX(), e.centerPoint().getY());
                                 Game.instance().getCurrentLevel().getGoals().add(g);
                             }
+                        } else {
+                            Game.instance().observers().forEach(o -> {
+                                o.playSound("phe");
+                            });
                         }
                     } else {
+                        Game.instance().observers().forEach(o -> {
+                        o.playSound("ehp");
+                        });
                         ((Player) this).setHealth(Math.max(0, ((Player) this).getHealth() - 1));
                         ((Player) this).getEffects().clear();
                     }

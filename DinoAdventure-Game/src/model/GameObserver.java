@@ -6,4 +6,6 @@ public interface GameObserver {
 
     public void handleInput();
 
+    public void playSound(String cause);
+
 }

@@ -65,12 +65,18 @@ public class Player extends Entity implements Living {
             Game.instance().setGameOverMessage("You ran out of health!");
             Game.instance().setState(GameState.GAME_OVER);
             Game.instance().getPlayer().setState(PlayerState.DEAD);
+            Game.instance().observers().forEach(o -> {
+                o.playSound("lose");
+            });
         }
 
         if(!Game.instance().isCheating() && Game.instance().getCurrentLevel().remainingTimeProperty().get() <= 0) {
             Game.instance().setGameOverMessage("You ran out of time!");
             Game.instance().setState(GameState.GAME_OVER);
             Game.instance().getPlayer().setState(PlayerState.DEAD);
+            Game.instance().observers().forEach(o -> {
+                o.playSound("lose");
+            });
         }
 
     }

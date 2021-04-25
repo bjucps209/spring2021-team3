@@ -28,21 +28,34 @@ public class Collectable extends Entity {
         int effectSeconds = 10;
         switch(type) {
             case Coin:
+                Game.instance().observers().forEach(o -> {
+                    o.playSound("coin");
+                });
                 Game.instance().getPlayer().scoreProperty().set(Game.instance().getPlayer().scoreProperty().get() + 25);
                 break;
 
             case FeatherPowerup:
             case SpeedPowerup:
+                Game.instance().observers().forEach(o -> {
+                    o.playSound("powerup");
+                });
                 Game.instance().getPlayer().getEffects().put(type, effectSeconds);
                 break;
 
             case HealthPowerup:
                 int healthChange = 5;
+                Game.instance().observers().forEach(o -> {
+                    o.playSound("powerup");
+                });
                 Game.instance().getPlayer().setHealth(Game.instance().getPlayer().getHealth() + healthChange);
                 break;
 
             case CoinPowerup:
                 int scoreChange = 100;
+                Game.instance().observers().forEach(o -> {
+                    o.playSound("coin");
+                    o.playSound("powerup");
+                });
                 Game.instance().getPlayer().setScore(Game.instance().getPlayer().getScore() + scoreChange);
                 break;
 
