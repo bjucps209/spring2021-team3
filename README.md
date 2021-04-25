@@ -13,7 +13,7 @@ After starting the program, click play. Once the game starts you can move move b
 
 ## Known Issues:
 
-Problems with the serialization: 1. Time only loads right when its saved and loaded back to back. If a new game is started, the time is off. (I have spent many hours trying to fix this and cannot figure it out) 2. Enemies are loaded back up on the screen lower than they should. 
+
 
 ## Recordings:
 [Full Alpha Demo](https://youtu.be/u_dezk9elx8)
@@ -28,7 +28,7 @@ Problems with the serialization: 1. Time only loads right when its saved and loa
 | --- | --- | ---:|
 | Luke | 36:45 | 13:15 |
 | Reshi | 35:20 | 14.40 |
-| Rebecca | 38:55 | 12:05 |
+| Rebecca | 43:40 | 6:20 |
 | Christopher | 22:50 | 27:20 |
 
 
