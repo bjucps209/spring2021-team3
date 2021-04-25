@@ -995,8 +995,12 @@ public class MainWindow implements GameObserver {
         play(event);
         Game.instance().getCurrentLevel().getEnemies().clear();
         try {
-            final Game game = Game.instance();
-            game.load("saveFile.dat");
+            Game.instance().load("saveFile.dat");
+            gameMode.setValue("CUSTOM");
+            String levelName  = Game.instance().getCurrentLevel().getLevelName().substring(13, Game.instance().getCurrentLevel().getLevelName().length() -4 );  
+            levelsChoice.setValue(levelName);
+            loadLevel();
+            Game.instance().load("saveFile.dat");
 
         } catch (Exception ex) {
             System.out.println(ex);
