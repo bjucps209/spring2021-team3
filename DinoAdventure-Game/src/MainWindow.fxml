@@ -18,16 +18,14 @@
         * Use `<fx:id>.setVisible(boolean)` to show and hide pages within the Java, just make sure only one is shown at a time.
     -->
 
-    <VBox fx:id="titlePage" styleClass="titlePage" managed="${titlePage.visible}" visible="true" alignment="CENTER" prefHeight="${window.height}">
-        <Label text="DINO ADVENTURE" fx:id="title"  prefHeight="150">
+    <VBox fx:id="titlePage" style="-fx-background-image: url(assets/images/world/background-faded.png); -fx-background-repeat: no-repeat; -fx-background-size: cover" managed="${titlePage.visible}" visible="true" alignment="CENTER" prefHeight="${window.height}">
+        <Label text="DINO ADVENTURE" fx:id="title"  prefHeight="400">
         <style>
-            -fx-font-size: 80px;
+            -fx-font-size: 100px;
         </style>
         </Label>
 
-        <Label prefHeight="300" style="-fx-graphic: url('assets/images/TitleScreen/gameImage.jpg')" />
-
-        <Label text="MAIN MENU" fx:id="mainMenu" prefHeight="100" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE"/>
+        <Label text="MAIN MENU" fx:id="mainMenu" prefHeight="200" style="-fx-font-size: 35px; -fx-text-fill: DARKBLUE"/>
         <HBox spacing="20" alignment="CENTER" >
             <Button text="ABOUT" onAction="#onAboutClicked" styleClass="titlePageButton"/>
             <Button text="HELP" onAction="#onHelpClicked" styleClass="titlePageButton"/>
@@ -36,10 +34,10 @@
             <Button text="PLAY" onAction="#play" styleClass="titlePageButton"/> 
         </HBox>
 
-        <HBox spacing="20" alignment="CENTER" prefHeight="100">
-            <Label text = "Enter your name:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" prefWidth = "250" alignment="CENTER_RIGHT"/>
+        <HBox spacing="20" alignment="CENTER" prefHeight="200">
+            <Label text = "Enter your name:" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE" prefHeight = "20" prefWidth = "250" alignment="CENTER_RIGHT"/>
             <TextField fx:id="name" text = "Joe" />
-            <Label text = "Difficulty Level:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
+            <Label text = "Difficulty Level:" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
             <ChoiceBox fx:id="difficultyLevels">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
@@ -54,7 +52,7 @@
                 </value>
             </ChoiceBox>
             
-            <Label text = "Game Mode:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
+            <Label text = "Game Mode:" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
             <ChoiceBox fx:id="gameMode" onAction="#onCustomClicked">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
@@ -68,7 +66,7 @@
                 </value>
             </ChoiceBox>
 
-            <Label text = "Level:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
+            <Label text = "Level:" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE" prefHeight = "20" />
             <ChoiceBox fx:id="levelsChoice">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
@@ -83,29 +81,29 @@
 
     </VBox>
 
-    <VBox fx:id="highScoresPage" styleClass="highScoresPage" managed="${highScoresPage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
+    <VBox fx:id="highScoresPage" style="-fx-background-image: url(assets/images/world/background-faded.png); -fx-background-repeat: no-repeat; -fx-background-size: cover" managed="${highScoresPage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
         <HBox alignment="CENTER">
-        <Label text="High Scores" style="-fx-font-size: 50px; -fx-text-fill: WHITE" alignment="CENTER"/>
+        <Label text="High Scores" style="-fx-font-size: 70px; -fx-text-fill: DARKBLUE" alignment="CENTER"/>
         </HBox>
 
-        <HBox style="-fx-font-size: 30px;" spacing="30" alignment="CENTER">
-            <Label text="Rank" style="-fx-text-fill: WHITE"/>
-            <Label text="Name" style="-fx-text-fill: WHITE"/>
-            <Label text="Score" style="-fx-text-fill: WHITE"/>
-            <Label text="Difficulty" style="-fx-text-fill: WHITE"/>
+        <HBox style="-fx-font-size: 40px;" spacing="30" alignment="CENTER">
+            <Label text="Rank" style="-fx-text-fill: DARKBLUE"/>
+            <Label text="Name" style="-fx-text-fill: DARKBLUE"/>
+            <Label text="Score" style="-fx-text-fill: DARKBLUE"/>
+            <Label text="Difficulty" style="-fx-text-fill: DARKBLUE"/>
         </HBox>
-        <HBox style="-fx-font-size: 20px;" spacing="30" alignment="CENTER"> 
+        <HBox style="-fx-font-size: 30px;" spacing="30" alignment="CENTER"> 
             <VBox fx:id="ranks" > </VBox>
             <VBox fx:id="names" ></VBox>
             <VBox fx:id="scores" ></VBox>
             <VBox fx:id="levels" ></VBox>
         </HBox>
 
-        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="highscorePageButton"/>
+        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
 
     </VBox>
 
-    <VBox fx:id="newHighscorePage" styleClass="newHighscorePage" managed="${newHighscorePage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
+    <VBox fx:id="newHighscorePage" style="-fx-background-image: url(assets/images/world/background-faded.png); -fx-background-repeat: no-repeat; -fx-background-size: cover" managed="${newHighscorePage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
         <HBox alignment="CENTER" style="-fx-font-size: 80px">
             <Label text="New High Score!" alignment="CENTER"  style="-fx-text-fill: DARKBLUE;"/>
         </HBox>
@@ -127,36 +125,36 @@
         <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
     </VBox>
 
-    <VBox fx:id="helpPage" styleClass="helpPage" managed="${helpPage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
-        <HBox alignment="CENTER" style="-fx-font-size: 50px;-fx-border-color:#DAA520;-fx-border-width:2px;-fx-border-height:2px;-fx-font: 28px Vivaldi;" >
-            <Label fx:id="instructions" text="INSTRUCTIONS" alignment="CENTER"/>
+    <VBox fx:id="helpPage" style="-fx-background-image: url(assets/images/world/background-faded.png); -fx-background-repeat: no-repeat; -fx-background-size: cover" managed="${helpPage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
+        <HBox alignment="CENTER" style="-fx-font-size: 70px;" >
+            <Label fx:id="instructions" text="INSTRUCTIONS" alignment="CENTER" style="-fx-font-size: 50px; -fx-text-fill: DARKBLUE"/>
         </HBox>
 
         <HBox alignment="CENTER" style="-fx-font-size:30px;">
-            <Label text="Follow these to finish DINO ADVENTURE." style="-fx-text-fill: WHITE"/>
+            <Label text="Follow these to finish DINO ADVENTURE." style="-fx-text-fill: DARKBLUE"/>
         </HBox>
 
-        <VBox alignment="CENTER" style="-fx-font-size:20px; -fx-padding:40px;" spacing="15">
-            <Label text="You are DINO and must proceed platform by platform to reach the end of your adventure. Use the left arrow to go left, the right arrow to go forward, and the up arrow to jump." wrapText="true" style="-fx-text-fill: WHITE"/>
-            <Label text="Kill the enemies by jumping and landing on their head. Every time you kill an enemy, you can collect a coin worth 25 points. Hitting an enemy anywhere other than the head makes you lose 1 health point." wrapText="true" style="-fx-text-fill: WHITE"/>
-            <Label text="Falling in the gap between platforms makes you lose 10 points. The feather powerup enables you to jump higher for 10 seconds. The lightning powerup increases your speed, and the first-aid powerup increases your health by 10 points" wrapText="true" style="-fx-text-fill: WHITE"/>
-            <Label text="Each level ends at the finish line. The game ends when you run out of health or complete the levels in the sequence you have chosen." wrapText="true" style="-fx-text-fill: WHITE"/>
-            <Label text="HAVE A GREAT GAME!" wrapText="true" style="-fx-text-fill: WHITE"/>
+        <VBox alignment="CENTER" style="-fx-font-size:25px; -fx-padding:40px;" spacing="15">
+            <Label text="You are DINO and must proceed platform by platform to reach the end of your adventure. Use the left arrow to go left, the right arrow to go forward, and the up arrow to jump." wrapText="true" style="-fx-text-fill: DARKBLUE"/>
+            <Label text="Kill the enemies by jumping and landing on their head. Every time you kill an enemy, you can collect a coin worth 25 points. Hitting an enemy anywhere other than the head makes you lose 1 health point." wrapText="true" style="-fx-text-fill: DARKBLUE"/>
+            <Label text="Falling in the gap between platforms makes you lose 10 points. The feather powerup enables you to jump higher for 10 seconds. The lightning powerup increases your speed, and the first-aid powerup increases your health by 10 points" wrapText="true" style="-fx-text-fill: DARKBLUE"/>
+            <Label text="Each level ends at the finish line. The game ends when you run out of health or complete the levels in the sequence you have chosen." wrapText="true" style="-fx-text-fill: DARKBLUE"/>
+            <Label text="HAVE A GREAT GAME!" wrapText="true" style="-fx-text-fill: DARKBLUE"/>
         </VBox>
 
-        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="highscorePageButton"/>
+        <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
     </VBox>
 
-    <VBox fx:id="aboutPage" styleClass="aboutPage" managed="${aboutPage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
-        <Label fx:id="aboutTitle" text="ABOUT DINO ADVENTURE" />
+    <VBox fx:id="aboutPage" style="-fx-background-image: url(assets/images/world/background-faded.png); -fx-background-repeat: no-repeat; -fx-background-size: cover" managed="${aboutPage.visible}" visible="false" prefHeight="${window.height}" alignment="CENTER" spacing="30">
+        <Label fx:id="aboutTitle" text="ABOUT DINO ADVENTURE" style="-fx-font-size: 50px; -fx-text-fill: DARKBLUE" />
         <Label text="Version 1.0" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
-        <Label text="DINO ADVENTURE is created by Team 3 of CPS 209." style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+        <Label text="DINO ADVENTURE is created by Team 3 of CPS 209." style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;" prefHeight="80"/>
         <VBox spacing = "20" alignment="CENTER">
-            <Label text="Developers:" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
-            <Label text="Luke Darling" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
-            <Label text="Rebecca Henderson" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
-            <Label text="Christopher Zuehlke" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
-            <Label text="Reshi Pasupuleti" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Developers:" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Luke Darling" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Rebecca Henderson" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Christopher Zuehlke" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Reshi Pasupuleti" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
         </VBox>
         <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
 

@@ -21,7 +21,12 @@
 .titlePageButton {
     -fx-font-size: 20px; 
     -fx-background-color: DARKBLUE; 
-    -fx-text-fill: WHITE
+    -fx-text-fill: WHITE;
+    -fx-border-radius: 100px;
+    -fx-background-radius: 100px;
+    -fx-border: none;
+    -fx-min-width: 156px;
+    -fx-max-width: 156px;
 }
 
 .titlePageButton:hover {
@@ -30,7 +35,7 @@
 
 .highScoresPage {
     -fx-background-color: DARKBLUE; 
-    -fx-text-fill: WHITE
+    -fx-text-fill:  DARKBLUE;
 }
 
 .highscorePageButton {
@@ -75,31 +80,32 @@
 }
 
 .gameOverPane {
-    -fx-background-color: rgba(0, 0, 0, 0.9);
+    -fx-background-color: rgba(0, 0, 0, 0.55);
 }
 
 .gameOverHeader {
     -fx-font-size: 48px;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: WHITE;
 }
 
 .gameOverMessage {
-    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-text-fill:  WHITE;
     -fx-font-size: 16px;
     -fx-text-alignment: center;
 }
 
 .gamePausedPane {
-    -fx-background-color: rgba(0, 0, 0, 0.9);
+    -fx-background-color: rgba(0, 0, 0, 0.55);
 }
 
 .gamePausedHeader {
     -fx-font-size: 48px;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: #CCCCCC;
 }
 
 .playPauseButton {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: DARKBLUE; 
+    -fx-text-fill: WHITE; 
     -fx-padding: 10px;
     -fx-font-size: 24px;
     -fx-border-radius: 100px;
@@ -114,7 +120,7 @@
 }
 
 .playPauseButton:hover {
-    -fx-background-color: #CCCCCC;
+    -fx-background-color: #6c64b3;
 }
 
 .playPauseLabel {
@@ -122,7 +128,8 @@
 }
 
 .menuButton {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: DARKBLUE; 
+    -fx-text-fill: WHITE; 
     -fx-padding: 10px;
     -fx-font-size: 20px;
     -fx-border-radius: 100px;
@@ -135,11 +142,12 @@
 }
 
 .menuButton:hover {
-    -fx-background-color: #CCCCCC;
+    -fx-background-color: #6c64b3;
 }
 
 .halfMenuButton {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: DARKBLUE; 
+    -fx-text-fill: WHITE; 
     -fx-padding: 10px;
     -fx-font-size: 20px;
     -fx-border-radius: 100px;
@@ -151,7 +159,7 @@
 }
 
 .halfMenuButton:hover {
-    -fx-background-color: #CCCCCC;
+    -fx-background-color: #6c64b3;
 }
 
 .load-save {
@@ -165,5 +173,5 @@
 
 .levelWonHeader {
     -fx-font-size: 48px;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: WHITE; 
 }
