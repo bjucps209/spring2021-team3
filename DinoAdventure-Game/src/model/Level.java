@@ -354,7 +354,8 @@ public class Level {
             String type = reader.readUTF();
             int x = reader.readInt();
             int y = reader.readInt();
-            Collectable col = new Collectable(x, y, CollectableType.valueOf(type));
+            Collectable col = new Collectable(x - 50, y -25, CollectableType.valueOf(type));
+            
             collectables.add(col);
         }
 

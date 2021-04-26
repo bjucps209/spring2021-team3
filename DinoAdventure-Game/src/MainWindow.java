@@ -128,7 +128,7 @@ public class MainWindow implements GameObserver {
     private ArrayList<ImageView> goalImages = new ArrayList<ImageView>();
 
     // holds the current index of the level
-    private int currentLevelIndex = 0;
+    // private int currentLevelIndex = 0;
 
     HighScore highScores = HighScore.getInstance(); // High scores instantiation
 
@@ -360,7 +360,7 @@ public class MainWindow implements GameObserver {
                 }
 
                 gameOverMessage.setText(Game.instance().getGameOverMessage());
-                currentLevelIndex = 0;
+                Game.instance().setCurrentLevelIndex(0);;
 
                 break;
 
@@ -520,11 +520,11 @@ public class MainWindow implements GameObserver {
 
             case LEVEL_WON:
                 //add level bones from time remaing - not working yet
-                //Game.instance().setScore((int)(Game.instance().getScore() + (getLevelCompletionBonus() * Game.instance().getCurrentLevel().remainingTimeProperty().get())));
+                Game.instance().setScore((int)(Game.instance().getScore() + (getLevelCompletionBonus() * Game.instance().getCurrentLevel().remainingTimeProperty().get())));
 
                 File[] levels = new File("src/levels").listFiles();
 
-                if (gameMode.getValue().equals("NORMAL") && (currentLevelIndex + 1) >= levels.length) {
+                if (gameMode.getValue().equals("NORMAL") && (Game.instance().getCurrentLevelIndex() + 1) >= levels.length) {
                     Game.instance().setState(GameState.GAME_OVER);
                     Game.instance().setGameOverMessage("You completed all the levels!");
                     Game.instance().observers().forEach(o -> {
@@ -581,7 +581,7 @@ public class MainWindow implements GameObserver {
                         levelWonButtons.getChildren().add(levelWonNextButton);
                         
                         levelWonNextButton.setOnAction(ev -> {
-                            ++currentLevelIndex;
+                            Game.instance().setCurrentLevelIndex(Game.instance().getCurrentLevelIndex() + 1);
                             play(new ActionEvent());
                         });
                     }
@@ -1181,7 +1181,7 @@ public class MainWindow implements GameObserver {
             try {
                 File[] files = new File("src/levels").listFiles();
                 
-                level.load("src/levels/" + files[currentLevelIndex].getName());
+                level.load("src/levels/" + files[Game.instance().getCurrentLevelIndex()].getName());
             } catch (IOException e1) {
                 // Auto-generated catch block
                 e1.printStackTrace();

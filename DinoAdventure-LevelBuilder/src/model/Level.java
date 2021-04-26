@@ -280,6 +280,7 @@ public class Level {
      */
     public void save(String filename) throws IOException {
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename, false))) {
+            // writer.writeUTF(getLevelName());
             // write the size of the level
             writer.writeInt(width);
             writer.writeInt(height);
@@ -303,8 +304,6 @@ public class Level {
                 writer.writeUTF(enemies.get(i).getType().toString());
                 writer.writeInt(enemies.get(i).centerPoint().getIntX());
                 writer.writeInt(enemies.get(i).centerPoint().getIntY());
-                // writer.writeInt(entities.get(i).getHeight());
-                // writer.writeInt(entities.get(i).getWidth());
             }
             // Write how many blocks there are
             writer.writeInt(blocks.size());

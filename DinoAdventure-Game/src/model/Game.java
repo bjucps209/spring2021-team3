@@ -16,6 +16,7 @@ public class Game {
     private DifficultyType difficulty = DifficultyType.EASY;
     private String gameOverMessage;
     private boolean cheating;
+    private int currentLevelIndex = 0;
 
     public static Random random = new Random();
 
@@ -131,6 +132,14 @@ public class Game {
 
     public void setCurrentLevel(Level level) {
         currentLevel = level;
+    }
+
+    public int getCurrentLevelIndex() {
+        return currentLevelIndex;
+    }
+
+    public void setCurrentLevelIndex(int index) {
+        this.currentLevelIndex = index;
     }
 
     //save the current Game state. Saves the player to file passed in the parameters.
