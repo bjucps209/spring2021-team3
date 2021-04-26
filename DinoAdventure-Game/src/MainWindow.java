@@ -7,6 +7,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -468,14 +469,20 @@ public class MainWindow implements GameObserver {
                 });
 
                 loadButton.setOnAction(ev -> {
-                    Game.instance().getCurrentLevel().getEnemies().clear();
                     try {
+                        gameMode.setValue("NORMAL");
                         Game.instance().load("saveFile.dat");
-                        String levelName  = Game.instance().getCurrentLevel().getLevelName();  
-                        var level = new Level();
-                        level.load(levelName);
+            
+                    } catch (Exception ex) {
+                        var alert = new Alert(AlertType.ERROR,
+                                "Sorry, something went wrong with loading the file\n error message: \n" + ex);
+                        alert.setHeaderText(null);
+                        alert.show();
+                    }
+                    try {
+                        play(e);
                         Game.instance().load("saveFile.dat");
-
+            
                     } catch (Exception ex) {
                         var alert = new Alert(AlertType.ERROR,
                                 "Sorry, something went wrong with loading the file\n error message: \n" + ex);
@@ -1064,12 +1071,8 @@ public class MainWindow implements GameObserver {
     @FXML
     void onLoadClicked(ActionEvent event) throws IOException {
         play(event);
-        Game.instance().getCurrentLevel().getEnemies().clear();
         try {
-            Game.instance().load("saveFile.dat");
-            String levelName  = Game.instance().getCurrentLevel().getLevelName();  
-            var level = new Level();
-            level.load(levelName);
+            gameMode.setValue("NORMAL");
             Game.instance().load("saveFile.dat");
 
         } catch (Exception ex) {
@@ -1078,6 +1081,17 @@ public class MainWindow implements GameObserver {
             alert.setHeaderText(null);
             alert.show();
         }
+        play(event);
+        try {
+            Game.instance().load("saveFile.dat");
+
+        } catch (Exception ex) {
+            var alert = new Alert(AlertType.ERROR,
+                    "Sorry, something went wrong with loading the file\n error message: \n" + ex);
+            alert.setHeaderText(null);
+            alert.show();
+        }
+        
 
         window.getScene().getRoot().requestFocus();
 
@@ -1127,7 +1141,7 @@ public class MainWindow implements GameObserver {
 
     //Get the bonus multiplier for completling a level
     public int getLevelCompletionBonus() {
-        if (difficultyLevels.getValue().equals("MEADIUM")) {
+        if (difficultyLevels.getValue().equals("MEDIUM")) {
             return 2;
         }
         else if (difficultyLevels.getValue().equals("HARD")) {
