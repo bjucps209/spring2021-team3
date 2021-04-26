@@ -219,12 +219,12 @@ public class MainWindow implements GameObserver {
         // About screen initialization
         aboutTitle.setTextFill(Color.DARKBLUE);
         // set font of title and main menu
-        aboutTitle.setFont(font);
+       // aboutTitle.setFont(font);
 
         // Help screen initialization
         instructions.setTextFill(Color.WHITE);
         // set font of title and main menu
-        instructions.setFont(font);
+       // instructions.setFont(font);
 
         // High Scores screen initialization
 
