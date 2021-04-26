@@ -221,11 +221,6 @@ public class MainWindow implements GameObserver {
         // set font of title and main menu
        // aboutTitle.setFont(font);
 
-        // Help screen initialization
-        instructions.setTextFill(Color.WHITE);
-        // set font of title and main menu
-       // instructions.setFont(font);
-
         // High Scores screen initialization
 
         /**
@@ -243,19 +238,19 @@ public class MainWindow implements GameObserver {
             Label difficultyLabel = new Label();
 
             rank.setText("" + (i + 1));
-            rank.setTextFill(Color.WHITE);
+            rank.setTextFill(Color.DARKBLUE);
             ranks.getChildren().add(rank);
 
             name.setText(slist.get(i).getName());
-            name.setTextFill(Color.WHITE);
+            name.setTextFill(Color.DARKBLUE);
             names.getChildren().add(name);
 
             scoreLabel.setText(String.valueOf(slist.get(i).getScore()));
-            scoreLabel.setTextFill(Color.WHITE);
+            scoreLabel.setTextFill(Color.DARKBLUE);
             scores.getChildren().add(scoreLabel);
 
             difficultyLabel.setText(String.valueOf(slist.get(i).getDifficultyType()));
-            difficultyLabel.setTextFill(Color.WHITE);
+            difficultyLabel.setTextFill(Color.DARKBLUE);
             levels.getChildren().add(difficultyLabel);
         }
 
@@ -1225,19 +1220,19 @@ public class MainWindow implements GameObserver {
             Label difficultyLabel = new Label();
 
             rank.setText("" + (i + 1));
-            rank.setTextFill(Color.WHITE);
+            rank.setTextFill(Color.DARKBLUE);
             ranks.getChildren().add(rank);
 
             name.setText(slist.get(i).getName());
-            name.setTextFill(Color.WHITE);
+            name.setTextFill(Color.DARKBLUE);
             names.getChildren().add(name);
 
             scoreLabel.setText(String.valueOf(slist.get(i).getScore()));
-            scoreLabel.setTextFill(Color.WHITE);
+            scoreLabel.setTextFill(Color.DARKBLUE);
             scores.getChildren().add(scoreLabel);
 
             difficultyLabel.setText(String.valueOf(slist.get(i).getDifficultyType()));
-            difficultyLabel.setTextFill(Color.WHITE);
+            difficultyLabel.setTextFill(Color.DARKBLUE);
             levels.getChildren().add(difficultyLabel);
         }
 

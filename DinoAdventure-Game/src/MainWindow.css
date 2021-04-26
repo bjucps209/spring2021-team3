@@ -30,7 +30,7 @@
 
 .highScoresPage {
     -fx-background-color: DARKBLUE; 
-    -fx-text-fill: WHITE
+    -fx-text-fill:  DARKBLUE;
 }
 
 .highscorePageButton {
