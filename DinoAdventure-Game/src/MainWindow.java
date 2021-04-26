@@ -219,12 +219,12 @@ public class MainWindow implements GameObserver {
         // About screen initialization
         aboutTitle.setTextFill(Color.DARKBLUE);
         // set font of title and main menu
-        aboutTitle.setFont(font);
+       // aboutTitle.setFont(font);
 
         // Help screen initialization
         instructions.setTextFill(Color.WHITE);
         // set font of title and main menu
-        instructions.setFont(font);
+       // instructions.setFont(font);
 
         // High Scores screen initialization
 
@@ -476,10 +476,9 @@ public class MainWindow implements GameObserver {
                     Game.instance().getCurrentLevel().getEnemies().clear();
                     try {
                         Game.instance().load("saveFile.dat");
-                        gameMode.setValue("CUSTOM");
-                        String levelName  = Game.instance().getCurrentLevel().getLevelName().substring(13, Game.instance().getCurrentLevel().getLevelName().length() -4 );  
-                        levelsChoice.setValue(levelName);
-                        loadLevel();
+                        String levelName  = Game.instance().getCurrentLevel().getLevelName();  
+                        var level = new Level();
+                        level.load(levelName);
                         Game.instance().load("saveFile.dat");
 
                     } catch (Exception ex) {
@@ -1073,10 +1072,9 @@ public class MainWindow implements GameObserver {
         Game.instance().getCurrentLevel().getEnemies().clear();
         try {
             Game.instance().load("saveFile.dat");
-            gameMode.setValue("CUSTOM");
-            String levelName  = Game.instance().getCurrentLevel().getLevelName().substring(13, Game.instance().getCurrentLevel().getLevelName().length() -4 );  
-            levelsChoice.setValue(levelName);
-            loadLevel();
+            String levelName  = Game.instance().getCurrentLevel().getLevelName();  
+            var level = new Level();
+            level.load(levelName);
             Game.instance().load("saveFile.dat");
 
         } catch (Exception ex) {
