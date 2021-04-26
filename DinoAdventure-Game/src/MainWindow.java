@@ -471,10 +471,9 @@ public class MainWindow implements GameObserver {
                     Game.instance().getCurrentLevel().getEnemies().clear();
                     try {
                         Game.instance().load("saveFile.dat");
-                        gameMode.setValue("CUSTOM");
-                        String levelName  = Game.instance().getCurrentLevel().getLevelName().substring(13, Game.instance().getCurrentLevel().getLevelName().length() -4 );  
-                        levelsChoice.setValue(levelName);
-                        loadLevel();
+                        String levelName  = Game.instance().getCurrentLevel().getLevelName();  
+                        var level = new Level();
+                        level.load(levelName);
                         Game.instance().load("saveFile.dat");
 
                     } catch (Exception ex) {
@@ -1068,10 +1067,9 @@ public class MainWindow implements GameObserver {
         Game.instance().getCurrentLevel().getEnemies().clear();
         try {
             Game.instance().load("saveFile.dat");
-            gameMode.setValue("CUSTOM");
-            String levelName  = Game.instance().getCurrentLevel().getLevelName().substring(13, Game.instance().getCurrentLevel().getLevelName().length() -4 );  
-            levelsChoice.setValue(levelName);
-            loadLevel();
+            String levelName  = Game.instance().getCurrentLevel().getLevelName();  
+            var level = new Level();
+            level.load(levelName);
             Game.instance().load("saveFile.dat");
 
         } catch (Exception ex) {
