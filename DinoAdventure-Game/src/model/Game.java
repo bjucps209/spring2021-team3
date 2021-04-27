@@ -159,7 +159,7 @@ public class Game {
         }
     }
 
-    //read through the filename passed in the parameters to load the game back to previous state.
+    //read through the filename passed in the parameters to load the game model back to previous state.
     public void load(String filename)throws IOException{
             DataInputStream reader = new DataInputStream(new FileInputStream(filename));
             currentLevelIndex = reader.readInt();
