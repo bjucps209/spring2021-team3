@@ -467,19 +467,36 @@ public class MainWindow implements GameObserver {
 
                 loadButton.setOnAction(ev -> {
                     try {
-                        gameMode.setValue("NORMAL");
                         Game.instance().load("saveFile.dat");
-            
-                    } catch (Exception ex) {
-                        var alert = new Alert(AlertType.ERROR,
-                                "Sorry, something went wrong with loading the file\n error message: \n" + ex);
-                        alert.setHeaderText(null);
-                        alert.show();
-                    }
-                    try {
-                        play(e);
-                        Game.instance().load("saveFile.dat");
-            
+                        String gameName = Game.instance().getCurrentLevel().getLevelName();
+                        if (gameName.equals("src/levels/level1.dat") || gameName.equals("src/levels/Level2.dat") || gameName.equals("src/levels/level3.dat")){ 
+                            try {
+                                gameMode.setValue("NORMAL");
+                                play(ev);
+                                Game.instance().load("saveFile.dat");
+
+                            } catch (Exception ex) {
+                                var alert = new Alert(AlertType.ERROR,
+                                        "Sorry, something went wrong with loading the file\n error message: \n" + ex);
+                                alert.setHeaderText(null);
+                                alert.show();
+                            }
+                        }else{
+                            try {
+                                gameMode.setValue("CUSTOM");
+                                String subName = gameName.substring(13, gameName.length() - 4);
+                                levelsChoice.setValue(subName);
+                                loadLevel();
+                                play(ev);
+                                Game.instance().load("saveFile.dat");
+
+                            } catch (Exception ex) {
+                                var alert = new Alert(AlertType.ERROR,
+                                        "Sorry, something went wrong with loading the file\n error message: \n" + ex);
+                                alert.setHeaderText(null);
+                                alert.show();
+                            }
+                        }
                     } catch (Exception ex) {
                         var alert = new Alert(AlertType.ERROR,
                                 "Sorry, something went wrong with loading the file\n error message: \n" + ex);
@@ -490,17 +507,17 @@ public class MainWindow implements GameObserver {
                     window.getScene().getRoot().requestFocus();
 
                     Game.instance().observers().forEach(o -> o.update());
-                    pauseLoop.stop();
-                    window.getScene().getRoot().requestFocus();
-                    gameLoop.play();
-                    gamePage.getChildren().remove(playButtonHBox);
-                    gamePage.getChildren().remove(gamePausedPane);
-                    Game.instance().getCurrentLevel().idleTimeProperty()
-                            .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
-                                    - gamePausedAt);
-                    update();
-                    // Game.instance().getCurrentLevel().tick();
-                });
+                        pauseLoop.stop();
+                        window.getScene().getRoot().requestFocus();
+                        gameLoop.play();
+                        gamePage.getChildren().remove(playButtonHBox);
+                        gamePage.getChildren().remove(gamePausedPane);
+                        Game.instance().getCurrentLevel().idleTimeProperty()
+                                .set(Game.instance().getCurrentLevel().idleTimeProperty().get() + System.currentTimeMillis()
+                                        - gamePausedAt);
+                        update();
+                        // Game.instance().getCurrentLevel().tick();
+                    });
 
                 saveButton.setOnAction(ev -> {
                     final Game game = Game.instance();
@@ -1069,27 +1086,42 @@ public class MainWindow implements GameObserver {
     void onLoadClicked(ActionEvent event) throws IOException {
         play(event);
         try {
-            gameMode.setValue("NORMAL");
             Game.instance().load("saveFile.dat");
+            String gameName = Game.instance().getCurrentLevel().getLevelName();
+            if (gameName.equals("src/levels/level1.dat") || gameName.equals("src/levels/Level2.dat") || gameName.equals("src/levels/level3.dat")){
+                try {
+                    gameMode.setValue("NORMAL");
+                    play(event);
+                    Game.instance().load("saveFile.dat");
 
+                } catch (Exception ex) {
+                    var alert = new Alert(AlertType.ERROR,
+                            "Sorry, something went wrong with loading the file\n error message: \n" + ex);
+                    alert.setHeaderText(null);
+                    alert.show();
+                }
+            }else{
+                try {
+                    gameMode.setValue("CUSTOM");
+                    String subName = gameName.substring(13, gameName.length() - 4);
+                    levelsChoice.setValue(subName);
+                    loadLevel();
+                    play(event);
+                    Game.instance().load("saveFile.dat");
+
+                } catch (Exception ex) {
+                    var alert = new Alert(AlertType.ERROR,
+                            "Sorry, something went wrong with loading the file\n error message: \n" + ex);
+                    alert.setHeaderText(null);
+                    alert.show();
+                }
+            }
         } catch (Exception ex) {
             var alert = new Alert(AlertType.ERROR,
                     "Sorry, something went wrong with loading the file\n error message: \n" + ex);
             alert.setHeaderText(null);
             alert.show();
         }
-        play(event);
-        try {
-            Game.instance().load("saveFile.dat");
-
-        } catch (Exception ex) {
-            var alert = new Alert(AlertType.ERROR,
-                    "Sorry, something went wrong with loading the file\n error message: \n" + ex);
-            alert.setHeaderText(null);
-            alert.show();
-        }
-        
-
         window.getScene().getRoot().requestFocus();
 
         Game.instance().observers().forEach(o -> o.update());
