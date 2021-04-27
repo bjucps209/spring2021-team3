@@ -146,6 +146,10 @@ public class Game {
     // Should also save others objects of the game needed to load the game back to a previous state. 
     public void save(String filename)throws IOException{
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename))){
+            writer.writeUTF(userName);
+            writer.writeInt(id);
+            writer.writeInt(score);
+            writer.writeBoolean(cheating);
             writer.writeInt(currentLevelIndex);
             writer.writeInt(difficulty.ordinal());  
             player.serialize(writer);
@@ -162,6 +166,10 @@ public class Game {
     //read through the filename passed in the parameters to load the game model back to previous state.
     public void load(String filename)throws IOException{
             DataInputStream reader = new DataInputStream(new FileInputStream(filename));
+            userName = reader.readUTF();
+            id = reader.readInt();
+            score = reader.readInt();
+            cheating = reader.readBoolean();
             currentLevelIndex = reader.readInt();
             state = GameState.LEVEL_PLAYING;
             difficulty = DifficultyType.values()[reader.readInt()];

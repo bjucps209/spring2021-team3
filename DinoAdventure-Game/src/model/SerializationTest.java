@@ -18,7 +18,7 @@ public class SerializationTest {
         Game.instance().setCurrentLevel(new Level());
         Level level = world.getCurrentLevel();
 
-
+        world.setUserName("Rose");
         player.centerPoint().setXY(100, 200);
         player.setHealth(9);
         world.setDifficulty(DifficultyType.MEDIUM);
