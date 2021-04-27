@@ -1,3 +1,9 @@
+//-------------------------------------------------------------
+//File:   Collectables.java
+//Desc:   Extends from entity. Holds methods to create a new 
+//        Collectable and get it's type as a string
+//-------------------------------------------------------------
+
 package model;
 
 import javafx.animation.KeyFrame;
@@ -7,8 +13,16 @@ import javafx.util.Duration;
 
 public class Collectable extends Entity {
 
+    //Holds the type of collectable
     private CollectableType type;
 
+    /**
+     * Create a new Collectables at x, y and of CollectableType type
+     * 
+     * @param x
+     * @param y
+     * @param type
+     */
     public Collectable(double x, double y, CollectableType type) {
         this.type = type;
         centerPoint.setXY(x, y);
@@ -24,13 +38,21 @@ public class Collectable extends Entity {
         return type;
     }
 
+    /**
+     * Method to collect for player to collect the item and play the sound fx
+     */
     public void collect() {
+
+        //length of soundFx
         int effectSeconds = 10;
         switch(type) {
             case Coin:
+                //Play the sound
                 Game.instance().observers().forEach(o -> {
                     o.playSound("coin");
                 });
+                
+                //Add the item to the player
                 Game.instance().getPlayer().scoreProperty().set(Game.instance().getPlayer().scoreProperty().get() + 25);
                 break;
 

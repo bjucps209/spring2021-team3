@@ -8,6 +8,7 @@ package model;
 
 public class Collectable extends Entity {
 
+    //holds the type of collectable
     private CollectableType type;
 
     /**

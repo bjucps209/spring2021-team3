@@ -293,7 +293,6 @@ public class Level {
             writer.writeInt(collectables.size());
 
             // Iterate through the collectables saving each's data
-
             for (int i = 0; i < collectables.size(); ++i) {
 
                 // save data for each collacetable
