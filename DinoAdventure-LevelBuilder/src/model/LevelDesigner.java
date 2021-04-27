@@ -1,6 +1,6 @@
 //---------------------------------------------------------------
 //File:   LevelDesigner.jave
-//Desc:   Singleton model class that can hold a level
+//Desc:   Singleton model class that holds a level
 //Creator: Christopehr Zuehlke
 //---------------------------------------------------------------
 
@@ -8,6 +8,7 @@ package model;
 
 public class LevelDesigner {
 
+    //Holdes the current level
     Level level;
 
     /**
@@ -26,6 +27,13 @@ public class LevelDesigner {
         return level;
     }
 
+    /**
+     * reset the designer
+     */
+    public static void reset() {
+        instance = new LevelDesigner();
+    }
+
     // Singleton implementation
     // prevent direct instantiation outside this class
 
@@ -39,8 +47,6 @@ public class LevelDesigner {
         return instance;
     }
 
-    public static void reset() {
-        instance = new LevelDesigner();
-    }
+    
 
 }

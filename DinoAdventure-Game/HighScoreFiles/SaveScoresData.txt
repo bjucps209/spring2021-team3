@@ -1,10 +1,10 @@
-Martha,19000,MEDIUM
 Joe,1075,EASY
+Christopher,950,HARD
 Joe,825,EASY
 Joe,800,EASY
 Joe,525,EASY
 Joe,350,EASY
 Joe,350,EASY
+Christopher,350,HARD
 Limestone,325,EASY
-Joe,325,EASY
-Joe,325,EASY
+Joe,300,EASY

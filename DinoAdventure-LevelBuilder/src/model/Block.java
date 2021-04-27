@@ -1,3 +1,7 @@
+//-------------------------------------------------------------
+//File:   Block.java
+//Desc:   Basic class that holds data for a single block
+//-------------------------------------------------------------
 package model;
 
 public class Block extends Box {
