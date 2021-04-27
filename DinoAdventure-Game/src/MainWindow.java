@@ -128,9 +128,6 @@ public class MainWindow implements GameObserver {
     private ArrayList<ImageView> collectableImages = new ArrayList<ImageView>();
     private ArrayList<ImageView> goalImages = new ArrayList<ImageView>();
 
-    // holds the current index of the level
-    // private int currentLevelIndex = 0;
-
     HighScore highScores = HighScore.getInstance(); // High scores instantiation
 
     final MediaPlayer HOME_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/titleScreenMusic.wav").toString()));
@@ -653,7 +650,7 @@ public class MainWindow implements GameObserver {
 
         if (rightKeyPressed && !leftKeyPressed) {
             Game.instance().getPlayer().setMoving(true);
-            Game.instance().getPlayer().setXVelocity(Math.min(Game.instance().getPlayer().getMaxSpeed(),
+            Game.instance().getPlayer().setXVelocity(Math.min((Game.instance().getPlayer().getMaxSpeed() + (Game.instance().getPlayer().getEffects().containsKey(CollectableType.SpeedPowerup) ? 3 : 0)),
                     Game.instance().getPlayer().getXVelocity() + (10 / Game.FPS)));
             Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
         }

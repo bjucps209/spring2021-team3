@@ -1,6 +1,6 @@
 //-------------------------------------------------------------
 //File:   Enemy.java
-//Desc:   Enemy class that extends Entity, and holds the enemies state and type.
+//Desc:   Enemy class, extends Entity, and holds the enemies state and type.
 //-------------------------------------------------------------
 
 package model;
