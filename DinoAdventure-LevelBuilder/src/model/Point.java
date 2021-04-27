@@ -1,25 +1,53 @@
+//-------------------------------------------------------------
+//File:   Point.java
+//Desc:   Main parant class for all game objects
+//-------------------------------------------------------------
 package model;
 
 import javafx.beans.property.*;
 
 public class Point {
 
-    public Point() { }
+    // create a point
+    public Point() {
+    }
 
+    /**
+     * create a new point at the give x, y coordinates
+     * 
+     * @param x int
+     * @param y int
+     */
     public Point(double x, double y) {
         xProperty.set(x);
         yProperty.set(y);
     }
 
-    public Point(Point p) {
+    /**
+     * Set the point to the location of the given point
+     * 
+     * @param p Point
+     */
+    public void copyFrom(Point p) {
         xProperty.set(p.getX());
         yProperty.set(p.getY());
     }
 
-    // Physical properties
+    /**
+     * calculate the distance to the given point
+     * 
+     * @param p point to calculate distance to
+     * @return distance double
+     */
+    public double distanceFrom(Point p) {
+        return Math.sqrt(Math.pow(xProperty.get() - p.getX(), 2) + Math.pow(yProperty.get() - p.getY(), 2));
+    }
 
+    // Physical properties
     protected DoubleProperty xProperty = new SimpleDoubleProperty();
     protected DoubleProperty yProperty = new SimpleDoubleProperty();
+
+    // Getters and Setters
 
     public int getIntX() {
         return (int) xProperty.get();
@@ -61,11 +89,6 @@ public class Point {
         return yProperty;
     }
 
-    public void copyFrom(Point p) {
-        xProperty.set(p.getX());
-        yProperty.set(p.getY());
-    }
-
     public void setXY(double x, double y) {
         xProperty.set(x);
         yProperty.set(y);
@@ -85,6 +108,8 @@ public class Point {
         xProperty.set(x);
         yProperty.set(y);
     }
+
+    // Math methods
 
     public void add(Point p) {
         xProperty.set(xProperty.get() + p.getX());
@@ -224,10 +249,6 @@ public class Point {
     public void divide(int x, double y) {
         xProperty.set(xProperty.get() / x);
         yProperty.set(yProperty.get() / y);
-    }
-
-    public double distanceFrom(Point p) {
-        return Math.sqrt(Math.pow(xProperty.get() - p.getX(), 2) + Math.pow(yProperty.get() - p.getY(), 2));
     }
 
 }

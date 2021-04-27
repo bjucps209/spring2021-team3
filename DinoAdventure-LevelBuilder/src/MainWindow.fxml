@@ -8,11 +8,9 @@
 
 <VBox fx:id="VboxMain" alignment="CENTER" spacing="10" stylesheets="@MainWindow.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="MainWindow" >
 
-    <!-- <ImageView><image><Image url="@images/logo.png" /></image></ImageView> -->
     <HBox spacing="10" prefHeight="980" >
         <HBox spacing="10" styleClass="propview">
             <VBox spacing="10"  minWidth="220">
-                <!-- <Label text = "Level Choice:" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE" prefHeight = "20" /> -->
                 <HBox spacing="10">
                     <ChoiceBox fx:id="levelsChoice" maxWidth="100">
                         <items>
@@ -44,7 +42,6 @@
                 
                 
                 <ScrollPane fx:id="scrlPaneButtons" >
-                <!-- <Button text="_Delete" fx:id="btnDelete" /> -->
                     <VBox>
                         <Button fx:id="btnNewBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-2.png" /></image></ImageView></graphic></Button>
                         <Button fx:id="btnNewLeftBlock"><graphic><ImageView><image><Image url="@/assets/images/world/ground-13.png" /></image></ImageView></graphic></Button>

@@ -1,3 +1,8 @@
+//-------------------------------------------------------------
+//File:   Level.java
+//Desc:   Holds a collection of blocks, enemies, collectables, player, and size of level
+//        Methodes to save/load a level
+//-------------------------------------------------------------
 package model;
 
 import java.io.DataInputStream;
@@ -7,102 +12,58 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
-
 public class Level {
 
+    // arrayList to hold the enemies in the level
     private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+
+    // arrayList to hold the goals
     private ArrayList<Goal> goals = new ArrayList<Goal>();
+
+    // arraylist to hold the blocks that make up the map
     private ArrayList<Block> blocks = new ArrayList<Block>();
+
+    // arraylist to hold collectables
     private ArrayList<Collectable> collectables = new ArrayList<Collectable>();
+
+    // width of the level
     private int width = 0;
+
+    // height of the level
     private int height = 0;
+
+    // Name of the level
     private String levelName;
-    private LongProperty startTimeProperty = new SimpleLongProperty();
-    private LongProperty runTimeProperty = new SimpleLongProperty();
-    private LongProperty currentTimeProperty = new SimpleLongProperty();
-    private LongProperty maxTimeProperty = new SimpleLongProperty();
-    private LongProperty remainingTimeProperty = new SimpleLongProperty();
-    private LongProperty idleTimeProperty = new SimpleLongProperty();
+
+    // Point object that holds the spawn point
     private Point spawnPoint = new Point();
 
-   
-   
-    //TODO rework the save/load/create functionality
-    //TODO add a delete option
-    //TODO Remove the .dat from file name (in main program)
-
     public Level() {
-
-        // player = Game.instance().getPlayer();
-
-        // Setup timer bindings
-
-        runTimeProperty.bind(Bindings.createLongBinding(() -> {
-            return currentTimeProperty.get() - (startTimeProperty.get() + idleTimeProperty.get());
-        }, currentTimeProperty, startTimeProperty, idleTimeProperty));
-
-        remainingTimeProperty.bind(Bindings.createLongBinding(() -> {
-            return maxTimeProperty.get() - runTimeProperty.get();
-        }, maxTimeProperty, runTimeProperty));
-
     }
+
+    /**
+     * get the goal objects of the level
+     * 
+     * @return Goal
+     */
     public ArrayList<Goal> getGoals() {
         return goals;
     }
 
+    /**
+     * get the Point objects of the level
+     * 
+     * @return Point
+     */
     public Point getSpawnPoint() {
         return spawnPoint;
     }
 
+    /**
+     * set the spawn point for the level
+     */
     public void setSpawnPoint(Point spawnPoint) {
         this.spawnPoint.copyFrom(spawnPoint);
-    }
-
-    public long getMaxTime() {
-        return maxTimeProperty.get() / 1000;
-    }
-
-    public void setMaxTime(long seconds) {
-        maxTimeProperty.set(seconds * 1000);
-    }
-
-    public LongProperty maxTimeProperty() {
-        return maxTimeProperty;
-    }
-
-    public LongProperty idleTimeProperty() {
-        return idleTimeProperty;
-    }
-
-    public LongProperty remainingTimeProperty() {
-        return remainingTimeProperty;
-    }
-
-    public LongProperty startTimeProperty() {
-        return startTimeProperty;
-    }
-
-    public LongProperty runTimeProperty() {
-        return runTimeProperty;
-    }
-
-    public void recordStartTime() {
-        startTimeProperty.set(System.currentTimeMillis());
-    }
-
-    public void setStartTime(long time) {
-        startTimeProperty.set(time);
-    }
-
-    public long getStartTime() {
-        return startTimeProperty.get();
-    }
-
-    public long getRunTime() {
-        return runTimeProperty.get();
     }
 
     /**
@@ -139,9 +100,9 @@ public class Level {
     }
 
     /**
-     * remove the Entity with the id from entities
+     * remove the given enemy from entities
      * 
-     * @param id
+     * @param Enemy entity
      */
     public void removeEntity(Enemy entity) {
         enemies.remove(entity);
@@ -162,7 +123,6 @@ public class Level {
         return null;
     }
 
-
     /**
      * remove the given block from blocks
      * 
@@ -181,14 +141,19 @@ public class Level {
         collectables.remove(item);
     }
 
+    /**
+     * remove the given goal from the level
+     * 
+     * @param flag
+     */
     public void removeGoal(Goal flag) {
         goals.remove(flag);
     }
 
     /**
-     * adds entity to entities
+     * adds enemy to entities
      * 
-     * @param object
+     * @param entity
      */
     public void addEntity(Enemy entity) {
         enemies.add(entity);
@@ -197,7 +162,7 @@ public class Level {
     /**
      * adds surface to surfaces
      * 
-     * @param object
+     * @param block
      */
     public void addBlock(Block block) {
         blocks.add(block);
@@ -206,7 +171,7 @@ public class Level {
     /**
      * adds item to collectables
      * 
-     * @param object
+     * @param item
      */
     public void addCollectable(Collectable item) {
         collectables.add(item);
@@ -215,7 +180,7 @@ public class Level {
     /**
      * Gets the surfaces in the level
      * 
-     * @return surfaces
+     * @return blocks in the level
      */
     public ArrayList<Block> getBlocks() {
         return blocks;
@@ -280,24 +245,29 @@ public class Level {
      */
     public void save(String filename) throws IOException {
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename, false))) {
-            // writer.writeUTF(getLevelName());
+
             // write the size of the level
             writer.writeInt(width);
             writer.writeInt(height);
+
             // write the spawn point
             writer.writeInt(spawnPoint.getIntX());
             writer.writeInt(spawnPoint.getIntY());
-            //write the number of goals
+
+            // write the number of goals
             writer.writeInt(goals.size());
-            //write the coardinates for each Goal
+
+            // write the coardinates for each Goal
             for (int i = 0; i < goals.size(); ++i) {
                 writer.writeInt(goals.get(i).centerPoint().getIntX());
                 writer.writeInt(goals.get(i).centerPoint().getIntY());
                 writer.writeInt(goals.get(i).getHeight());
                 writer.writeInt(goals.get(i).getWidth());
             }
+
             // write how many entities their are
             writer.writeInt(enemies.size());
+
             // Iterate through the entities saving each's data
             for (int i = 0; i < enemies.size(); ++i) {
                 writer.writeInt(enemies.get(i).getId());
@@ -305,8 +275,10 @@ public class Level {
                 writer.writeInt(enemies.get(i).centerPoint().getIntX());
                 writer.writeInt(enemies.get(i).centerPoint().getIntY());
             }
+
             // Write how many blocks there are
             writer.writeInt(blocks.size());
+
             // Iterate through the blocks saving each's data
             for (int i = 0; i < blocks.size(); ++i) {
                 writer.writeInt(blocks.get(i).getId());
@@ -315,15 +287,18 @@ public class Level {
                 writer.writeInt(blocks.get(i).centerPoint().getIntY());
                 writer.writeInt(blocks.get(i).getHeight());
                 writer.writeInt(blocks.get(i).getWidth());
-                
+
             }
+            // write how many collectables there are
             writer.writeInt(collectables.size());
+
             // Iterate through the collectables saving each's data
             for (int i = 0; i < collectables.size(); ++i) {
-            // writer.writeInt(collectables.get(i).getId());
-            writer.writeUTF(collectables.get(i).getStringType());
-            writer.writeInt(collectables.get(i).centerPoint().getIntX());
-            writer.writeInt(collectables.get(i).centerPoint().getIntY());
+
+                // save data for each collacetable
+                writer.writeUTF(collectables.get(i).getStringType());
+                writer.writeInt(collectables.get(i).centerPoint().getIntX());
+                writer.writeInt(collectables.get(i).centerPoint().getIntY());
             }
         }
     }
@@ -333,23 +308,28 @@ public class Level {
      * Load the level
      */
     public void load(String fileName) throws IOException {
+        
         // Set the name of the level
         setLevelName(fileName);
+        
         // clear the level of old items/enemies/blocks
         enemies.clear();
         blocks.clear();
         collectables.clear();
         goals.clear();
-        // Load Playermanager instance from filename.dat binary file
-        var reader = new DataInputStream(new FileInputStream(fileName)); // Create loader
+        
+        // Create reader to load the level
+        var reader = new DataInputStream(new FileInputStream(fileName)); 
+        
         // read the size of the level
         int width = reader.readInt();
         int height = reader.readInt();
+        
         // read and update the spawn point
-
         int spawnX = reader.readInt();
         int spawnY = reader.readInt();
-        //read the bumber of goals
+        
+        // read the bumber of goals
         int sizeOfGoals = reader.readInt();
         for (int i = 0; i < sizeOfGoals; ++i) {
             Goal flag = new Goal(reader.readInt(), reader.readInt());
@@ -357,12 +337,12 @@ public class Level {
             flag.setWidth(reader.readInt());
             goals.add(flag);
         }
-        
+
         // read the number of entities
         int sizeOfEntities = reader.readInt();
         // iterate over each playing gathering their values
         for (int i = 0; i < sizeOfEntities; ++i) {
-            
+
             Enemy entity = new Enemy();
             entity.setId(reader.readInt());
             entity.setType(reader.readUTF());
@@ -374,8 +354,9 @@ public class Level {
 
         // get blocks
         int sizeOfBlocks = reader.readInt();
+        
+        // iterate over block in the save file and create a matching block
         for (int i = 0; i < sizeOfBlocks; ++i) {
-            // iterate over each playing gathering their values
             Block box = new Block();
             box.setId(reader.readInt());
             box.setTexture(reader.readUTF());
@@ -384,26 +365,28 @@ public class Level {
             box.setHeight(reader.readInt());
             blocks.add(box);
         }
-        //Load colletables
+        
+        // Load number of collectables
         int sizeOfCollectables = reader.readInt();
-            // Iterate through the collectables saving each's data
-            for (int i = 0; i < sizeOfCollectables; ++i) {
-                String type = reader.readUTF();
-                int x = reader.readInt();
-                int y = reader.readInt();
-                Collectable col = new Collectable(x, y, CollectableType.valueOf(type));
-                collectables.add(col);
-            }
+        
+        // Iterate through the collectables loading each's data
+        for (int i = 0; i < sizeOfCollectables; ++i) {
+            String type = reader.readUTF();
+            int x = reader.readInt();
+            int y = reader.readInt();
+            Collectable col = new Collectable(x, y, CollectableType.valueOf(type));
+            collectables.add(col);
+        }
 
-
-        //set the spawn point
+        // set the spawn point
         setSpawnPoint(new Point(spawnX, spawnY));
 
-        //set the size of the level
+        // set the size of the level
         setWidth(width);
         setHeight(height);
 
+        //close the reader
         reader.close();
     }
-    
+
 }

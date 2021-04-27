@@ -31,7 +31,7 @@ After starting the program, click play. Once the game starts you can move move b
 | Luke | 44:45 | 5:15 |
 | Reshi | 37:26 | 12:34 |
 | Rebecca | 43:40 | 6:20 |
-| Christopher | 29:50 | 21:10 |
+| Christopher | 33:10 | 16:50 |
 
 
 ### Journals

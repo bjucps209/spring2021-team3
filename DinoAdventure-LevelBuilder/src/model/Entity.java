@@ -1,38 +1,39 @@
+//-------------------------------------------------------------
+//File:   Entity.java
+//Desc:   extends Box, adds physics properties.
+//-------------------------------------------------------------
 package model;
-
-import java.util.ArrayList;
 
 public class Entity extends Box {
 
+    // holds the weight of the entity for physics properties
     protected double weight;
+
+    // Holds the x-velocity of the entity
     protected double xVelocity;
+
+    // Holds the y-velocity of the entity
     protected double yVelocity;
+
+    // Holds the maximum speed of the entity
     protected double maxSpeed = 5;
+
+    // Enum that holds the direction of the entity
     protected EntityDirection direction;
+
+    // Tells whether the entity is on the ground or not
     protected boolean onSurface;
-    
-    public void tick() {
 
-        ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
-
-        // Create dummy boxes for checking where our future velocities will place us
-        Box xCheck = new Box();
-        xCheck.centerPoint().copyFrom(centerPoint);
-        xCheck.widthProperty().set(widthProperty.get());
-        xCheck.heightProperty().set(heightProperty.get());
-        xCheck.centerPoint().add(xVelocity, 0);
-        Box yCheck = new Box();
-        yCheck.centerPoint().copyFrom(centerPoint);
-        yCheck.widthProperty().set(widthProperty.get());
-        yCheck.heightProperty().set(heightProperty.get());
-        yCheck.centerPoint().add(0, yVelocity);
-
-        onSurface = false;
-    }
-
+    /**
+     * returns true if entity is on the ground
+     * 
+     * @return boolean
+     */
     public boolean isOnSurface() {
         return onSurface;
     }
+
+    // Getters/Setters
 
     public void setWeight(double w) {
         weight = w;

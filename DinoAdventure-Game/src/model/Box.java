@@ -1,3 +1,7 @@
+//-------------------------------------------------------------
+//File:   Box.java
+//Desc:   main class that all game objects extend from
+//-------------------------------------------------------------
 package model;
 
 import javafx.beans.binding.Bindings;
@@ -30,9 +34,15 @@ public class Box {
 
     // Physical properties
 
+    //id #
     protected int id;
+    //Next id
     private static int nextId;
+
+    //Point that holds location of box
     protected Point centerPoint = new Point();
+
+    // size of box
     protected IntegerProperty widthProperty = new SimpleIntegerProperty();
     protected IntegerProperty heightProperty = new SimpleIntegerProperty();
     protected IntegerProperty maxYProperty = new SimpleIntegerProperty();
@@ -40,6 +50,7 @@ public class Box {
     protected IntegerProperty maxXProperty = new SimpleIntegerProperty();
     protected IntegerProperty minYProperty = new SimpleIntegerProperty();
 
+    //Getters/Setters
 
     public int getId() {
         return id;
@@ -109,12 +120,15 @@ public class Box {
         return maxYProperty.get();
     }
 
+
     public boolean contains(Point p) {
         return p.getX() >= getMinX() && p.getX() <= getMaxX() && p.getY() >= getMinY() && p.getY() <= getMaxY();
     }
 
+    // Check for colision
     public boolean overlaps(Box b) {
-        return getMaxX() >= b.getMinX() && getMinX() <= b.getMaxX() && getMaxY() >= b.getMinY() && getMinY() <= b.getMaxY();
+        return getMaxX() >= b.getMinX() && getMinX() <= b.getMaxX() && getMaxY() >= b.getMinY()
+                && getMinY() <= b.getMaxY();
     }
 
 }
