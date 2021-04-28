@@ -149,6 +149,7 @@
         <Label fx:id="aboutTitle" text="ABOUT DINO ADVENTURE" style="-fx-font-size: 50px; -fx-text-fill: DARKBLUE" />
         <Label text="Version 1.0" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
         <Label text="DINO ADVENTURE is created by Team 3 of CPS 209." style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;" prefHeight="80"/>
+
         <Label text="Developers:" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
         <HBox spacing = "20" alignment="CENTER">
             <Label text="Luke Darling" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
@@ -156,6 +157,15 @@
             <Label text="Christopher Zuehlke" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
             <Label text="Reshi Pasupuleti" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
         </HBox>
+
+        <Label text="ASSETS DOCUMENTATION" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
+        <VBox alignment="CENTER">
+            <Label text="Characters: Dino - license: Creative Common Zero (CC0) Public Domain license; Enemies - license: https://craftpix.net/file-licenses/ " style="-fx-font-size: 15px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="TileMap: TileSet - license: Creative Common Zero (CC0) Public Domain license); Finish Flag - license: Public domain" style="-fx-font-size: 15px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Collectables: Coin - Made by Luke Darling" style="-fx-font-size: 15px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Title screen music: “Summers-in-Quirkyville” by Eric Matyas (www.soundimage.org)" style="-fx-font-size: 15px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Sound Effects: Coins and Enemy kill - Eric Matyas (www.soundimage.org); Jump - https://www.dreamstime.com/stock-music-sound-effect/jump.html" style="-fx-font-size: 15px; -fx-text-fill: DARKBLUE;"/>
+        </VBox>
         <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
 
     </VBox>
