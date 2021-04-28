@@ -650,7 +650,7 @@ public class MainWindow implements GameObserver {
 
         if (rightKeyPressed && !leftKeyPressed) {
             Game.instance().getPlayer().setMoving(true);
-            Game.instance().getPlayer().setXVelocity(Math.min(Game.instance().getPlayer().getMaxSpeed(),
+            Game.instance().getPlayer().setXVelocity(Math.min((Game.instance().getPlayer().getMaxSpeed() + (Game.instance().getPlayer().getEffects().containsKey(CollectableType.SpeedPowerup) ? 3 : 0)),
                     Game.instance().getPlayer().getXVelocity() + (10 / Game.FPS)));
             Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
         }
@@ -1179,47 +1179,58 @@ public class MainWindow implements GameObserver {
         return 1;
     }   
 
+    /**
+     * Method to load the current level into the view
+     */
     public void loadLevel() {
-        // Create/load level
-
+        
+        //create a new level
         Level level;
 
-            
+        //instantiat it;
         level = new Level();
 
-        // Set level as the current level
+        // Check wheather the game is curretly in a play session
         if (Game.instance().getState() == GameState.LEVEL_WON) {
+            //Set the next level without reseting the score
             Game.instance().startNextLevel(level);
         } else {
+            //else just start a new level
             Game.instance().startLevel(level);
         }
         
 
+        //Check if the mode of the game
+
+        //If it's custom Mode, load a level from the customLevel folder
         if (gameMode.getValue().equals("CUSTOM")) {
+            
             try {
                 level.load("CustomLevels/" + levelsChoice.getSelectionModel().getSelectedItem() + ".dat");
             } catch (IOException e1) {
-                // Auto-generated catch block
                 e1.printStackTrace();
             }
+        //If it's schaub mode load the boss.dat file
         } else if(gameMode.getValue().equals("SCHAUB MODE")) {
             try {
                 
                 level.load("src/assets/boss.dat");
+                //Spawm the boss
                 Enemy e = new Enemy(1600, 600, EnemyState.SCHAUB);
                 level.getEnemies().add(e);
             } catch (IOException e1) {
                 // Auto-generated catch block
                 e1.printStackTrace();
             }
-            
+        //else play the next level in the list
         } else {
             try {
+                //find the files in the levels folder
                 File[] files = new File("src/levels").listFiles();
                 
+                //load the next level
                 level.load("src/levels/" + files[Game.instance().getCurrentLevelIndex()].getName());
             } catch (IOException e1) {
-                // Auto-generated catch block
                 e1.printStackTrace();
             }
             
@@ -1231,11 +1242,8 @@ public class MainWindow implements GameObserver {
             blockImage.yProperty().bind(block.minYProperty());
             levelPane.getChildren().add(blockImage);
         });
-        // Generate Collectables from the level
-        level.getCollectables().stream().forEach(enemy -> {
-            // TODO: create logic to load in collectables
-        });
         
+        //Set the level's size
         levelPane.setMinWidth(level.getWidth());
         levelPane.setMinHeight(level.getHeight());
         levelPane.setMaxWidth(level.getWidth());
@@ -1283,7 +1291,9 @@ public class MainWindow implements GameObserver {
 
     
     /**
+     * Remove the file extions from the file name
      * https://www.baeldung.com/java-filename-without-extension
+     * @Param
      */
     public static String removeFileExtension(String filename, boolean removeAllExtensions) {
         if (filename == null || filename.isEmpty()) {
