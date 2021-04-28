@@ -124,12 +124,19 @@ public class MainWindow implements GameObserver {
     private boolean rightKeyPressed;
     private boolean escapeKeyPressed;
 
+    //ArrayList of ImageView's that holds the enemies
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
+    
+    //ArrayList that holds teh collectables 
     private ArrayList<ImageView> collectableImages = new ArrayList<ImageView>();
+    
+    //ArrayList that holds teh goalImages
     private ArrayList<ImageView> goalImages = new ArrayList<ImageView>();
 
+    //instanc eof highScore for scoring
     HighScore highScores = HighScore.getInstance(); // High scores instantiation
 
+    //SoundFX and music
     final MediaPlayer HOME_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/titleScreenMusic.wav").toString()));
     final MediaPlayer ORGAN_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/organ.wav").toString()));
     
@@ -141,7 +148,11 @@ public class MainWindow implements GameObserver {
     final MediaPlayer PLAYER_HIT_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/enemyhitsplayer.wav").toString()));
     final MediaPlayer LOSE_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/lose.wav").toString()));
     final MediaPlayer WIN_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/win.wav").toString()));
-
+    
+    /**
+     * Play the sound with the given name
+     *  @param cause String
+     */
     public void playSound(String cause) {
         switch(cause) {
             case "jump":

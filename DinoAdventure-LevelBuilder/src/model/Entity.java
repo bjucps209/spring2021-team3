@@ -4,6 +4,9 @@
 //-------------------------------------------------------------
 package model;
 
+/**
+ * Class that holds phyisical properties of an entity
+ */
 public class Entity extends Box {
 
     // holds the weight of the entity for physics properties

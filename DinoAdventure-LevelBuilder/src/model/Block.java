@@ -1,12 +1,15 @@
 //-------------------------------------------------------------
 //File:   Block.java
-//Desc:   Basic class that holds data for a single block
+//Desc:   Class that holds data for a single block, extends from Box
 //-------------------------------------------------------------
 package model;
 
+/**
+ * Holds an instance of a single block.
+ */
 public class Block extends Box {
 
-    //initiat default texture
+    // Tnitiat default texture
     private String texture = "assets/images/world/ground-2.png";
 
     public String getTexture() {

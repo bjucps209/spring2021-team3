@@ -4,6 +4,9 @@
 //-------------------------------------------------------------
 package model;
 
+/**
+ * Enum that holds a dirrection
+ */
 public enum EntityDirection {
     LEFT,
     RIGHT

@@ -4,6 +4,9 @@
 //-------------------------------------------------------------
 package model;
 
+/**
+ * Holds instance of a gaol
+ */
 public class Goal extends Entity {
 
     /**

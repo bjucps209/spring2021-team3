@@ -8,7 +8,9 @@ package model;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-
+/**
+ * Test cases for level save/load system
+ */
 public class LevelTest {
 
     @Test
