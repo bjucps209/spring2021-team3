@@ -14,7 +14,7 @@ public class Enemy extends Entity implements Living {
     //Holds the state of the enemy
     protected EnemyState state;
 
-    //Holds teh type of the enemy
+    //Holds the type of the enemy
     protected EnemyState type;
 
     //ticks per second. Controlls how often the physics are updated per second
