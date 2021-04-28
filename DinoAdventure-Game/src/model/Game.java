@@ -5,11 +5,22 @@ import java.util.*;
 
 public class Game {
 
+    //Instance of the player
     private Player player;
+
+    //Holds the current level
     private Level currentLevel;
+    
+    //Holds the current state of the game
     private GameState state;
+    
+    //Holds the game instance
     private static Game instance = new Game();
+    
+    
     private ArrayList<GameObserver> observers = new ArrayList<GameObserver>();
+    
+    //Holds the users name as a string
     private String userName;
     private int id;
     private int score;
@@ -126,18 +137,31 @@ public class Game {
         return difficulty;
     }
 
+    /**
+     * Return the current level
+     */
     public Level getCurrentLevel() {
         return currentLevel;
     }
 
+    /**
+     * Set the current level to level
+     * @param level level
+     */
     public void setCurrentLevel(Level level) {
         currentLevel = level;
     }
 
+    /**
+     * Get the current level index
+     */
     public int getCurrentLevelIndex() {
         return currentLevelIndex;
     }
 
+    /**
+     * Set the currentLevelIndex
+     */
     public void setCurrentLevelIndex(int index) {
         this.currentLevelIndex = index;
     }
