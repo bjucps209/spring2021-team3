@@ -469,7 +469,7 @@ public class MainWindow implements GameObserver {
                     try {
                         Game.instance().load("saveFile.dat");
                         String gameName = Game.instance().getCurrentLevel().getLevelName();
-                        if (gameName.equals("src/levels/level1.dat") || gameName.equals("src/levels/Level2.dat") || gameName.equals("src/levels/level3.dat")){ 
+                        if (gameName.equals("src/levels/level1.dat") || gameName.equals("src/levels/level2.dat") || gameName.equals("src/levels/level3.dat")){ 
                             try {
                                 gameMode.setValue("NORMAL");
                                 play(ev);
@@ -1088,7 +1088,7 @@ public class MainWindow implements GameObserver {
         try {
             Game.instance().load("saveFile.dat");
             String gameName = Game.instance().getCurrentLevel().getLevelName();
-            if (gameName.equals("src/levels/level1.dat") || gameName.equals("src/levels/Level2.dat") || gameName.equals("src/levels/level3.dat")){
+            if (gameName.equals("src/levels/level1.dat") || gameName.equals("src/levels/level2.dat") || gameName.equals("src/levels/level3.dat")){
                 try {
                     gameMode.setValue("NORMAL");
                     play(event);
