@@ -113,6 +113,7 @@ public class Player extends Entity implements Living {
         } 
     }
     
+    //reads each property that was saved and loads it back
     public void deserialize(DataInputStream reader) throws IOException{
         try {
         direction = EntityDirection.values()[reader.readInt()];

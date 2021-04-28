@@ -149,13 +149,13 @@
         <Label fx:id="aboutTitle" text="ABOUT DINO ADVENTURE" style="-fx-font-size: 50px; -fx-text-fill: DARKBLUE" />
         <Label text="Version 1.0" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
         <Label text="DINO ADVENTURE is created by Team 3 of CPS 209." style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;" prefHeight="80"/>
-        <VBox spacing = "20" alignment="CENTER">
-            <Label text="Developers:" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
-            <Label text="Luke Darling" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
-            <Label text="Rebecca Henderson" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
-            <Label text="Christopher Zuehlke" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
-            <Label text="Reshi Pasupuleti" style="-fx-font-size: 25px; -fx-text-fill: DARKBLUE;"/>
-        </VBox>
+        <Label text="Developers:" style="-fx-font-size: 30px; -fx-text-fill: DARKBLUE;"/>
+        <HBox spacing = "20" alignment="CENTER">
+            <Label text="Luke Darling" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Rebecca Henderson" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Christopher Zuehlke" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+            <Label text="Reshi Pasupuleti" style="-fx-font-size: 20px; -fx-text-fill: DARKBLUE;"/>
+        </HBox>
         <Button text="MAIN MENU" onAction="#onMainMenuClicked" styleClass="titlePageButton"/>
 
     </VBox>

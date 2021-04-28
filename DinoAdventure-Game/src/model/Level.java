@@ -391,10 +391,8 @@ public class Level {
         reader.close();
     }
 
-    // this was made for serialization the Game model. This method does not save the
-    // play in the Player.
-    // THe writer passed by the parameter is the one used in the save method in the
-    // game class
+    // This was made for serialization the Game model. This method does not save the play in the Player.
+    // THe writer passed by the parameter is the one used in the save method in the game class
     public void serialize(DataOutputStream writer) throws IOException {
         writer.writeInt(width);
         writer.writeInt(height);

@@ -650,7 +650,7 @@ public class MainWindow implements GameObserver {
 
         if (rightKeyPressed && !leftKeyPressed) {
             Game.instance().getPlayer().setMoving(true);
-            Game.instance().getPlayer().setXVelocity(Math.min(Game.instance().getPlayer().getMaxSpeed(),
+            Game.instance().getPlayer().setXVelocity(Math.min((Game.instance().getPlayer().getMaxSpeed() + (Game.instance().getPlayer().getEffects().containsKey(CollectableType.SpeedPowerup) ? 3 : 0)),
                     Game.instance().getPlayer().getXVelocity() + (10 / Game.FPS)));
             Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
         }
