@@ -1,3 +1,9 @@
+//-------------------------------------------------------------
+//File:   Level.java
+//Desc:   Holds a collection of blocks, enemies, collectables, player, and size of level
+//        Methodes to save/load a level
+//-------------------------------------------------------------
+
 package model;
 
 import java.io.DataInputStream;
@@ -12,21 +18,37 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 
 public class Level {
-
+    // arrayList to hold the enemies in the level
     private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+
+    // arrayList to hold the goals
     private ArrayList<Goal> goals = new ArrayList<Goal>();
+
+    // arraylist to hold the blocks that make up the map
     private ArrayList<Block> blocks = new ArrayList<Block>();
+
+    // arraylist to hold collectables
     private ArrayList<Collectable> collectables = new ArrayList<Collectable>();
+
+    // holds instance of the player
     private Player player;
+
+    // size of the level
     private int width;
     private int height;
+
+    // Name of the level
     private String levelName;
+
+    // Time properties
     private LongProperty startTimeProperty = new SimpleLongProperty();
     private LongProperty runTimeProperty = new SimpleLongProperty();
     private LongProperty currentTimeProperty = new SimpleLongProperty();
     private LongProperty maxTimeProperty = new SimpleLongProperty();
     private LongProperty remainingTimeProperty = new SimpleLongProperty();
     private LongProperty idleTimeProperty = new SimpleLongProperty();
+
+    // Spawn point where Dino will be placed
     private Point spawnPoint = new Point();
 
     public Level() {
@@ -45,12 +67,15 @@ public class Level {
 
     }
 
+    // Spawn the player
     public void spawnPlayer() {
         Game.instance().getPlayer().setWidth(50);
         Game.instance().getPlayer().setHeight(54);
         Game.instance().getPlayer().centerPoint().copyFrom(Game.instance().getCurrentLevel().getSpawnPoint());
         Game.instance().getPlayer().setDirection(EntityDirection.RIGHT);
     }
+
+    // Getters/Setters
 
     public ArrayList<Goal> getGoals() {
         return goals;
@@ -88,6 +113,8 @@ public class Level {
         return currentTimeProperty;
     }
 
+    // iterate the time and call a physisc update on each enemy and collectable in
+    // the level.
     public void tick() {
 
         currentTimeProperty.set(System.currentTimeMillis());
@@ -150,6 +177,12 @@ public class Level {
         return null;
     }
 
+    /**
+     * Find the collectable with the given id
+     * 
+     * @param id
+     * @return Collectable with the give id
+     */
     public Collectable findCollectable(int id) {
         for (Collectable c : collectables) {
             if (c.getId() == id) {
@@ -158,21 +191,6 @@ public class Level {
         }
         return null;
     }
-
-    // /**
-    // * find the surface with the given id
-    // *
-    // * @param id
-    // * @return Block
-    // */
-    // public Collectable findCollectable(int id) {
-    // for (Collectable item : collectables) {
-    // if (item.getId() == id) {
-    // return item;
-    // }
-    // }
-    // return null;
-    // }
 
     /**
      * Gets the surfaces in the level
@@ -239,6 +257,8 @@ public class Level {
 
     /**
      * Save the file
+     * 
+     * @param filename String the name and path of the level to save
      */
     public void save(String filename) throws IOException {
         try (DataOutputStream writer = new DataOutputStream(new FileOutputStream(filename, false))) {
@@ -265,8 +285,6 @@ public class Level {
                 writer.writeUTF(enemies.get(i).getType().toString());
                 writer.writeInt(enemies.get(i).centerPoint().getIntX());
                 writer.writeInt(enemies.get(i).centerPoint().getIntY());
-                // writer.writeInt(entities.get(i).getHeight());
-                // writer.writeInt(entities.get(i).getWidth());
             }
             // Write how many blocks there are
             writer.writeInt(blocks.size());
@@ -280,20 +298,24 @@ public class Level {
                 writer.writeInt(blocks.get(i).getWidth());
 
             }
-            // writer.writeInt(collectables.size());
-            // // Iterate through the collectables saving each's data
-            // for (int i = 0; i < collectables.size(); ++i) {
-            // // writer.writeInt(collectables.get(i).getId());
-            // writer.writeUTF(collectables.get(i).getType());
-            // writer.writeInt(collectables.get(i).centerPoint().getIntX());
-            // writer.writeInt(collectables.get(i).centerPoint().getIntY());
-            // }
+            writer.writeInt(collectables.size());
+
+            // Iterate through the collectables saving each's data
+            for (int i = 0; i < collectables.size(); ++i) {
+
+                // save data for each collacetable
+                writer.writeUTF(collectables.get(i).getStringType());
+                writer.writeInt(collectables.get(i).centerPoint().getIntX());
+                writer.writeInt(collectables.get(i).centerPoint().getIntY());
+            }
         }
     }
 
     /**
      * 
      * Load the level
+     * 
+     * @param fileName String of the name and path to the level to load
      */
     public void load(String fileName) throws IOException {
         // Set the name of the level
@@ -354,8 +376,8 @@ public class Level {
             String type = reader.readUTF();
             int x = reader.readInt();
             int y = reader.readInt();
-            Collectable col = new Collectable(x - 50, y -25, CollectableType.valueOf(type));
-            
+            Collectable col = new Collectable(x - 50, y - 25, CollectableType.valueOf(type));
+
             collectables.add(col);
         }
 

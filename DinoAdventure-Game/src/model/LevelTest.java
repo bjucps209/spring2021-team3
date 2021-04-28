@@ -1,3 +1,8 @@
+//-------------------------------------------------------------
+//File:   LevelTest.java
+//Desc:   Holds Junit Test methods for level's save/load methods
+//-------------------------------------------------------------
+
 package model;
 
 import org.junit.Test;
@@ -38,6 +43,7 @@ public class LevelTest {
         Level level = new Level();
 
         Enemy enemy = new Enemy();
+        enemy.setType(EnemyState.FLEEING);
         enemy.setId(2);
         enemy.centerPoint().setXY(10, 25);
 
@@ -66,6 +72,7 @@ public class LevelTest {
         Level level = new Level();
 
         Enemy enemy = new Enemy();
+        enemy.setType(EnemyState.FLEEING);
         enemy.setId(2);
         enemy.centerPoint().setXY(10, 25);
 

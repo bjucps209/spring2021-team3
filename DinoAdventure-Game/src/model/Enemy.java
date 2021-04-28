@@ -1,3 +1,9 @@
+//-------------------------------------------------------------
+//File:   Enemy.java
+//Desc:   Enemy class, extends Entity, and holds the enemies state and type.
+//        Holds methods for the enemy to move
+//-------------------------------------------------------------
+
 package model;
 
 import java.io.*;
@@ -5,16 +11,24 @@ import javafx.beans.property.*;
 
 public class Enemy extends Entity implements Living {
 
+    //Holds the state of the enemy
     protected EnemyState state;
+
+    //Holds teh type of the enemy
     protected EnemyState type;
+
+    //ticks per second. Controlls how often the physics are updated per second
     protected int tps = 1;
 
+    //Health property
     protected IntegerProperty healthProperty = new SimpleIntegerProperty();
 
+    //Create an enemy with 1 hp
     public Enemy() {
         setHealth(1);
     }
 
+    
     public Enemy(double x, double y, EnemyState type) {
         centerPoint.xProperty().set(x);
         centerPoint.yProperty().set(y);

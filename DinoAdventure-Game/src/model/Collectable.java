@@ -87,6 +87,27 @@ public class Collectable extends Entity {
         Platform.runLater(() -> Game.instance().getCurrentLevel().getCollectables().remove(this));
     }
 
+    /**
+     * gets the type of the colletable and returns a string value of it's type
+     * 
+     * @return String value of collectable type
+     */
+    public String getStringType() {
+
+        if (type == CollectableType.Coin) {
+            return "Coin";
+        } else if (type == CollectableType.FeatherPowerup) {
+            return "FeatherPowerup";
+        } else if (type == CollectableType.SpeedPowerup) {
+            return "SpeedPowerup";
+        } else if (type == CollectableType.CoinPowerup) {
+            return "CoinPowerup";
+        } else if (type == CollectableType.HealthPowerup) {
+            return "HealthPowerup";
+        }
+        return "";
+    }
+
     public void tick() {
 
         // Apply generic Collectable physics updates
