@@ -1,4 +1,4 @@
-# Dino Adventure
+![](https://github.com/bjucps209/spring2021-team3/blob/main/Title.PNG)
 
 [Main Wiki Page](https://github.com/bjucps209/spring2021-team3/wiki)
 
