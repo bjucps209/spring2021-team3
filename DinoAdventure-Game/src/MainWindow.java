@@ -198,6 +198,11 @@ public class MainWindow implements GameObserver {
     @FXML
     public void initialize() throws IOException {
 
+        File dir = new File("HighScoreFiles/");
+        if(!dir.exists()) dir.mkdir();
+        dir = new File("CustomLevels/");
+        if(!dir.exists()) dir.mkdir();
+
         // Title screen initialization
         title.setTextFill(Color.DARKBLUE);
         // create a font
@@ -277,7 +282,9 @@ public class MainWindow implements GameObserver {
                 
             }
         }
-        levelsChoice.setValue(levelsChoice.getItems().get(0));
+        if(levelsChoice.getItems().size() > 0) {
+            levelsChoice.setValue(levelsChoice.getItems().get(0));
+        }
         name.requestFocus();
 
         Game.instance().observers().add(this);

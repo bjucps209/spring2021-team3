@@ -99,6 +99,8 @@ public class HighScore {
      */
     public void loadScores(String fileName) throws IOException {
         // 1. Create the File Object to identify the file to work with and verify it exists
+        File dir = new File("HighScoreFiles/");
+        if(!dir.exists()) dir.mkdir();
         File myFileObj = new File(fileName);
         myFileObj.createNewFile();
         // 2. Create the FileReader object from the File object to work with a character Stream
