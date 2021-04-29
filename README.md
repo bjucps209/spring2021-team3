@@ -24,6 +24,8 @@ After starting the program, click play. Once the game starts you can move move b
 
 [Full Release Candidate Demo](https://youtu.be/rLCIKcYP_UM)
 
+[Final Release Demo](https://youtu.be/iKXSBtyk-Hk)
+
 ## Expenses 
 
 | Developer | Time Spent | Remaining |
