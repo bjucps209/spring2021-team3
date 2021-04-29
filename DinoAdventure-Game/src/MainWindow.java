@@ -701,49 +701,30 @@ public class MainWindow implements GameObserver {
         // Side-scrolling logic
         if (Game.instance().getPlayer().centerPoint().getX() > (gamePage.getWidth() / 2) && Game.instance().getPlayer()
                 .centerPoint().getX() < Game.instance().getCurrentLevel().getWidth() - (gamePage.getWidth() / 2)) {
-            // Scrolling
+            // Scrolling left-right
             AnchorPane.setLeftAnchor(levelPane,
                     ((gamePage.getWidth() / 2) - Game.instance().getPlayer().centerPoint().getX()));
             AnchorPane.setLeftAnchor(background, -(Game.instance().getPlayer().centerPoint().getX() / 2));
         } else if (Game.instance().getPlayer().centerPoint().getX() <= (gamePage.getWidth() / 2)) {
-            // Left
+            // All the way left
             AnchorPane.setLeftAnchor(levelPane, 0.0);
             AnchorPane.setLeftAnchor(background, -(gamePage.getWidth() / 4));
         } else {
-            // Right
+            // All the way right
             AnchorPane.setLeftAnchor(levelPane,
                     (double) (gamePage.getWidth() - Game.instance().getCurrentLevel().getWidth()));
             AnchorPane.setLeftAnchor(background, -(Math.min(Game.instance().getPlayer().centerPoint().getX(),
                     Game.instance().getCurrentLevel().getWidth() - (gamePage.getWidth() / 2)) / 2));
         }
-
-
-
-
         if(Game.instance().getCurrentLevel().getHeight() > window.getHeight()) {
             // Top-bottom-scrolling logic
-            // if (Game.instance().getPlayer().centerPoint().getY() > (gamePage.getHeight() / 2) && Game.instance().getPlayer()
-            //         .centerPoint().getY() < Game.instance().getCurrentLevel().getHeight() - (gamePage.getHeight() / 2)) {
-                // Scrolling
-                AnchorPane.setTopAnchor(levelPane, ((gamePage.getHeight() / 2) - Game.instance().getPlayer().centerPoint().getY()));
-            // } else if (Game.instance().getPlayer().centerPoint().getY() <= (gamePage.getHeight() / 2)) {
-                // Up
-            //     AnchorPane.setTopAnchor(levelPane, 0.0);
-            // } else {
-                // Down
-            //    AnchorPane.setTopAnchor(levelPane,
-            //    (double) (gamePage.getHeight() - Game.instance().getCurrentLevel().getHeight()));
-            //}
+            AnchorPane.setTopAnchor(levelPane, ((gamePage.getHeight() / 2) - Game.instance().getPlayer().centerPoint().getY()));
         } else {
-            // Down
+            // All the way down
             AnchorPane.setTopAnchor(levelPane, window.getHeight() - Game.instance().getCurrentLevel().getHeight());
             AnchorPane.setBottomAnchor(levelPane, 0.0);
             levelPane.setPrefHeight(Game.instance().getCurrentLevel().getHeight());
         }
-
-
-
-
 
         // Add enemy images
         if (Game.instance().getCurrentLevel().getEnemies().size() != enemyImages.size()) {
@@ -863,6 +844,7 @@ public class MainWindow implements GameObserver {
             }
         }
 
+        // Remove marked enemies
         for (Node n : toRemove) {
             enemyImages.remove(n);
             collectableImages.remove(n);
@@ -1168,7 +1150,7 @@ public class MainWindow implements GameObserver {
     //     highScoresPage.setVisible(false);
     // }
 
-    //Get the bonus multiplier for completling a level
+    // Get the bonus multiplier for completling a level
     public int getLevelCompletionBonus() {
         if (difficultyLevels.getValue().equals("MEDIUM")) {
             return 2;
@@ -1215,7 +1197,7 @@ public class MainWindow implements GameObserver {
             try {
                 
                 level.load("src/assets/boss.dat");
-                //Spawm the boss
+                // Spawm the boss
                 Enemy e = new Enemy(1600, 600, EnemyState.SCHAUB);
                 level.getEnemies().add(e);
             } catch (IOException e1) {
