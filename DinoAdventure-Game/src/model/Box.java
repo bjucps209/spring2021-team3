@@ -7,6 +7,9 @@ package model;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 
+/**
+ * Main Parent class that entities extend from
+ */
 public class Box {
 
     public Box() {
@@ -34,12 +37,12 @@ public class Box {
 
     // Physical properties
 
-    //id #
+    // id #
     protected int id;
-    //Next id
+    // Next id
     private static int nextId;
 
-    //Point that holds location of box
+    // Point that holds location of box
     protected Point centerPoint = new Point();
 
     // size of box
@@ -50,7 +53,7 @@ public class Box {
     protected IntegerProperty maxXProperty = new SimpleIntegerProperty();
     protected IntegerProperty minYProperty = new SimpleIntegerProperty();
 
-    //Getters/Setters
+    // Getters/Setters
 
     public int getId() {
         return id;
@@ -119,7 +122,6 @@ public class Box {
     public double getMaxY() {
         return maxYProperty.get();
     }
-
 
     public boolean contains(Point p) {
         return p.getX() >= getMinX() && p.getX() <= getMaxX() && p.getY() >= getMinY() && p.getY() <= getMaxY();

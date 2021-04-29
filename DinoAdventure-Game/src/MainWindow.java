@@ -1,3 +1,8 @@
+//---------------------------------------------------------------
+//File:   MainWindow.java
+//Desc:   View class for DinoAdventure.
+//---------------------------------------------------------------
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,7 +102,7 @@ public class MainWindow implements GameObserver {
                                     // src/levels/
 
     @FXML
-    ChoiceBox<String> gameMode;
+    ChoiceBox<String> gameMode; //Dropdown to select teh game mode
 
     // GUI controls for Highscores screen
     @FXML
@@ -545,11 +550,13 @@ public class MainWindow implements GameObserver {
                 break;
 
             case LEVEL_WON:
-                //add level bones from time remaing - not working yet
+                //add level bones from time remaing
                 Game.instance().setScore((int)(Game.instance().getScore() + (getLevelCompletionBonus() * Game.instance().getCurrentLevel().remainingTimeProperty().get())));
 
+                //Get the levels form the level folder
                 File[] levels = new File("src/levels").listFiles();
 
+                //Check the mode of game and show the game_over screen if it's the last level
                 if (gameMode.getValue().equals("NORMAL") && (Game.instance().getCurrentLevelIndex() + 1) >= levels.length) {
                     Game.instance().setState(GameState.GAME_OVER);
                     Game.instance().setGameOverMessage("You completed all the levels!");
@@ -561,11 +568,12 @@ public class MainWindow implements GameObserver {
 
                 gameLoop.stop();
 
-
+                //Play the victory sound
                 Game.instance().observers().forEach(o -> {
                     o.playSound("win");
                 });
 
+                //Create the level won page
                 VBox levelWonPane = new VBox();
                 levelWonPane.setAlignment(Pos.CENTER);
                 levelWonPane.getStyleClass().add("levelWonPane");
@@ -631,6 +639,7 @@ public class MainWindow implements GameObserver {
 
             }
         }));
+        //Loop the music
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
     }
