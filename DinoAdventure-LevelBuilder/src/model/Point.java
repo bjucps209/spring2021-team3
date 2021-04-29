@@ -6,6 +6,9 @@ package model;
 
 import javafx.beans.property.*;
 
+/**
+ * Class that contains methods needed for location
+ */
 public class Point {
 
     // create a point

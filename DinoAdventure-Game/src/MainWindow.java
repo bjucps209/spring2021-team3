@@ -1,3 +1,8 @@
+//---------------------------------------------------------------
+//File:   MainWindow.java
+//Desc:   View class for DinoAdventure.
+//---------------------------------------------------------------
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,7 +102,7 @@ public class MainWindow implements GameObserver {
                                     // src/levels/
 
     @FXML
-    ChoiceBox<String> gameMode;
+    ChoiceBox<String> gameMode; //Dropdown to select teh game mode
 
     // GUI controls for Highscores screen
     @FXML
@@ -124,12 +129,19 @@ public class MainWindow implements GameObserver {
     private boolean rightKeyPressed;
     private boolean escapeKeyPressed;
 
+    //ArrayList of ImageView's that holds the enemies
     private ArrayList<ImageView> enemyImages = new ArrayList<ImageView>();
+    
+    //ArrayList that holds teh collectables 
     private ArrayList<ImageView> collectableImages = new ArrayList<ImageView>();
+    
+    //ArrayList that holds teh goalImages
     private ArrayList<ImageView> goalImages = new ArrayList<ImageView>();
 
+    //instanc eof highScore for scoring
     HighScore highScores = HighScore.getInstance(); // High scores instantiation
 
+    //SoundFX and music
     final MediaPlayer HOME_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/titleScreenMusic.wav").toString()));
     final MediaPlayer ORGAN_MUSIC = new MediaPlayer(new Media(getClass().getResource("assets/sounds/organ.wav").toString()));
     
@@ -141,7 +153,11 @@ public class MainWindow implements GameObserver {
     final MediaPlayer PLAYER_HIT_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/enemyhitsplayer.wav").toString()));
     final MediaPlayer LOSE_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/lose.wav").toString()));
     final MediaPlayer WIN_SOUND = new MediaPlayer(new Media(getClass().getResource("assets/sounds/win.wav").toString()));
-
+    
+    /**
+     * Play the sound with the given name
+     *  @param cause String
+     */
     public void playSound(String cause) {
         switch(cause) {
             case "jump":
@@ -534,11 +550,13 @@ public class MainWindow implements GameObserver {
                 break;
 
             case LEVEL_WON:
-                //add level bones from time remaing - not working yet
+                //add level bones from time remaing
                 Game.instance().setScore((int)(Game.instance().getScore() + (getLevelCompletionBonus() * Game.instance().getCurrentLevel().remainingTimeProperty().get())));
 
+                //Get the levels form the level folder
                 File[] levels = new File("src/levels").listFiles();
 
+                //Check the mode of game and show the game_over screen if it's the last level
                 if (gameMode.getValue().equals("NORMAL") && (Game.instance().getCurrentLevelIndex() + 1) >= levels.length) {
                     Game.instance().setState(GameState.GAME_OVER);
                     Game.instance().setGameOverMessage("You completed all the levels!");
@@ -550,11 +568,12 @@ public class MainWindow implements GameObserver {
 
                 gameLoop.stop();
 
-
+                //Play the victory sound
                 Game.instance().observers().forEach(o -> {
                     o.playSound("win");
                 });
 
+                //Create the level won page
                 VBox levelWonPane = new VBox();
                 levelWonPane.setAlignment(Pos.CENTER);
                 levelWonPane.getStyleClass().add("levelWonPane");
@@ -620,6 +639,7 @@ public class MainWindow implements GameObserver {
 
             }
         }));
+        //Loop the music
         gameLoop.setCycleCount(Timeline.INDEFINITE);
 
     }

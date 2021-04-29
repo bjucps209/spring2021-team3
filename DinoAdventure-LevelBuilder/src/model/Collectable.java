@@ -6,9 +6,12 @@
 
 package model;
 
+/**
+ * Class that holds a single instance of a collectable
+ **/
 public class Collectable extends Entity {
 
-    //holds the type of collectable
+    // holds the type of collectable
     private CollectableType type;
 
     /**

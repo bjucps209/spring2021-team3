@@ -1,19 +1,44 @@
+//-------------------------------------------------------------
+//File:   Entity.java
+//Desc:   extends Box, adds physics properties.
+//-------------------------------------------------------------
+
 package model;
 
 import java.util.ArrayList;
 
+/**
+ * Class that holds phyisical properties of an entity
+ */
 public class Entity extends Box {
 
+    // How heavy the entity is. Used in gravity calculations
     protected double weight;
+
+    // Velocity of movement in the x direciton
     protected double xVelocity;
+
+    // Velocity of movement in the y direction
     protected double yVelocity;
+
+    // Max speed of entity
     protected double maxSpeed = 5;
+
+    // Max height the entity can jump
     protected double maxJumpHeight = 8;
+
+    // Dirrection the entity is facing
     protected EntityDirection direction;
+
+    // true if entity is touching the ground
     protected boolean onSurface;
-    
+
+    /**
+     * Method to run a physics update
+     */
     public void tick() {
 
+        // Enemies to remove from the game if they are killed, or fall of an edge
         ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
 
         // Apply gravity
@@ -33,27 +58,30 @@ public class Entity extends Box {
 
         onSurface = false;
 
-        // Check if the entity would be colliding with a surface based on the future velocities
-        for(Block b : Game.instance().getCurrentLevel().getBlocks()) {
-            if(b.overlaps(xCheck) && b.overlaps(yCheck)) {
+        // Check if the entity would be colliding with a surface based on the future
+        // velocities
+        for (Block b : Game.instance().getCurrentLevel().getBlocks()) {
+            if (b.overlaps(xCheck) && b.overlaps(yCheck)) {
                 xVelocity = 0;
                 yVelocity = 0;
-                if(centerPoint.getY() < b.centerPoint().getY()) {
+                if (centerPoint.getY() < b.centerPoint().getY()) {
                     // Handle spawning inside a Block
-                    // Move the entity up to the surface if Entity.centerPoint is higher than Block.centerPoint
+                    // Move the entity up to the surface if Entity.centerPoint is higher than
+                    // Block.centerPoint
                     centerPoint.setY(b.getMinY() - (heightProperty.get() / 2) - 1);
                 } else {
                     // Handle corners/spawning inside the bottom of a Block
-                    // Move the Entity down to the bottom of a Block if Block.centerPoint is higher than Entity.centerPoint
+                    // Move the Entity down to the bottom of a Block if Block.centerPoint is higher
+                    // than Entity.centerPoint
                     centerPoint.setY(b.getMaxY() + (heightProperty.get() / 2) + 1);
                 }
-            } else if(b.overlaps(xCheck)) {
+            } else if (b.overlaps(xCheck)) {
                 // Handle hitting a wall
                 xVelocity = 0;
-            } else if(b.overlaps(yCheck)) {
+            } else if (b.overlaps(yCheck)) {
                 // Handle hitting a ceiling/landing on a surface
                 yVelocity = 0;
-                if(centerPoint.getY() < b.centerPoint().getY()) {
+                if (centerPoint.getY() < b.centerPoint().getY()) {
                     centerPoint.setY(b.getMinY() - (heightProperty.get() / 2) - 1);
                     onSurface = true;
                 }
@@ -61,12 +89,12 @@ public class Entity extends Box {
         }
 
         // Handle Player colliding with Enemy
-        if(this instanceof Player) {
-            for(Enemy e : Game.instance().getCurrentLevel().getEnemies()) {
-                if(e.overlaps(xCheck) || e.overlaps(yCheck)) {
+        if (this instanceof Player) {
+            for (Enemy e : Game.instance().getCurrentLevel().getEnemies()) {
+                if (e.overlaps(xCheck) || e.overlaps(yCheck)) {
 
-                    if(e.overlaps(xCheck)) {
-                        if(centerPoint.getX() < e.centerPoint().getX()) {
+                    if (e.overlaps(xCheck)) {
+                        if (centerPoint.getX() < e.centerPoint().getX()) {
                             xVelocity -= 5;
                         } else {
                             xVelocity += 5;
@@ -74,34 +102,36 @@ public class Entity extends Box {
                         yVelocity -= 5;
                     }
 
-                    if(getMaxY() < e.getMinY()) {
-                        if(yVelocity > 0) {
+                    if (getMaxY() < e.getMinY()) {
+                        if (yVelocity > 0) {
                             yVelocity = -15;
                         }
                         e.setHealth(e.getHealth() - 1);
-                        if(e.getHealth() <= 0) {
+                        if (e.getHealth() <= 0) {
                             Game.instance().observers().forEach(o -> {
                                 o.playSound("pke");
                             });
                             int coins = Game.random.nextInt(3) + 1;
-                            if(e.getType() == EnemyState.SCHAUB) {
+                            if (e.getType() == EnemyState.SCHAUB) {
                                 coins = 100;
                             }
                             enemiesToRemove.add(e);
-                            for(int i = 0; i < coins; i++) {
-                                Collectable coin = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), CollectableType.Coin);
+                            for (int i = 0; i < coins; i++) {
+                                Collectable coin = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(),
+                                        CollectableType.Coin);
                                 coin.xVelocity = (Game.random.nextInt(100) - 50) / 10;
                                 coin.yVelocity = -Game.random.nextInt(5);
                                 Game.instance().getCurrentLevel().getCollectables().add(coin);
                             }
-                            if(Game.random.nextInt(5) == 0) {
-                                CollectableType t = CollectableType.values()[Game.random.nextInt(CollectableType.values().length)];
+                            if (Game.random.nextInt(5) == 0) {
+                                CollectableType t = CollectableType.values()[Game.random
+                                        .nextInt(CollectableType.values().length)];
                                 Collectable c = new Collectable(e.centerPoint().getX(), e.centerPoint().getY(), t);
                                 c.xVelocity = (Game.random.nextInt(100) - 50) / 10;
                                 c.yVelocity = -Game.random.nextInt(5);
                                 Game.instance().getCurrentLevel().getCollectables().add(c);
                             }
-                            if(e.getType() == EnemyState.SCHAUB) {
+                            if (e.getType() == EnemyState.SCHAUB) {
                                 Goal g = new Goal(e.centerPoint().getX(), e.centerPoint().getY());
                                 Game.instance().getCurrentLevel().getGoals().add(g);
                             }
@@ -112,7 +142,7 @@ public class Entity extends Box {
                         }
                     } else {
                         Game.instance().observers().forEach(o -> {
-                        o.playSound("ehp");
+                            o.playSound("ehp");
                         });
                         ((Player) this).setHealth(Math.max(0, ((Player) this).getHealth() - 1));
                         ((Player) this).getEffects().clear();
@@ -122,20 +152,28 @@ public class Entity extends Box {
             }
         }
 
-        if(onSurface && !(this instanceof Player && ((Player) this).isMoving())) {
-            // Apply friction unless this Entity is a Player and the user is moving the Player
+        if (onSurface && !(this instanceof Player && ((Player) this).isMoving())) {
+            // Apply friction unless this Entity is a Player and the user is moving the
+            // Player
             xVelocity = xVelocity * Game.FRICTION;
         }
-
+        //Apply the movement
         centerPoint.add(xVelocity, yVelocity);
 
-        for(Enemy e : enemiesToRemove) Game.instance().getCurrentLevel().getEnemies().remove(e);
+        //Removed killed enemies
+        for (Enemy e : enemiesToRemove)
+            Game.instance().getCurrentLevel().getEnemies().remove(e);
 
     }
 
+    /**
+     * @return true if entity is on the ground, else false
+     */
     public boolean isOnSurface() {
         return onSurface;
     }
+
+    // Getters/Setters
 
     public void setWeight(double w) {
         weight = w;

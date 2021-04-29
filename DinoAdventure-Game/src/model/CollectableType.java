@@ -5,6 +5,9 @@
 
 package model;
 
+/**
+ * Enum for the type of collectable
+ */
 public enum CollectableType {
     Coin,
     FeatherPowerup,

@@ -4,9 +4,12 @@
 //-------------------------------------------------------------
 package model;
 
+/**
+ * Holds an instance of a single block.
+ */
 public class Block extends Box {
 
-    //initiat default texture
+    // initiat default texture
     private String texture = "assets/images/world/ground-2.png";
 
     public String getTexture() {

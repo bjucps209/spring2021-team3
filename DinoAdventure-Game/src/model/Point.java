@@ -1,16 +1,34 @@
+//-------------------------------------------------------------
+//File:   Point.java
+//Desc:   Main parant class for all game objects
+//-------------------------------------------------------------
 package model;
 
 import javafx.beans.property.*;
 
+/**
+ * Class that contains methods needed for location
+ */
 public class Point {
 
-    public Point() { }
+    // Create a Point
+    public Point() {
+    }
 
+    /**
+     * Create a new Point at the given location
+     * 
+     * @param x int
+     * @param y int
+     */
     public Point(double x, double y) {
         xProperty.set(x);
         yProperty.set(y);
     }
 
+    /**
+     * Create a new point at the given Point
+     */
     public Point(Point p) {
         xProperty.set(p.getX());
         yProperty.set(p.getY());
@@ -20,6 +38,8 @@ public class Point {
 
     protected DoubleProperty xProperty = new SimpleDoubleProperty();
     protected DoubleProperty yProperty = new SimpleDoubleProperty();
+
+    // Getters/Setters
 
     public int getIntX() {
         return (int) xProperty.get();
@@ -226,6 +246,12 @@ public class Point {
         yProperty.set(yProperty.get() / y);
     }
 
+    /**
+     * calculate the distance to the given point
+     * 
+     * @param p point to calculate distance too
+     * @return distance double
+     */
     public double distanceFrom(Point p) {
         return Math.sqrt(Math.pow(xProperty.get() - p.getX(), 2) + Math.pow(yProperty.get() - p.getY(), 2));
     }

@@ -12,6 +12,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Class that holds an instance of a level.
+ */
 public class Level {
 
     // arrayList to hold the enemies in the level

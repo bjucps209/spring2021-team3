@@ -7,6 +7,9 @@ package model;
 
 import javafx.beans.property.*;
 
+/**
+ * Class that holds a single instance of an enemy
+ */
 public class Enemy extends Entity {
 
     // Enum that holds the state of the enemy

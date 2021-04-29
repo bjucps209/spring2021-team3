@@ -6,6 +6,7 @@
 
 package model;
 
+//Model class for the LevelBuilder
 public class LevelDesigner {
 
     //Holdes the current level

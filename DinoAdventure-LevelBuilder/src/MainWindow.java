@@ -1,6 +1,6 @@
 //---------------------------------------------------------------
 //File:   MainWindow.java
-//Desc:   View class for level LevelBuilder.
+//Desc:   View class for LevelBuilder.
 //Creator: Christopehr Zuehlke
 //---------------------------------------------------------------
 
@@ -20,6 +20,9 @@ import javafx.scene.text.FontWeight;
 
 import model.*;
 
+/**
+ * View class for LevelBuilder
+ */
 public class MainWindow {
 
     @FXML
@@ -839,7 +842,7 @@ public class MainWindow {
     }
 
     /**
-     * Set all Items' disable
+     * disable/enable all item buttons
      * 
      * @param t boolean
      */

@@ -6,14 +6,14 @@
 
 package model;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.util.Duration;
 
+/**
+ * Class that holds a single instance of a collectable
+ **/
 public class Collectable extends Entity {
 
-    //Holds the type of collectable
+    // Holds the type of collectable
     private CollectableType type;
 
     /**
@@ -43,46 +43,46 @@ public class Collectable extends Entity {
      */
     public void collect() {
 
-        //length of soundFx
+        // length of soundFx
         int effectSeconds = 10;
-        switch(type) {
-            case Coin:
-                //Play the sound
-                Game.instance().observers().forEach(o -> {
-                    o.playSound("coin");
-                });
-                
-                //Add the item to the player
-                Game.instance().getPlayer().scoreProperty().set(Game.instance().getPlayer().scoreProperty().get() + 25);
-                break;
+        switch (type) {
+        case Coin:
+            // Play the sound
+            Game.instance().observers().forEach(o -> {
+                o.playSound("coin");
+            });
 
-            case FeatherPowerup:
-            case SpeedPowerup:
-                Game.instance().observers().forEach(o -> {
-                    o.playSound("powerup");
-                });
-                Game.instance().getPlayer().getEffects().put(type, effectSeconds);
-                break;
+            // Add the item to the player
+            Game.instance().getPlayer().scoreProperty().set(Game.instance().getPlayer().scoreProperty().get() + 25);
+            break;
 
-            case HealthPowerup:
-                int healthChange = 5;
-                Game.instance().observers().forEach(o -> {
-                    o.playSound("powerup");
-                });
-                Game.instance().getPlayer().setHealth(Game.instance().getPlayer().getHealth() + healthChange);
-                break;
+        case FeatherPowerup:
+        case SpeedPowerup:
+            Game.instance().observers().forEach(o -> {
+                o.playSound("powerup");
+            });
+            Game.instance().getPlayer().getEffects().put(type, effectSeconds);
+            break;
 
-            case CoinPowerup:
-                int scoreChange = 100;
-                Game.instance().observers().forEach(o -> {
-                    o.playSound("coin");
-                    o.playSound("powerup");
-                });
-                Game.instance().getPlayer().setScore(Game.instance().getPlayer().getScore() + scoreChange);
-                break;
+        case HealthPowerup:
+            int healthChange = 5;
+            Game.instance().observers().forEach(o -> {
+                o.playSound("powerup");
+            });
+            Game.instance().getPlayer().setHealth(Game.instance().getPlayer().getHealth() + healthChange);
+            break;
 
-            default:
-                break;
+        case CoinPowerup:
+            int scoreChange = 100;
+            Game.instance().observers().forEach(o -> {
+                o.playSound("coin");
+                o.playSound("powerup");
+            });
+            Game.instance().getPlayer().setScore(Game.instance().getPlayer().getScore() + scoreChange);
+            break;
+
+        default:
+            break;
         }
         Platform.runLater(() -> Game.instance().getCurrentLevel().getCollectables().remove(this));
     }
@@ -108,12 +108,14 @@ public class Collectable extends Entity {
         return "";
     }
 
+    //Run a physices update
     public void tick() {
 
         // Apply generic Collectable physics updates
         super.tick();
 
-        if(Game.instance().getPlayer().overlaps(this)) {
+        //If player overlaps with the item, collect it
+        if (Game.instance().getPlayer().overlaps(this)) {
             collect();
         }
 
