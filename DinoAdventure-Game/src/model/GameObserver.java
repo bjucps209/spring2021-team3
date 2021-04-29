@@ -1,3 +1,8 @@
+//---------------------------------------------------------------
+//File:   GameObserver.jave
+//Desc:   Observer interface
+//---------------------------------------------------------------
+
 package model;
 
 public interface GameObserver {

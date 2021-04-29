@@ -1,3 +1,7 @@
+//-------------------------------------------------------------
+//File:   GameState.java
+//Desc:   Enum for Game's state
+//-------------------------------------------------------------
 package model;
 
 public enum GameState {
