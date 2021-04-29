@@ -1193,7 +1193,7 @@ public class MainWindow implements GameObserver {
         level = new Level();
 
         // Check wheather the game is curretly in a play session
-        if (Game.instance().getState() == GameState.LEVEL_WON) {
+        if (Game.instance().getState() == GameState.LEVEL_WON && gameMode.getValue().equals("NORMAL")) {
             //Set the next level without reseting the score
             Game.instance().startNextLevel(level);
         } else {
