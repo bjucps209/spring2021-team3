@@ -1,6 +1,6 @@
 //---------------------------------------------------------------
 //File:   MainWindow.java
-//Desc:   View class for level LevelBuilder.
+//Desc:   View class for LevelBuilder.
 //Creator: Christopehr Zuehlke
 //---------------------------------------------------------------
 
