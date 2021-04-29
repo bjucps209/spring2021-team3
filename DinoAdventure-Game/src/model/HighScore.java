@@ -98,8 +98,9 @@ public class HighScore {
      * @throws IOException
      */
     public void loadScores(String fileName) throws IOException {
-        // 1. Create the File Object to identify the file to work with
+        // 1. Create the File Object to identify the file to work with and verify it exists
         File myFileObj = new File(fileName);
+        myFileObj.createNewFile();
         // 2. Create the FileReader object from the File object to work with a character Stream
         // 3. Create the BufferedReader object to read through the stream by passing the FileReader object
         BufferedReader buffObj = new BufferedReader(new FileReader(myFileObj));

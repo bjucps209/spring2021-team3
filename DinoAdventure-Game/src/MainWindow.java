@@ -1156,20 +1156,6 @@ public class MainWindow implements GameObserver {
         titlePage.setVisible(true);
     }
 
-    // Event handler to show the NewHighscore screen when the user makes a new
-    // highscore.
-    // @FXML
-    // public void displayNewHighScore() throws IOException {
-    //     // New High score screen initialization
-    //     playerName.setText(Game.instance().getUserName());
-    //     newScore.setText(String.valueOf(Game.instance().getScore()));
-    //     // Show the new Score Screen
-    //     titlePage.setVisible(false);
-    //     newHighscorePage.setVisible(true);
-    //     gamePage.setVisible(false);
-    //     highScoresPage.setVisible(false);
-    // }
-
     // Get the bonus multiplier for completling a level
     public int getLevelCompletionBonus() {
         if (difficultyLevels.getValue().equals("MEDIUM")) {
