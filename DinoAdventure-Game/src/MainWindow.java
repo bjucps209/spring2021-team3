@@ -198,6 +198,11 @@ public class MainWindow implements GameObserver {
     @FXML
     public void initialize() throws IOException {
 
+        File dir = new File("HighScoreFiles/");
+        if(!dir.exists()) dir.mkdir();
+        dir = new File("CustomLevels/");
+        if(!dir.exists()) dir.mkdir();
+
         // Title screen initialization
         title.setTextFill(Color.DARKBLUE);
         // create a font
@@ -277,7 +282,9 @@ public class MainWindow implements GameObserver {
                 
             }
         }
-        levelsChoice.setValue(levelsChoice.getItems().get(0));
+        if(levelsChoice.getItems().size() > 0) {
+            levelsChoice.setValue(levelsChoice.getItems().get(0));
+        }
         name.requestFocus();
 
         Game.instance().observers().add(this);
@@ -1155,20 +1162,6 @@ public class MainWindow implements GameObserver {
         helpPage.setVisible(false);
         titlePage.setVisible(true);
     }
-
-    // Event handler to show the NewHighscore screen when the user makes a new
-    // highscore.
-    // @FXML
-    // public void displayNewHighScore() throws IOException {
-    //     // New High score screen initialization
-    //     playerName.setText(Game.instance().getUserName());
-    //     newScore.setText(String.valueOf(Game.instance().getScore()));
-    //     // Show the new Score Screen
-    //     titlePage.setVisible(false);
-    //     newHighscorePage.setVisible(true);
-    //     gamePage.setVisible(false);
-    //     highScoresPage.setVisible(false);
-    // }
 
     // Get the bonus multiplier for completling a level
     public int getLevelCompletionBonus() {
